@@ -4,11 +4,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import name_pending.Entities.Entity;
+import name_pending.Windows.GameWindow;
 
 public class FrameKeyListener implements KeyListener{
 	
 	//needs an instance of Game so it can check keys for entities
-	Game theGame;
+	protected Game theGame;
 
 	FrameKeyListener(Game theGame)
 	{
@@ -23,22 +24,35 @@ public class FrameKeyListener implements KeyListener{
 	
 	@Override
 	public void keyPressed(KeyEvent event) {
-		for (Entity e: theGame.getEntityHash())
-		{
-			e.keyCheck(event.getKeyCode(), true);
-		}
-		//Check if this effects the ui
-		theGame.getUi().keyCheck(event.getKeyCode(), true);
+		sendEvent(event.getKeyCode(), true);
 	}
 
 	@Override
 	public void keyReleased(KeyEvent event) {
+		sendEvent(event.getKeyCode(), false);
+	}
+	
+	/**
+	 * Noticed both events code was the same so I moved there code to this method
+	 * @param pressed
+	 */
+	protected void sendEvent(int keyCode, boolean pressed)
+	{
 		for (Entity e: theGame.getEntityHash())
 		{
-			e.keyCheck(event.getKeyCode(), false);
+			e.keyCheck(keyCode, pressed);
 		}
+		
+		for (GameWindow gw: theGame.getGameWindowHash())
+		{
+			gw.keyCheck(keyCode, pressed);
+		}
+		
 		//Check if this effects the ui
-		theGame.getUi().keyCheck(event.getKeyCode(), false);
+		theGame.getUi().keyCheck(keyCode, pressed);
+		
+		//Check if the windows manager needs it
+		theGame.getGameWindowManager().keyCheck(keyCode, pressed);
 	}
 
 	@Override

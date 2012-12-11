@@ -11,6 +11,8 @@ import javax.swing.JPanel;
 
 import name_pending.Entities.Entity;
 import name_pending.Entities.Player;
+import name_pending.Windows.GameWindow;
+import name_pending.Windows.GameWindowManager;
 
 
 /**
@@ -29,10 +31,16 @@ public class Game
 
 	//This will contain every entity currently in the game to run all of their internal functions
 	private HashSet<Entity> entityHash = new HashSet<Entity>();
+	//This will contain every window currently on screen and run all of their interal finctions
+	private HashSet<GameWindow> gameWindowHash = new HashSet<GameWindow>();
+	
 	//the keylistener
 	private FrameKeyListener frameKeyListener;
 	//the mouse listener
 	private FrameMouseListener frameMouseListener;
+	
+	//Manages all the windows in the game
+	private GameWindowManager gameWindowManager = new GameWindowManager(this);
 
 	//The main game thread loop
 	private GameLoop gameLoop = null;
@@ -306,6 +314,22 @@ public class Game
 
 	public void setFrameMouseListener(FrameMouseListener frameMouseListener) {
 		this.frameMouseListener = frameMouseListener;
+	}
+
+	public HashSet<GameWindow> getGameWindowHash() {
+		return gameWindowHash;
+	}
+
+	public void setGameWindowHash(HashSet<GameWindow> gameWindowHash) {
+		this.gameWindowHash = gameWindowHash;
+	}
+
+	public GameWindowManager getGameWindowManager() {
+		return gameWindowManager;
+	}
+
+	public void setGameWindowManager(GameWindowManager gameWindowManager) {
+		this.gameWindowManager = gameWindowManager;
 	}
 
 	//Different method for this above

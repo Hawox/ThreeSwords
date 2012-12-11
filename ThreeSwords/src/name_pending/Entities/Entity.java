@@ -2,6 +2,7 @@ package name_pending.Entities;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
 import java.util.HashSet;
 
 import name_pending.Game;
@@ -162,10 +163,23 @@ public abstract class Entity {
 		setY(y);
 	}
 
-	//Check for keyboard input
-	//Key = key used
-	//state = [true] pressed | [false] released
-	public void keyCheck(int keyCode,boolean pressed)
+	/**
+	 * Will need to check on mouse events and key events to know when clicked or when it needs to close, etc
+	 * Check for keyboard input
+	 * @param keyCode key used
+	 * @param pressed state = [true] pressed | [false] released
+	 */
+	public void keyCheck(int keyCode,boolean pressed) //copied from Entity
+	{
+
+	}
+	
+	/**
+	 * Will be triggered by the FrameMouseListener event
+	 * @param event Event that was passed from the MouseListener
+	 * @param eventType Compatable Strings "Clicked", "Pressed", and "Released.
+	 */
+	public void mouseCheck(MouseEvent event,String eventType)
 	{
 
 	}
