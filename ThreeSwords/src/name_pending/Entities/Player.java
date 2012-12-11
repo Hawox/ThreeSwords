@@ -33,7 +33,6 @@ public class Player extends Being{
 	public Player(Game theGame, int x, int y)
 	{
 		super(theGame, x, y, STARTING_NAME, STARTING_HEALTH, STARTING_DEFENCE, STARTING_ATTACK, STARTING_SPEED, STARTING_DEXTERITY, STARTING_RESISTANCE);
-		setSprite(theGame.getResourceLoader().getSprite("Player.png"));
 	}
 
 	/*
@@ -43,6 +42,7 @@ public class Player extends Being{
 	public void onCreate()
 	{
 		super.onCreate();
+		setSprite(getTheGame().getResourceLoader().getSprite("Player.png"));
 	}
 
 	public void onDelete()

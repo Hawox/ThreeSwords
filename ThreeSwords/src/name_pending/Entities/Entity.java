@@ -90,11 +90,8 @@ public abstract class Entity {
 		//Name in the list
 		this.nameInList = (name + "_" + Integer.toString(number));
 		onCreate();
-		//setSprite(theGame.getSpriteLoader().getSprite("Error.png"));
-		//if(theGame.getResourceLoader().getImages().containsKey("Error.png"))
-		Sprite s = theGame.getResourceLoader().getSprite("Error.png");
-		this.setSprite(s);
-
+		//All entities should set their sprites in the onCreate, add this here to give each entity it's own sprite object
+		//setSprite(getSprite().clone()); //Not needed?
 		//Start the sprites animation
 		this.sprite.setAnimation(1);
 	}
@@ -102,7 +99,10 @@ public abstract class Entity {
 	//The script that is run for the entity upon it's creation
 	public void onCreate()
 	{
-
+		//Setup the sprite
+		//setSprite(theGame.getSpriteLoader().getSprite("Error.png"));
+		//if(theGame.getResourceLoader().getImages().containsKey("Error.png"))
+		setSprite(theGame.getResourceLoader().getSprite("Error.png"));
 	}
 
 	//Objects can't really be deleted, so this is ran when the object is removed form the entity list

@@ -7,7 +7,7 @@ public class FrameMouseListener implements MouseListener{
 	
 	Game theGame = null;
 	
-	FrameMouseListener(Game game)
+	public FrameMouseListener(Game game)
 	{
 		this.theGame = game;
 	}

@@ -9,7 +9,7 @@ public class ItemBow extends ItemWeapon{
 		super(game, name, decription, rarity, minDamage, maxDamage, distance, bonuses);
 		setWeaponType("bow");
 		setRanged(true);
-		this.setSprite(this.getTheGame().getResourceLoader().getSprite("ItemBow.png").clone());
+		this.setSprite(this.getTheGame().getResourceLoader().getSprite("ItemBow.png"));
 	}
 
 }
