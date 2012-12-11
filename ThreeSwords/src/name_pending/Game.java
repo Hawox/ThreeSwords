@@ -31,6 +31,8 @@ public class Game
 	private HashSet<Entity> entityHash = new HashSet<Entity>();
 	//the keylistener
 	private FrameKeyListener frameKeyListener;
+	//the mouse listener
+	private FrameMouseListener frameMouseListener;
 
 	//The main game thread loop
 	private GameLoop gameLoop = null;
@@ -51,9 +53,11 @@ public class Game
 	{
 		setupFrame();
 
-		//setup the keylistener
+		//setup the  mouse and key listeners
 		frameKeyListener = new FrameKeyListener(this);
 		frame.addKeyListener(frameKeyListener);
+		frameMouseListener = new FrameMouseListener(this);
+		frame.addMouseListener(frameMouseListener);
 
 		if(TESTING)
 			testRoom.start();
@@ -294,6 +298,14 @@ public class Game
 
 	public void setUi(UI ui) {
 		this.ui = ui;
+	}
+
+	public FrameMouseListener getFrameMouseListener() {
+		return frameMouseListener;
+	}
+
+	public void setFrameMouseListener(FrameMouseListener frameMouseListener) {
+		this.frameMouseListener = frameMouseListener;
 	}
 
 	//Different method for this above
