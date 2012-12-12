@@ -11,9 +11,11 @@ import javax.swing.JPanel;
 
 import name_pending.Entities.Entity;
 import name_pending.Entities.Player;
-import name_pending.Windows.GameWindow;
 import name_pending.Windows.GameWindowManager;
 
+
+//TODO AMATI HAS CLAIMED THAT THIS GAME MUST HAVE KITTENS. IT SHALL BE DONE
+	//Pet cat AND THIS https://i.chzbgr.com/maxW500/6831610368/h9D0FC08E/
 
 /**
  * Code snipits to remember
@@ -31,8 +33,9 @@ public class Game
 
 	//This will contain every entity currently in the game to run all of their internal functions
 	private HashSet<Entity> entityHash = new HashSet<Entity>();
+	//EDIT:Moved to the GameWindowManagerClass
 	//This will contain every window currently on screen and run all of their interal finctions
-	private HashSet<GameWindow> gameWindowHash = new HashSet<GameWindow>();
+	//private HashSet<GameWindow> gameWindowHash = new HashSet<GameWindow>();
 	
 	//the keylistener
 	private FrameKeyListener frameKeyListener;
@@ -314,14 +317,6 @@ public class Game
 
 	public void setFrameMouseListener(FrameMouseListener frameMouseListener) {
 		this.frameMouseListener = frameMouseListener;
-	}
-
-	public HashSet<GameWindow> getGameWindowHash() {
-		return gameWindowHash;
-	}
-
-	public void setGameWindowHash(HashSet<GameWindow> gameWindowHash) {
-		this.gameWindowHash = gameWindowHash;
 	}
 
 	public GameWindowManager getGameWindowManager() {

@@ -4,7 +4,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import name_pending.Entities.Entity;
-import name_pending.Windows.GameWindow;
 
 public class FrameKeyListener implements KeyListener{
 	
@@ -43,16 +42,17 @@ public class FrameKeyListener implements KeyListener{
 			e.keyCheck(keyCode, pressed);
 		}
 		
-		for (GameWindow gw: theGame.getGameWindowHash())
+		//Check if the windows manager needs it
+		theGame.getGameWindowManager().keyCheck(keyCode, pressed);
+				
+		/* Moved to GameWindowManager
+		 * for (GameWindow gw: theGame.getGameWindowHash())
 		{
 			gw.keyCheck(keyCode, pressed);
-		}
+		}*/
 		
 		//Check if this effects the ui
 		theGame.getUi().keyCheck(keyCode, pressed);
-		
-		//Check if the windows manager needs it
-		theGame.getGameWindowManager().keyCheck(keyCode, pressed);
 	}
 
 	@Override

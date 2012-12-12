@@ -1,5 +1,8 @@
 package name_pending.Windows;
 
+import java.awt.event.MouseEvent;
+import java.util.HashSet;
+
 import name_pending.Game;
 
 /**
@@ -11,6 +14,8 @@ import name_pending.Game;
 public class GameWindowManager {
 
 	protected Game theGame = null;
+	//Will house all the game active windows
+	private HashSet<GameWindow> gameWindowHash = new HashSet<GameWindow>();
 	
 	public GameWindowManager(Game game)
 	{
@@ -25,6 +30,34 @@ public class GameWindowManager {
 	 */
 	public void keyCheck(int keyCode,boolean pressed) //copied from Entity
 	{
+		for (GameWindow gw: getGameWindowHash())
+			gw.keyCheck(keyCode, pressed);
+	}
 
+	/**
+	 * Will be triggered by the FrameMouseListener event
+	 * @param event Event that was passed from the MouseListener
+	 * @param eventType Compatable Strings "clicked", "pressed", and "released.
+	 */
+	public void mouseCheck(MouseEvent event,String eventType)
+	{
+		for(GameWindow gw: getGameWindowHash())
+			gw.mouseCheck(event, eventType);
+	}
+
+	public Game getTheGame() {
+		return theGame;
+	}
+
+	public void setTheGame(Game theGame) {
+		this.theGame = theGame;
+	}
+
+	public HashSet<GameWindow> getGameWindowHash() {
+		return gameWindowHash;
+	}
+
+	public void setGameWindowHash(HashSet<GameWindow> gameWindowHash) {
+		this.gameWindowHash = gameWindowHash;
 	}
 }

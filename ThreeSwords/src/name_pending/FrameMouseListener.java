@@ -4,7 +4,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import name_pending.Entities.Entity;
-import name_pending.Windows.GameWindow;
 
 public class FrameMouseListener implements MouseListener{
 	
@@ -41,16 +40,18 @@ public class FrameMouseListener implements MouseListener{
 	 * @param eventType
 	 */
 	protected void sendEvent(MouseEvent event, String eventType)
-	{
+	{	
 		for (Entity e: theGame.getEntityHash())
 		{
 			e.mouseCheck(event, eventType);
 		}
 
+		this.theGame.getGameWindowManager().mouseCheck(event, eventType);
+		/* Moved this to the GameWindowManager
 		for (GameWindow gw: theGame.getGameWindowHash())
 		{
 			gw.mouseCheck(event, eventType);
-		}
+		}*/
 	}
 	
 	//Not so important to me for the time being
