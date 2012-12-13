@@ -1,5 +1,7 @@
 package name_pending;
 
+import java.awt.Point;
+
 import name_pending.Entities.Player;
 import name_pending.Entities.Items.ItemBow;
 import name_pending.Entities.Items.ItemDrop;
@@ -21,7 +23,7 @@ public class TestRoom {
 	{
 		//add the player
 		//change the cursor
-		theGame.changeCursor("CursorCrossheir.png");
+		theGame.changeCursor("CursorCrossheir.png", new Point(15,15));
 		theGame.getEntityHash().add(new Player(theGame, 200, 200));
 		//theGame.getEntityHash().add(new Player(theGame, 400, 100));
 		//create a bow
@@ -29,14 +31,16 @@ public class TestRoom {
 		//ItemBow bow = new ItemBow(theGame, "SuperBow", "This is the SuperBow of epicness", "white", 10, 100, 150, null);
 		//put it in the players inventory
 
-		ItemDrop itemDrop = new ItemDrop(theGame, new ItemBow(theGame, "SuperBow", "This is the SuperBow of epicness", "white", 10, 100, 150, null), 100, 100);
-		theGame.getEntityHash().add(itemDrop);
-		
+		for(int i=0; i<10; i++){
+			ItemDrop itemDrop = new ItemDrop(theGame, new ItemBow(theGame, "SuperBow", "This is the SuperBow of epicness", "white", 10, 100, 150, null), 50 + (50*i), 50 + (50*i));
+			theGame.getEntityHash().add(itemDrop);
+		}
+		/*
 		ItemDrop itemDropa = new ItemDrop(theGame, new ItemBow(theGame, "SuperBow", "This is the SuperBow of epicness", "white", 10, 100, 150, null), 300, 350);
 		theGame.getEntityHash().add(itemDropa);
 		
 		ItemDrop itemDropb = new ItemDrop(theGame, new ItemBow(theGame, "SuperBow", "This is the SuperBow of epicness", "white", 10, 100, 150, null), 300, 400);
-		theGame.getEntityHash().add(itemDropb);
+		theGame.getEntityHash().add(itemDropb);*/
 	}
 
 }

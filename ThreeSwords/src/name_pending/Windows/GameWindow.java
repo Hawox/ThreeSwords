@@ -14,15 +14,16 @@ public class GameWindow {
 	Game theGame = null;
 	
 	//This is assuming all my windows will be rectangles later on
-	protected int x;
-	protected int y;
-	protected int width;
-	protected int height;
+	private int x;
+	private int y;
+	private int width;
+	private int height;
+	private boolean visiable = false;
 	//TODO get this setup to work with the sprites drawn by ChanceBandit
 	
 	//These are here incase I need them in the future.
-	protected String name = "NoNameWindow";
-	protected String windowType = "NoWindowType";
+	private String name = "NoNameWindow";
+	private String windowType = "NoWindowType";
 	
 	/**
 	 * 
@@ -41,6 +42,8 @@ public class GameWindow {
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		this.name = name;
+		this.windowType = type;
 	}
 
 	/**
@@ -71,5 +74,99 @@ public class GameWindow {
 	public void mouseCheck(MouseEvent event,String eventType)
 	{
 
+	}
+	
+	public void toggleVisibility()
+	{
+		if(isVisiable() == true)
+			setVisiable(false);
+		else
+			setVisiable(true);
+	}
+	
+	/**
+	 * Called when the data inside the window needs to be updated
+	 * Ex: Inventory updated when an item is picked up
+	 */
+	public void update()
+	{
+		
+	}
+	
+	/**
+	 * Remove it from the windows list which should delete it
+	 */
+	public void onDelete()
+	{
+		this.theGame.getGameWindowManager().getGameWindowHash().remove(this);
+	}
+	
+	/**
+	 * Getters and setters
+	 * @return
+	 */
+
+	public Game getTheGame() {
+		return theGame;
+	}
+
+	public void setTheGame(Game theGame) {
+		this.theGame = theGame;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getWindowType() {
+		return windowType;
+	}
+
+	public void setWindowType(String windowType) {
+		this.windowType = windowType;
+	}
+
+	public boolean isVisiable() {
+		return visiable;
+	}
+
+	public void setVisiable(boolean visiable) {
+		this.visiable = visiable;
 	}
 }

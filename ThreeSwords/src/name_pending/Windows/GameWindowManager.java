@@ -26,6 +26,8 @@ public class GameWindowManager {
 	public GameWindowManager(Game game)
 	{
 		this.theGame = game;
+		//create our inventory
+		getGameWindowHash().add(new GameWindowInventory(theGame, 600, 300, 190, 290));
 	}
 	
 	/**
@@ -36,14 +38,42 @@ public class GameWindowManager {
 	 */
 	public void keyCheck(int keyCode,boolean pressed) //copied from Entity
 	{
+		if(pressed == false)
+		{
+			if(keyCode == HOTKEY_inventory)
+			{
+				for(GameWindow gw : gameWindowHash)
+				{
+					if(gw.getName() == "InventoryWindow")
+					{
+						gw.toggleVisibility();
+						break;
+					}
+				}
+			}
+		}
+		/* Windows will not be visiable and non-visiable instead of deleting and creating them
+		 * Not sure why I thought that was a good idea
 		for (GameWindow gw: getGameWindowHash())
 			gw.keyCheck(keyCode, pressed);
-		
+		boolean hasInventory = false;
 		//Should we make some windows?
+		
 		if(keyCode == HOTKEY_inventory)
 		{
-			getGameWindowHash().add(new GameWindowInventory(theGame, 600, 300, 190, 290));
-		}
+			for (GameWindow gw : this.gameWindowHash)
+			{
+				if(gw.getName() == "InventoryWindow")
+				{
+					//remove that window
+					gw.onDelete();
+					hasInventory = true;
+					break;
+				}
+			}
+			if(hasInventory == false)
+				getGameWindowHash().add(new GameWindowInventory(theGame, 600, 300, 190, 290));
+		}*/
 	}
 
 	/**
@@ -67,6 +97,25 @@ public class GameWindowManager {
 			gw.paintMe(g);
 	}
 	
+	/*
+	 * Updates all the windows
+	 */
+	public void updateWindows()
+	{
+		for(GameWindow gw : getGameWindowHash())
+			gw.update();
+	}
+	
+	/*
+	 * Override to update a specific window
+	 */
+	public void updateWindows(String name)
+	{
+		for(GameWindow gw : getGameWindowHash())
+			if(gw.getName() == name)
+				gw.update();
+	}
+	
 	
 	/**
 	 * Getters and setters
@@ -81,7 +130,7 @@ public class GameWindowManager {
 		this.theGame = theGame;
 	}
 
-	private HashSet<GameWindow> getGameWindowHash() {
+	public HashSet<GameWindow> getGameWindowHash() {
 		return gameWindowHash;
 	}
 

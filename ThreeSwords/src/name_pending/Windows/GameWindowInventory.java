@@ -2,13 +2,9 @@ package name_pending.Windows;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
+import java.util.ConcurrentModificationException;
 
 import name_pending.Game;
 import name_pending.Inventory;
@@ -34,60 +30,94 @@ public class GameWindowInventory extends GameWindow {
 	
 	public void populateInventorySlots()
 	{
-		try{
+		//Variables are oddly named because I stole this code from UI and then broke it into different sections
+		//try{
 		int row = 1;
 		int vert = 1;
-		int startx = x - 40;
-		int starty = y - 40;
+		int startx = getX() - 25;
+		int starty = getY() - 15;
 		int drawx = startx;
 		int drawy = starty;
 		Inventory inventory = theGame.getPlayer().getInventory();
+		Item item = null;
 		for(int i=0; i<inventory.getMaxSize(); i++)
 		{
-			this.inventorySlots.add(new GameWindowInventorySlot(this, drawx+(35*vert), drawy+(35*row), 32, 32, inventory.getItems().get(i), i));
+			if(inventory.getItems().size() > i)
+				item = inventory.getItems().get(i);
+			else
+				item = new Item(theGame, "Empty Slot", "Nothing here.", "none");
+			this.inventorySlots.add(new GameWindowInventorySlot(this, drawx+(35*vert), drawy+(35*row), 32, 32, item, i+1));
 			//check if at end of row
 			vert++;
-			if( (drawx+(35*vert+1) + 32) > theGame.getFrame().getWidth() )
+			if( (drawx+(35*vert+1) + 32) > this.getWidth() + this.getX() )
 			{
 				drawx = startx;
 				row ++;
 				vert = 1;
 			}
 		}
-		}catch(IndexOutOfBoundsException e){}
+		//}catch(IndexOutOfBoundsException e){}
 	}
 
 	public void paintMe(Graphics g)
 	{
-		super.paintMe(g);
-		//Only paint this if the player exists
-		Player player = theGame.getPlayer();
-		if(player != null)
+		if(isVisiable())
 		{
-			//Fill
-			g.setColor(Color.LIGHT_GRAY);
-			g.fillRect(x, y, width, height);
-			g.setColor(Color.CYAN);
-			g.fillRect(x, y, 190, 15);
-
-			//text
-			g.setColor(Color.black);
-			g.drawString("Inventory", 665, 312);
-
-			//borders
-			g.setColor(Color.BLACK);
-			g.drawRect(x, y, width, height);
-			g.drawRect(x, y, 190, 15);
-
-			//Draw the items
-			populateInventorySlots();
-			for(GameWindowInventorySlot gwis : this.inventorySlots)
+			super.paintMe(g);
+			//Only paint this if the player exists
+			Player player = theGame.getPlayer();
+			if(player != null)
 			{
-				gwis.paintMe(g);
+				//Fill
+				g.setColor(Color.LIGHT_GRAY);
+				g.fillRect(getX(), getY(), getWidth(), getHeight());
+				g.setColor(Color.CYAN);
+				g.fillRect(getX(), getY(), 190, 15);
+
+				//text
+				g.setColor(Color.black);
+				g.drawString("Inventory", this.getX() + 65, this.getY() + 12);
+
+				//borders
+				g.setColor(Color.BLACK);
+				g.drawRect(getX(), getY(), getWidth(), getHeight());
+				g.drawRect(getX(), getY(), 190, 15);
+
+				//Draw the items
+				//populateInventorySlots();
+				try{
+				for(GameWindowInventorySlot gwis : this.inventorySlots)
+				{
+					gwis.paintMe(g);
+				}
+				}catch(ConcurrentModificationException e){}
 			}
 		}
 	}
 	
+	public void toggleVisibility()
+	{
+		super.toggleVisibility();
+		if(isVisiable())
+			this.populateInventorySlots();
+	}
+	
+	public void update()
+	{
+		super.update();
+		this.populateInventorySlots();
+	}
+	
+	public void mouseCheck(MouseEvent event, String eventType)
+	{
+		super.mouseCheck(event, eventType);
+		//Check if our slots need it
+		for(GameWindowInventorySlot gwis : this.inventorySlots)
+		{
+			gwis.mouseCheck(event, eventType);
+		}
+	}
+
 	/**
 	 * Internal classes!
 	 */
@@ -98,37 +128,54 @@ public class GameWindowInventory extends GameWindow {
 		
 		//These will contain items so we need them to hold item objects
 		Item item;
-		PopupListener popupListener = new PopupListener();
+		//PopupListener popupListener = new PopupListener(this);
 		
 		GameWindowInventorySlot(GameWindow parentWindow, int x, int y,
 				int width, int height, Item item, int slotNumber) {
 			super(parentWindow, x, y, width, height);
 			this.item = item;
 			this.slotNumber = slotNumber;
+			
+			//create our menu
+			getPopup().add(makeMenuItem("Use"));
+			getPopup().add(makeMenuItem("Equip"));
+			getPopup().add(makeMenuItem("Move To Slot X"));
+			getPopup().add(makeMenuItem("Drop"));
+			
+			
+			/*setMenuItem(new JMenuItem("Use"));
+			//menuItem.addActionListener((ActionListener) popupListener);
+			getPopup().add(menuItem);
+			setMenuItem(new JMenuItem("Equip"));
+			//menuItem.addActionListener((ActionListener) popupListener);
+			getPopup().add(menuItem);
+			setMenuItem(new JMenuItem("Move To Slot x"));
+			//menuItem.addActionListener((ActionListener) popupListener);
+			popup.add(menuItem);
+			setMenuItem(new JMenuItem("Drop"));
+			//menuItem.addActionListener((ActionListener) popupListener);
+			popup.add(menuItem);*/
 		}
 		
 		public void paintMe(Graphics g)
 		{
 			g.setColor(Color.WHITE);
-			g.fillRect(x, y, width, height);
+			g.fillRect(getX(), getY(), getWidth(), getHeight());
 			g.setColor(Color.BLACK);
-			g.drawRect(x, y, width, height);
+			g.drawRect(getX(), getY(), getWidth(), getHeight());
 			g.setColor(Color.RED);
-			g.drawString(Integer.toString(slotNumber), x+16, y+16);
-			//TODO draw item sprite inside of it
+			g.drawString(Integer.toString(slotNumber), getX()+16, getY()+16);
 			Sprite s = null;
 			try{
 				if(item != null)
 					s = item.getSprite();
 				if(s != null)
 				{
-					s.setPosition(x, y);
+					s.setPosition(getX(), getY());
 					s.paintOrig(g);
 				}
 			}catch(IndexOutOfBoundsException e){}
 		}
-		
-		
 		
 		/**
 		 * Menus we want are:
@@ -138,30 +185,26 @@ public class GameWindowInventory extends GameWindow {
 		 *  Drop
 		 * @return 
 		 */
-		
-		//Needed to get our popup working
-		JPopupMenu popup = new JPopupMenu();
-		JMenuItem menuItem;
-		
-		public void rightClicked()
+		public void rightClicked(MouseEvent event)
 		{
-			//create our menu
-			menuItem = new JMenuItem("Use");
-			menuItem.addActionListener((ActionListener) popupListener);
-			popup.add(menuItem);
-			menuItem = new JMenuItem("Equip");
-			menuItem.addActionListener((ActionListener) popupListener);
-			popup.add(menuItem);
-			menuItem = new JMenuItem("Move To Slot x");
-			menuItem.addActionListener((ActionListener) popupListener);
-			popup.add(menuItem);
-			menuItem = new JMenuItem("Drop");
-			menuItem.addActionListener((ActionListener) popupListener);
-			popup.add(menuItem);
+			super.rightClicked(event);
+			
+			//popup.setBounds(mousePoint.x, mousePoint.y, popup.getWidth(), popup.getHeight());
+			//popup.setVisible(true);
+			getPopup().show(getParentWindow().getTheGame().getFrame(), event.getPoint().x, event.getPoint().y);
+			//getPopup().show(getParentWindow().getTheGame().getFrame(), getX(), getY());
+			
+			//this.parentWindow.getTheGame().getFrame().addMouseListener(popupListener);
 		}
 		
-		//needed to get input from the popup menu
+		/*needed to get input from the popup menu
 		class PopupListener extends MouseAdapter {
+			GameWindowInventorySlot slot;
+			
+			PopupListener(GameWindowInventorySlot slot)
+			{
+				this.slot = slot;
+			}
 			public void mousePressed(MouseEvent e) {
 				maybeShowPopup(e);
 			}
@@ -171,50 +214,13 @@ public class GameWindowInventory extends GameWindow {
 			}
 
 			private void maybeShowPopup(MouseEvent e) {
+				slot.rightClicked();
+				/*
 				if (e.isPopupTrigger()) {
 					popup.show(e.getComponent(),
 							e.getX(), e.getY());
-				}
+				}*
 			}
-		}
+		}*/
 	}
 }
-		/*
-			//...where instance variables are declared:
-			JPopupMenu popup;
-
-			    //...where the GUI is constructed:
-			    //Create the popup menu.
-			    popup = new JPopupMenu();
-			    menuItem = new JMenuItem("A popup menu item");
-			    menuItem.addActionListener(this);
-			    popup.add(menuItem);
-			    menuItem = new JMenuItem("Another popup menu item");
-			    menuItem.addActionListener(this);
-			    popup.add(menuItem);
-
-			    //Add listener to components that can bring up popup menus.
-			    MouseListener popupListener = new PopupListener();
-			    output.addMouseListener(popupListener);
-			    menuBar.addMouseListener(popupListener);
-			...
-			class PopupListener extends MouseAdapter {
-			    public void mousePressed(MouseEvent e) {
-			        maybeShowPopup(e);
-			    }
-
-			    public void mouseReleased(MouseEvent e) {
-			        maybeShowPopup(e);
-			    }
-
-			    private void maybeShowPopup(MouseEvent e) {
-			        if (e.isPopupTrigger()) {
-			            popup.show(e.getComponent(),
-			                       e.getX(), e.getY());
-			        }
-			    }
-		}
-		
-	}
-}
-*/

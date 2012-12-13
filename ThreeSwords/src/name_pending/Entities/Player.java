@@ -66,7 +66,10 @@ public class Player extends Being{
 					//Delete drop and add it's item to inventory < reverse that
 					this.getInventory().addItem(id.getItem());
 					id.onDelete();
-					//break;
+					
+					//Update our inventory with the new item
+					this.getTheGame().getGameWindowManager().updateWindows("InventoryWindow");
+					break;
 				}
 			}
 		}

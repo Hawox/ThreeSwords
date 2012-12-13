@@ -130,7 +130,7 @@ public class Game
 	 * Returns true if it changed the cursor
 	 * @param name -- String tied to the cursor sprite
 	 */
-	public boolean changeCursor(String name)
+	public boolean changeCursor(String name, Point clickPoint)
 	{
 		Sprite newCursor = null;
 
@@ -138,6 +138,7 @@ public class Game
 		//{
 			//Change the variable
 			newCursor = this.getResourceLoader().getSprite(name);
+			newCursor.setRefPixel(clickPoint.x, clickPoint.y);
 			//Now actually change the cursor that's drawn
 			Toolkit toolkit = Toolkit.getDefaultToolkit();
 			Image image = newCursor.getImage();
