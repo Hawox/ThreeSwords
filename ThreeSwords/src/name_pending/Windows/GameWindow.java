@@ -1,5 +1,6 @@
 package name_pending.Windows;
 
+import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 
 import name_pending.Game;
@@ -30,8 +31,10 @@ public class GameWindow {
 	 * @param y
 	 * @param width
 	 * @param height
+	 * @param name
+	 * @param type
 	 */
-	GameWindow(Game theGame, int x, int y, int width, int height)
+	GameWindow(Game theGame, int x, int y, int width, int height, String name, String type)
 	{
 		this.theGame = theGame;
 		this.x = x;
@@ -49,6 +52,15 @@ public class GameWindow {
 	public void keyCheck(int keyCode,boolean pressed) //copied from Entity
 	{
 
+	}
+	
+	/**
+	 * Draws the window to the frame
+	 * @param g
+	 */
+	public void paintMe(Graphics g)
+	{
+		
 	}
 	
 	/**

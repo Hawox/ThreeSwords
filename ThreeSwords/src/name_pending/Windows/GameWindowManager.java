@@ -1,5 +1,7 @@
 package name_pending.Windows;
 
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.HashSet;
 
@@ -12,6 +14,10 @@ import name_pending.Game;
  *
  */
 public class GameWindowManager {
+	
+	//TODO Maybe make a global hotkey manager at somepoint
+	//All the hotkeys that are used in the inventory manager
+	int HOTKEY_inventory = KeyEvent.VK_I;
 
 	protected Game theGame = null;
 	//Will house all the game active windows
@@ -32,6 +38,12 @@ public class GameWindowManager {
 	{
 		for (GameWindow gw: getGameWindowHash())
 			gw.keyCheck(keyCode, pressed);
+		
+		//Should we make some windows?
+		if(keyCode == HOTKEY_inventory)
+		{
+			getGameWindowHash().add(new GameWindowInventory(theGame, 600, 300, 190, 290));
+		}
 	}
 
 	/**
@@ -45,6 +57,22 @@ public class GameWindowManager {
 			gw.mouseCheck(event, eventType);
 	}
 
+	/**
+	 * Paint all the windows ALL THE WINDOWS!
+	 * @param g Graphics
+	 */
+	public void paintWindows(Graphics g)
+	{
+		for(GameWindow gw: getGameWindowHash())
+			gw.paintMe(g);
+	}
+	
+	
+	/**
+	 * Getters and setters
+	 */
+	
+	
 	public Game getTheGame() {
 		return theGame;
 	}
@@ -53,11 +81,12 @@ public class GameWindowManager {
 		this.theGame = theGame;
 	}
 
-	public HashSet<GameWindow> getGameWindowHash() {
+	private HashSet<GameWindow> getGameWindowHash() {
 		return gameWindowHash;
 	}
 
-	public void setGameWindowHash(HashSet<GameWindow> gameWindowHash) {
+	@SuppressWarnings("unused")
+	private void setGameWindowHash(HashSet<GameWindow> gameWindowHash) {
 		this.gameWindowHash = gameWindowHash;
 	}
 }

@@ -35,7 +35,8 @@ public class UI {
 		
 		/* Draw active windows */
 		if(doDrawInventory)
-			drawInventoryWindow(g, player);
+			drawGameWindows(g);
+			//drawInventoryWindow(g, player);
 		
 		
 		/**DEBUG STUFF!**/
@@ -78,8 +79,13 @@ public class UI {
 		
 	}
 	
+	public void drawGameWindows(Graphics g)
+	{
+		theGame.getGameWindowManager().paintWindows(g);
+	}
 	
-	/** Methods for drawing all of the cool windows **/
+	/** EDIT: Moved to GameWindowManager 
+	 * Methods for drawing all of the cool windows **
 	private void drawInventoryWindow(Graphics g, Player player)
 	{
 		//Fill
@@ -134,7 +140,7 @@ public class UI {
 				vert = 1;
 			}
 		}
-	}
+	}*/
 	
 	
 	/** Keycheck method **/
