@@ -18,6 +18,7 @@ public class GameWindowManager {
 	//TODO Maybe make a global hotkey manager at somepoint
 	//All the hotkeys that are used in the inventory manager
 	int HOTKEY_inventory = KeyEvent.VK_I;
+	int HOTKEY_equipment = KeyEvent.VK_E;
 
 	protected Game theGame = null;
 	//Will house all the game active windows
@@ -28,6 +29,7 @@ public class GameWindowManager {
 		this.theGame = game;
 		//create our inventory
 		getGameWindowHash().add(new GameWindowInventory(theGame, 600, 300, 190, 290));
+		getGameWindowHash().add(new GameWindowEquipment(theGame, 300, 300, 190, 290));
 	}
 	
 	/**
@@ -45,6 +47,18 @@ public class GameWindowManager {
 				for(GameWindow gw : gameWindowHash)
 				{
 					if(gw.getName() == "InventoryWindow")
+					{
+						gw.toggleVisibility();
+						break;
+					}
+				}
+			}
+			
+			if(keyCode == HOTKEY_equipment)
+			{
+				for(GameWindow gw : gameWindowHash)
+				{
+					if(gw.getName() == "EquipmentWindow")
 					{
 						gw.toggleVisibility();
 						break;

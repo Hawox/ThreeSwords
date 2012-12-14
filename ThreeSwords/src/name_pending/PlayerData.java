@@ -1,5 +1,7 @@
 package name_pending;
 
+import name_pending.Entities.Items.Item;
+
 
 /**
  * I have split the player and the players data into two parts. This will house everything player related as in stat's and inventory.
@@ -30,7 +32,76 @@ public class PlayerData {
 	
 	//Players inventory
 	private Inventory inventory = new Inventory("Players Inventory", 15);
+	private Inventory equipment = new Inventory("Players Equipment", 8);
+	/*
+	 * 0 Clockwork weapon
+	 * 1 Melee weapon
+	 * 2 Ranged Weapon
+	 * 3 Headpiece
+	 * 4 Chest
+	 * 5 Gloves
+	 * 6 Boots
+	 * 7 Amulet
+	 * 8 Ring
+	 */
+	
+	/**
+	 * I don't want to have to remember the above stats so I am going to add in different methods to clean up the code
+	 *  And make it more readable
+	 */
+	public Item getClockworkWeapon()
+	{
+		return getEquipment().getItems().get(0);
+	}
+	
+	public Item getMeleeWeapon()
+	{
+		return getEquipment().getItems().get(1);
+	}
+	
+	public Item getRangedWeapon()
+	{
+		return getEquipment().getItems().get(2);
+	}
+	
+	public Item getHeadpiece()
+	{
+		return getEquipment().getItems().get(3);
+	}
+	
+	public Item getChest()
+	{
+		return getEquipment().getItems().get(4);
+	}
+	
+	public Item getGloves()
+	{
+		return getEquipment().getItems().get(5);
+	}
+	
+	public Item getBoots()
+	{
+		return getEquipment().getItems().get(6);
+	}
+	
+	public Item getAmulet()
+	{
+		return getEquipment().getItems().get(1);
+	}
+	
+	public Item getRing()
+	{
+		return getEquipment().getItems().get(1);
+	}
 
+	
+	
+	/**
+	 * Getters and setters
+	 */
+	
+	
+	
 	public PlayerData(Game theGame)
 	{
 		this.thegame = theGame;
@@ -146,6 +217,14 @@ public class PlayerData {
 
 	public void setInventory(Inventory inventory) {
 		this.inventory = inventory;
+	}
+
+	public Inventory getEquipment() {
+		return equipment;
+	}
+
+	public void setEquipment(Inventory equipment) {
+		this.equipment = equipment;
 	}
 
 
