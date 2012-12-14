@@ -55,6 +55,9 @@ public class Game
 	
 	//Houses all of the games sprites
 	ResourceLoader spriteLoader = new ResourceLoader();
+	
+	//This will hold all the important data for players
+	PlayerData playerData = new PlayerData(this);
 
 
 	private Sprite currentCursor = null;
@@ -326,6 +329,14 @@ public class Game
 
 	public void setGameWindowManager(GameWindowManager gameWindowManager) {
 		this.gameWindowManager = gameWindowManager;
+	}
+
+	public PlayerData getPlayerData() {
+		return playerData;
+	}
+
+	public void setPlayerData(PlayerData playerData) {
+		this.playerData = playerData;
 	}
 
 	//Different method for this above

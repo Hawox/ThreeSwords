@@ -49,7 +49,7 @@ public class UI {
 		//Draw player related HUD
 		//Level
 		g.setColor(Color.BLACK);
-		g.drawString("Player Level: " + Integer.toString(player.getLevel()), 700, 50);
+		g.drawString("Player Level: " + Integer.toString(getTheGame().getPlayerData().getLevel()), 700, 50);
 		//Health bar
 		g.setColor(Color.GREEN);
 		g.drawString("Health: " + Integer.toString(player.getHealth()), 700, 65);

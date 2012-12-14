@@ -38,7 +38,7 @@ public class GameWindowInventory extends GameWindow {
 		int starty = getY() - 15;
 		int drawx = startx;
 		int drawy = starty;
-		Inventory inventory = theGame.getPlayer().getInventory();
+		Inventory inventory = theGame.getPlayerData().getInventory();
 		Item item = null;
 		for(int i=0; i<inventory.getMaxSize(); i++)
 		{
