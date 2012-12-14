@@ -33,11 +33,21 @@ public class PlayerData {
 	//Players inventory
 	private Inventory inventory = new Inventory("Players Inventory", 15);
 	private Inventory equipment = new Inventory("Players Equipment", 8);
+	
+	public PlayerData(Game theGame)
+	{
+		this.thegame = theGame;
+		for(int i=0; i<9; i++)
+		{
+			this.getEquipment().getItems().add(i, null);
+			//this.getEquipment().getItems().add(i,new ItemBow(theGame, "SuperBow", "This is the SuperBow of epicness", "white", 10, 100, 150, null), 50 + (50*i), 50 + (50*i));
+		}
+	}
 	/*
 	 * 0 Clockwork weapon
 	 * 1 Melee weapon
 	 * 2 Ranged Weapon
-	 * 3 Headpiece
+	 * 3 Head
 	 * 4 Chest
 	 * 5 Gloves
 	 * 6 Boots
@@ -51,47 +61,157 @@ public class PlayerData {
 	 */
 	public Item getClockworkWeapon()
 	{
+		try{
 		return getEquipment().getItems().get(0);
+		}catch(java.lang.IndexOutOfBoundsException e){ return null;	}
 	}
 	
 	public Item getMeleeWeapon()
 	{
+		try{
 		return getEquipment().getItems().get(1);
+		}catch(java.lang.IndexOutOfBoundsException e){ return null;	}
 	}
 	
 	public Item getRangedWeapon()
 	{
+		try{
 		return getEquipment().getItems().get(2);
+		}catch(java.lang.IndexOutOfBoundsException e){ return null;}
 	}
 	
-	public Item getHeadpiece()
+	public Item getHead()
 	{
+		try{
 		return getEquipment().getItems().get(3);
+		}catch(java.lang.IndexOutOfBoundsException e){ return null;	}
 	}
 	
 	public Item getChest()
 	{
+		try{
 		return getEquipment().getItems().get(4);
+		}catch(java.lang.IndexOutOfBoundsException e){ return null;	}
 	}
 	
 	public Item getGloves()
 	{
+		try{
 		return getEquipment().getItems().get(5);
+		}catch(java.lang.IndexOutOfBoundsException e){ return null;	}
 	}
 	
 	public Item getBoots()
 	{
+		try{
 		return getEquipment().getItems().get(6);
+		}catch(java.lang.IndexOutOfBoundsException e){ return null;	}
 	}
 	
 	public Item getAmulet()
 	{
-		return getEquipment().getItems().get(1);
+		try{
+		return getEquipment().getItems().get(7);
+		}catch(java.lang.IndexOutOfBoundsException e){ return null;	}
 	}
 	
 	public Item getRing()
 	{
-		return getEquipment().getItems().get(1);
+		try{
+		return getEquipment().getItems().get(8);
+		}catch(java.lang.IndexOutOfBoundsException e){ return null;	}
+	}
+	
+	
+	
+	public boolean setClockworkWeapon(Item item)
+	{
+		if(item.getType() == "clockworkweapon")
+		{
+			this.getEquipment().getItems().set(0, item);
+			return true;
+		}else
+			return false;
+	}	
+	
+	public boolean setMeleeWeapon(Item item)
+	{
+		if(item.getType() == "meleeweapon")
+		{
+			this.getEquipment().getItems().set(1, item);
+			return true;
+		}else
+			return false;
+	}	
+	
+	public boolean setrangedWeapon(Item item)
+	{
+		if(item.getType() == "rangedweapon")
+		{
+			this.getEquipment().getItems().set(2, item);
+			return true;
+		}else
+			return false;
+	}	
+	
+	public boolean setHead(Item item)
+	{
+		if(item.getType() == "head")
+		{
+			this.getEquipment().getItems().set(3, item);
+			return true;
+		}else
+			return false;
+	}	
+	
+	public boolean setChest(Item item)
+	{
+		if(item.getType() == "chest")
+		{
+			this.getEquipment().getItems().set(4, item);
+			return true;
+		}else
+			return false;
+	}	
+	
+	public boolean setGloves(Item item)
+	{
+		if(item.getType() == "gloves")
+		{
+			this.getEquipment().getItems().set(5, item);
+			return true;
+		}else
+			return false;
+	}	
+	
+	public boolean setBoots(Item item)
+	{
+		if(item.getType() == "boots")
+		{
+			this.getEquipment().getItems().set(6, item);
+			return true;
+		}else
+			return false;
+	}	
+	
+	public boolean setAmulet(Item item)
+	{
+		if(item.getType() == "amulet")
+		{
+			this.getEquipment().getItems().set(7, item);
+			return true;
+		}else
+			return false;
+	}	
+	
+	public boolean setRing(Item item)
+	{
+		if(item.getType() == "ring")
+		{
+			this.getEquipment().getItems().set(8, item);
+			return true;
+		}else
+			return false;
 	}
 
 	
@@ -99,13 +219,6 @@ public class PlayerData {
 	/**
 	 * Getters and setters
 	 */
-	
-	
-	
-	public PlayerData(Game theGame)
-	{
-		this.thegame = theGame;
-	}
 
 	public static String getSTARTING_NAME() {
 		return STARTING_NAME;

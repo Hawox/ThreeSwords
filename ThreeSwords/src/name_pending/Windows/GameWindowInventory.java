@@ -2,12 +2,14 @@ package name_pending.Windows;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
 import name_pending.Game;
 import name_pending.Inventory;
+import name_pending.PlayerData;
 import name_pending.Sprite;
 import name_pending.Entities.Player;
 import name_pending.Entities.Items.Item;
@@ -45,7 +47,7 @@ public class GameWindowInventory extends GameWindow {
 			if(inventory.getItems().size() > i)
 				item = inventory.getItems().get(i);
 			else
-				item = new Item(theGame, "Empty Slot", "Nothing here.", "none");
+				item = new Item(theGame, "Empty Slot", "Nothing here.", "notype", "none");
 			this.inventorySlots.add(new GameWindowInventorySlot(this, drawx+(35*vert), drawy+(35*row), 32, 32, item, i+1));
 			//check if at end of row
 			vert++;
@@ -197,6 +199,29 @@ public class GameWindowInventory extends GameWindow {
 			//this.parentWindow.getTheGame().getFrame().addMouseListener(popupListener);
 		}
 		
+		/**
+		 * Stuff happenes when the popup menu is clicked
+		 */
+		
+		public void actionPerformed(ActionEvent event) {
+			String command = event.getActionCommand();
+			if(command == "Equip")
+			{
+				//TODO add in all the other types
+				if(this.item.getType() == "rangedweapon")
+				{
+					PlayerData pd = this.getParentWindow().theGame.getPlayerData();
+					Item equipedItem = pd.getRangedWeapon();
+					pd.setrangedWeapon(item);
+					pd.getInventory().getItems().remove(item);
+					if(equipedItem != null)
+						pd.getInventory().addItem(equipedItem);
+					this.getParentWindow().getTheGame().getGameWindowManager().updateWindows();
+				}
+				
+			}
+		}
+
 		/*needed to get input from the popup menu
 		class PopupListener extends MouseAdapter {
 			GameWindowInventorySlot slot;

@@ -65,8 +65,16 @@ public class GameWindowSlot implements ActionListener{
 		item.addActionListener(this);
 		return item;
 	}
+	
+	public void actionPerformed(ActionEvent event)
+	{
+		
+	}
 
-	public void actionPerformed(ActionEvent event) {
+	/* This dosen't work so it's just called in each child
+	 * public void actionPerformed(ActionEvent event) {
+	 *
+		if(event.getActionCommand() == "Equip")
 		actionHappened(event);
 	}
 
@@ -74,7 +82,7 @@ public class GameWindowSlot implements ActionListener{
 	private void actionHappened(ActionEvent event)
 	{
 		
-	}
+	}*/ 
 
 	public GameWindow getParentWindow() {
 		return parentWindow;

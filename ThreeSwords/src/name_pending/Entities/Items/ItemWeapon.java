@@ -29,8 +29,8 @@ public class ItemWeapon extends Item{
 	 * @param maxDamage
 	 * @param distance
 	 */
-	public ItemWeapon(Game game, String name, String decription, String rarity, int minDamage, int maxDamage, int distance, String[] bonuses) {
-		super(game, name, decription, rarity);
+	public ItemWeapon(Game game, String name, String decription, String rarity, String type, int minDamage, int maxDamage, int distance, String[] bonuses) {
+		super(game, name, decription, rarity, type);
 		this.minDamage = minDamage;
 		this.maxDamage = maxDamage;
 		this.distance = distance;

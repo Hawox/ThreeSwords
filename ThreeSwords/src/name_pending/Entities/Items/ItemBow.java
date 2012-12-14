@@ -4,9 +4,20 @@ import name_pending.Game;
 
 public class ItemBow extends ItemWeapon{
 
-	public ItemBow(Game game, String name, String decription, String rarity,
-			int minDamage, int maxDamage, int distance, String[] bonuses) {
-		super(game, name, decription, rarity, minDamage, maxDamage, distance, bonuses);
+	/**
+	 * 
+	 * @param game
+	 * @param name
+	 * @param decription
+	 * @param rarity
+	 * @param type
+	 * @param minDamage
+	 * @param maxDamage
+	 * @param distance
+	 * @param bonuses
+	 */
+	public ItemBow(Game game, String name, String decription, String rarity, int minDamage, int maxDamage, int distance, String[] bonuses) {
+		super(game, name, decription, rarity, "rangedweapon", minDamage, maxDamage, distance, bonuses);
 		setWeaponType("bow");
 		setRanged(true);
 		this.setSprite(this.getTheGame().getResourceLoader().getSprite("ItemBow.png"));

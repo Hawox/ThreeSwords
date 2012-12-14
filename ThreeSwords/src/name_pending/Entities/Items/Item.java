@@ -10,6 +10,7 @@ public class Item {
 	private String name = "Empty Item";
 	private String decription = "I am an empty item. Here me ROAWR!";
 	private String rarity = "white";
+	private String type = "nothing";
 	private Sprite sprite = null;
 	
 	/**
@@ -19,12 +20,13 @@ public class Item {
 	 * @param decription
 	 * @param rarity
 	 */
-	public Item(Game game, String name, String decription, String rarity)
+	public Item(Game game, String name, String decription, String rarity, String type)
 	{
 		this.theGame = game;
 		this.name = name;
 		this.decription = decription;
 		this.rarity = rarity;
+		this.type = type;
 		
 		//Set the sprite to an error sprite
 		game.getResourceLoader().getSprite("ItemError.png");
@@ -68,5 +70,13 @@ public class Item {
 
 	public void setSprite(Sprite sprite) {
 		this.sprite = sprite;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 }
