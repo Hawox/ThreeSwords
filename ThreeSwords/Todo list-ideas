@@ -6,3 +6,4 @@ Crafting on the go with tools made in town but they have limited uses
 wood, ore, string, elements, gears and circuts the basic crafting stuff
 Use all basic stuff off the bat
 Don't gain exp or materies in stuff without points put into it
+Fix concurrent modification exceptions everywhere

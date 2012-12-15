@@ -85,10 +85,12 @@ public class GameLoop implements Runnable{
 					g.fillRect(0, 0, theGame.getFrame().getWidth(), theGame.getFrame().getHeight());
 
 					//Draw our entities
+					try{
 					for(Entity e : entities)
 					{
 						e.paintMe(g);
 					}
+					}catch(ConcurrentModificationException e){}
 					
 
 					/*if(theGame.isDEBUG())
@@ -130,10 +132,12 @@ public class GameLoop implements Runnable{
 
 	private void steps(HashSet<Entity> entities)
 	{
+		try{
 		for(Entity e : entities)
 		{
 			e.step();
 		}
+		}catch(ConcurrentModificationException e){}
 	}
 
 }

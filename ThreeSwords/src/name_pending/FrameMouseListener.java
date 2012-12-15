@@ -2,6 +2,7 @@ package name_pending;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ConcurrentModificationException;
 
 import name_pending.Entities.Entity;
 
@@ -41,10 +42,12 @@ public class FrameMouseListener implements MouseListener{
 	 */
 	protected void sendEvent(MouseEvent event, String eventType)
 	{	
+		try{
 		for (Entity e: theGame.getEntityHash())
 		{
 			e.mouseCheck(event, eventType);
 		}
+		}catch(ConcurrentModificationException e){}
 
 		this.theGame.getGameWindowManager().mouseCheck(event, eventType);
 		/* Moved this to the GameWindowManager

@@ -19,7 +19,7 @@ public class Player extends Being{
 	@SuppressWarnings("static-access")
 	public Player(Game theGame, int x, int y)
 	{
-		super(theGame, x, y, theGame.getPlayerData().getSTARTING_NAME(), theGame.getPlayerData().getSTARTING_HEALTH(), theGame.getPlayerData().getSTARTING_DEFENCE(), theGame.getPlayerData().getSTARTING_ATTACK(), theGame.getPlayerData().getSTARTING_SPEED(), theGame.getPlayerData().getSTARTING_DEXTERITY(), theGame.getPlayerData().getSTARTING_RESISTANCE());
+		super(theGame, x, y, theGame.getPlayerData().getSTARTING_SPEED(), theGame.getPlayerData().getSTARTING_NAME(), theGame.getPlayerData().getSTARTING_HEALTH(), theGame.getPlayerData().getSTARTING_DEFENCE(), theGame.getPlayerData().getSTARTING_ATTACK(), theGame.getPlayerData().getSTARTING_DEXTERITY(), theGame.getPlayerData().getSTARTING_RESISTANCE());
 		this.mana = theGame.getPlayerData().getMaxMana();
 		this.stamina = theGame.getPlayerData().getMaxStamina();
 	}
@@ -122,9 +122,13 @@ public class Player extends Being{
 		if(event.getButton() == MouseEvent.BUTTON3)
 		{
 			//TODO do a check if the mouse is over a window
-			if(getTheGame().getPlayerData().getRangedWeapon() != null)
+			ItemBow rangedWeapon = (ItemBow) getTheGame().getPlayerData().getRangedWeapon();
+			if(rangedWeapon != null)
 			{
-				Projectile projectile = new Projectile(getTheGame(), getX(), getY(), true);
+				//get a random dmg number from the weapon
+				int projectileDamage = getTheGame().getRandomGenerator().nextInt(rangedWeapon.getMaxDamage() - rangedWeapon.getMinDamage()) + rangedWeapon.getMinDamage();
+				//fire the arrow at the speed of the ranged weapon
+				Projectile projectile = new Projectile(getTheGame(), getX(), getY(), rangedWeapon.getDistance(), projectileDamage, true);
 				projectile.setDestination(event.getPoint());
 				getTheGame().getEntityHash().add(projectile);
 			}

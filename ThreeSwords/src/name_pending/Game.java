@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.util.HashSet;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -58,6 +59,9 @@ public class Game
 	
 	//This will hold all the important data for players
 	PlayerData playerData = new PlayerData(this);
+	
+	//Al of our random number needs
+	Random randomGenerator = new Random();
 
 
 	private Sprite currentCursor = null;
@@ -337,6 +341,14 @@ public class Game
 
 	public void setPlayerData(PlayerData playerData) {
 		this.playerData = playerData;
+	}
+
+	public Random getRandomGenerator() {
+		return randomGenerator;
+	}
+
+	public void setRandomGenerator(Random randomGenerator) {
+		this.randomGenerator = randomGenerator;
 	}
 
 	//Different method for this above

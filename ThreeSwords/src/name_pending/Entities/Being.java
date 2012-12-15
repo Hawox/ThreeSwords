@@ -19,8 +19,6 @@ public class Being extends Entity{
 	private int defence = 0; // Blocks damage
 
 	private int attack = 0; //base dmg delt
-
-	private int speed = 0; //How fast the entity moves, but also used in calculation crit/dodge
 	private int dexterity = 0;
 		private int critChance = 0; //this number is a percentage 1-100 ((=> 100) = 100% crit
 		private int dodgeChance = 0; //Calcuated the same as crit
@@ -28,15 +26,15 @@ public class Being extends Entity{
 
 	private boolean killable = true;
 
-	Being(Game theGame, int x, int y, String name, int health, int defence, int attack, int speed, int dexterity, String[] resist)
+	Being(Game theGame, int x, int y, int speed, String name, int health, int defence, int attack, int dexterity, String[] resist)
 	{
 		//Set cords and name
-		super(theGame, x, y, name);
+		super(theGame, x, y, speed, name);
 
 		this.health = health;
 		this.defence = defence;
 		this.attack = attack;
-		this.speed = speed;
+		setSpeed(speed);
 		this.dexterity = dexterity;
 
 		//Added the resists as a String[] to make it easier when calling the constructor
@@ -170,17 +168,6 @@ public class Being extends Entity{
 	public void setAttack(int attack) {
 		this.attack = attack;
 	}
-
-
-	public int getSpeed() {
-		return speed;
-	}
-
-
-	public void setSpeed(int speed) {
-		this.speed = speed;
-	}
-
 
 	public int getDexterity() {
 		return dexterity;

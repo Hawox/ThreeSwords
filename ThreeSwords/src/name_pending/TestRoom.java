@@ -32,7 +32,7 @@ public class TestRoom {
 		//put it in the players inventory
 
 		for(int i=0; i<10; i++){
-			ItemDrop itemDrop = new ItemDrop(theGame, new ItemBow(theGame, "SuperBow", "This is the SuperBow of epicness", "white", 10, 100, 150, null), 50 + (50*i), 50 + (50*i));
+			ItemDrop itemDrop = new ItemDrop(theGame, new ItemBow(theGame, "SuperBow", "This is the SuperBow of epicness", "white", 10, 100, 150, null), 50 + (50*i), 50 + (50*i), 0);
 			theGame.getEntityHash().add(itemDrop);
 		}
 		/*

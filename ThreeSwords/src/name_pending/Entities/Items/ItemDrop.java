@@ -14,9 +14,9 @@ public class ItemDrop extends Entity{
 	
 	Item item;
 	
-	public ItemDrop(Game theGame, Item item, int x, int y)
+	public ItemDrop(Game theGame, Item item, int x, int y, int speed)
 	{
-		super(theGame, x, y, "ItemDrop");
+		super(theGame, x, y, speed, "ItemDrop");
 		this.item = item;
 		//Set the entity sprite to the item sprite
 		setSprite(item.getSprite()); // I don't call this in the onCreate because item will still be null

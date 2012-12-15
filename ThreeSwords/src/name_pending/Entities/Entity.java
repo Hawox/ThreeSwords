@@ -67,6 +67,9 @@ public abstract class Entity {
 
 	//If it's an entity in the world it should have a sprite
 	private Sprite sprite = null;
+	
+	//How fast the entity moves, but also used in calculation crit/dodge
+	private int speed = 0; 
 
 	/*
 	 * I didn't want to add this before, now I am trying to remember why.
@@ -78,12 +81,19 @@ public abstract class Entity {
 	private String name = "deleteMe"; //Name before list edit
 	private String nameInList = "deleteMe"; //this name will have a number added to the end so entities in the list don't all have the same name
 
-	//basic constructor
-	protected Entity(Game theGame, int x, int y, String name)
+	/**
+	 * 
+	 * @param theGame
+	 * @param x
+	 * @param y
+	 * @param SpeedString
+	 */
+	protected Entity(Game theGame, int x, int y, int Speed, String name)
 	{
 		this.theGame = theGame;
 		this.setX(x);
 		this.setY(y);
+		this.setSpeed(speed);
 		//Lets see if changing their names helps with java.util.ConcurrentModificationException
 		int number = 0;
 		for(Entity e : theGame.getEntityHash())
@@ -155,8 +165,42 @@ public abstract class Entity {
 	//move the entity based on it's direction
 	public void moveMe()
 	{
-		x += dx;
-		y += dy;
+		//x += dx;
+		//y += dy;
+		//We want to check for collisions every 1 pixal movement to be more accurate with collision checking
+		//positive movement
+		if(dx > 0)
+		{
+			for(int i =0; i < dx; i++)
+			{
+				x += 1;
+				this.checkCollisions();
+			}
+		}else //negitive movement
+		{
+			for(int i = 0; i < (dx* -1); i++)
+			{
+				x -= 1;
+				this.checkCollisions();
+			}
+		}
+		
+		//positive movement
+		if(dy > 0)
+		{
+			for(int i =0; i < dy; i++)
+			{
+				y += 1;
+				this.checkCollisions();
+			}
+		}else //negitive movement
+		{
+			for(int i = 0; i < (dy* -1); i++)
+			{
+				y -= 1;
+				this.checkCollisions();
+			}
+		}
 	}
 
 	//Override to allow the entity to be moved to an exact x y
@@ -342,6 +386,14 @@ public abstract class Entity {
 
 	public void setNameInList(String nameInList) {
 		this.nameInList = nameInList;
+	}
+
+	public int getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(int speed) {
+		this.speed = speed;
 	}
 
 
