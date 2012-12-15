@@ -195,7 +195,7 @@ public class GameWindowInventory extends GameWindow {
 			//popup.setVisible(true);
 			//getPopup().set
 			if(this.getParentWindow().isVisiable())
-				getPopup().show(getParentWindow().getTheGame().getFrame(), event.getPoint().x, event.getPoint().y);
+				getPopup().show(getParentWindow().getTheGame().getGameArea(), event.getPoint().x, event.getPoint().y);
 			//getPopup().show(getParentWindow().getTheGame().getFrame(), getX(), getY());
 			
 			//this.parentWindow.getTheGame().getFrame().addMouseListener(popupListener);

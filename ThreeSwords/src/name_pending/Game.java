@@ -1,7 +1,9 @@
 package name_pending;
 
+import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Image;
+import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.util.HashSet;
@@ -53,6 +55,7 @@ public class Game
 	private JFrame frame = new JFrame();
 	private MainDrawPanel mainDrawPanel = new MainDrawPanel();
 	private UI ui = new UI(this); //base UI for the game
+	private GameArea gameArea = new GameArea(this);
 	
 	//Houses all of the games sprites
 	ResourceLoader spriteLoader = new ResourceLoader();
@@ -94,14 +97,25 @@ public class Game
 	{
 		//Create our frame
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().add(mainDrawPanel);
+		frame.getContentPane().add(BorderLayout.CENTER, gameArea);
 		frame.setSize(800,600);
 		frame.setVisible(true);
 		frame.setResizable(false);
-
-		//Have not setup fullscreen stuff yet but I think this will be needed
+		
+		//gameArea.setSize(800, 600);
+		
+		//frame.add();
+		
 		if(fullscreen)
-			frame.setUndecorated(true);
+		{
+			//frame.setUndecorated(true);
+			/*Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		    frame.setBounds(0,0,screenSize.width, screenSize.height);*/
+			/*
+			GraphicsDevice gd;
+			if(gd.isFullScreenSupported())
+				gd.setFullScreenWindow(getFrame());*/
+		}
 
 		//Gets double buffering ready
 		frame.createBufferStrategy(2);
@@ -349,6 +363,14 @@ public class Game
 
 	public void setRandomGenerator(Random randomGenerator) {
 		this.randomGenerator = randomGenerator;
+	}
+
+	public GameArea getGameArea() {
+		return gameArea;
+	}
+
+	public void setGameArea(GameArea gameArea) {
+		this.gameArea = gameArea;
 	}
 
 	//Different method for this above

@@ -2,7 +2,6 @@ package name_pending;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -17,7 +16,7 @@ public class UI {
 	private Game theGame;
 	
 	//Decides whether or not game windows are drawn
-	private boolean doDrawInventory = false;
+	//private boolean doDrawInventory = false;
 	
 	UI(Game game)
 	{
@@ -34,7 +33,7 @@ public class UI {
 			drawPlayerStuff(g, player);
 		
 		/* Draw active windows */
-		if(doDrawInventory)
+//		if(doDrawInventory)
 			drawGameWindows(g);
 			//drawInventoryWindow(g, player);
 		
@@ -146,7 +145,7 @@ public class UI {
 	/** Keycheck method **/
 	public void keyCheck(int keyCode, boolean pressed)
 	{
-		//Show or hide the inventory based on it's previous state
+		/*Show or hide the inventory based on it's previous state
 		if(keyCode == KeyEvent.VK_I)
 		{
 			if(pressed)
@@ -156,7 +155,7 @@ public class UI {
 				else //inventory is closed
 					this.setDrawInventory(true); //show it
 			}
-		}
+		}*/
 	}
 	
 	/**
@@ -245,14 +244,14 @@ public class UI {
 	}
 
 
-	public boolean isDrawInventory() {
+	/*public boolean isDrawInventory() {
 		return doDrawInventory;
 	}
 
 
 	public void setDrawInventory(boolean drawInventory) {
 		this.doDrawInventory = drawInventory;
-	}
+	}*/
 	
 	//All of it's other draw methods should be private because nothing else should call them
 }

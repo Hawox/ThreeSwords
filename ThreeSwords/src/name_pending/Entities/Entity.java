@@ -2,10 +2,12 @@ package name_pending.Entities;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.HashSet;
 
 import name_pending.Game;
+import name_pending.Room;
 import name_pending.Sprite;
 
 /****
@@ -80,6 +82,8 @@ public abstract class Entity {
 	//Defaults to delete me so if a blank entity exists it will be removed from the entity hash
 	private String name = "deleteMe"; //Name before list edit
 	private String nameInList = "deleteMe"; //this name will have a number added to the end so entities in the list don't all have the same name
+	
+	Point reletivePosition = new Point(x,y);
 
 	/**
 	 * 
@@ -138,14 +142,70 @@ public abstract class Entity {
 	public void paintMe(Graphics g)
 	{
 		//Set the sprites location before we draw it
-//		this.sprite.setPosition(x, y);
+		//It needs to be drawn on the reletive point of the game room, not on the exact point of the JPanel
+		//if(!(this instanceof Player))
+			//this.sprite.setPosition(x+theGame.getGameArea().getReletivePoint().x, y+theGame.getGameArea().getReletivePoint().y);
+		Room theRoom = getTheGame().getGameArea().getCurrentRoom();
+		int newX = getX();//getX() - (theRoom.getWidth() / 2);
+		int newY = getY();//getY() - (theRoom.getHeight() / 2);
+		//make sure it does not draw outside the frames bounds
+		Player player = theGame.getPlayer();
+		
+		int shouldCenter = 2;
+		//Player should be at the center of screen but everything else should just be drawn at its reletive positions
+		if(this instanceof Player)
+			shouldCenter = 2;
+
+		//Set the reletive position of the player
+		if(player.getX() >  (getTheGame().getFrame().getWidth() / shouldCenter) )
+		{
+			//Check if it's on the right boundery
+			if( (getX() + (getTheGame().getFrame().getWidth() / 2) > theRoom.getWidth()))
+				newX = getTheGame().getFrame().getWidth() - (theRoom.getWidth() - getX()); 
+			else{ //Center of screen
+				if((this instanceof Player))
+					newX = (getTheGame().getFrame().getWidth() / 2);
+				else
+				{
+					//Converts cordnates based on the side of the player the entity is on
+					int sideModifier = -1;
+					//if(this.getX() > player.getX())
+					//	sideModifier = -1;
+					newX = (getTheGame().getFrame().getWidth() / 2) + ( (player.getX() - this.getX()) * sideModifier);
+				}
+			}
+		}
+
+		//Set the reletive position of the player
+		if(player.getY() >  (getTheGame().getFrame().getHeight() / shouldCenter) )
+		{
+			//Check if it's on the right boundery
+			if( (getY() + (getTheGame().getFrame().getHeight() / 2) > theRoom.getHeight()))
+				newY = getTheGame().getFrame().getHeight() - (theRoom.getHeight() - getY()); 
+			else{ //Center of screen
+				if((this instanceof Player))
+					newY = (getTheGame().getFrame().getHeight() / 2);
+				else
+				{
+					//Converts cordnates based on the side of the player the entity is on
+					int sideModifier = -1;
+					//if(this.getY() > player.getY())
+					//	sideModifier = -1;
+					newY = (getTheGame().getFrame().getHeight() / 2) + ( (player.getY() - this.getY()) * sideModifier);
+				}
+			}
+		}
+
+		getSprite().setPosition(newX, newY);
+
 		this.sprite.paint(g);
 		this.sprite.continueAnimation();
 		//TODO DEBUG REMOVEME
 		if(theGame.isDEBUG())
 		{
 			g.setColor(Color.RED);
-			g.drawString(getNameInList(), getX(), getY()-10);
+			g.drawString(getNameInList(), getSprite().getX(), getSprite().getY()-10);
+			g.drawString("X: " + Integer.toString(getX()) + "  Y: " + Integer.toString(getY()), getSprite().getX() - 20, getSprite().getY()-20);
 			g.drawRect(getSprite().getX(), getSprite().getY(), getSprite().getWidth(), getSprite().getHeight());
 		}
 	}
@@ -160,6 +220,21 @@ public abstract class Entity {
 		//Don't think we need this here. Moved to the paint step.
 		// - Having this here might be the reason we can only have one entity per sprite
 		this.sprite.setPosition(x, y);
+		
+		//If the entity is out of the bounds of the Room then delete it UNLESS IT IS THE PLAYER
+		if(!(this instanceof Player))
+		{
+			if(   (this.getX() > getTheGame().getGameArea().getCurrentRoom().getWidth()) || (this.getX() < 0 )  )
+			{
+				//Out of x bounds
+				this.onDelete();
+			}
+			if(   (this.getY() > getTheGame().getGameArea().getCurrentRoom().getHeight()) || (this.getY() < 0 )  )
+			{
+				//out of y bounds
+				this.onDelete();
+			}
+		}
 	}
 
 	//move the entity based on it's direction
@@ -394,6 +469,14 @@ public abstract class Entity {
 
 	public void setSpeed(int speed) {
 		this.speed = speed;
+	}
+
+	public Point getReletivePosition() {
+		return reletivePosition;
+	}
+
+	public void setReletivePosition(Point reletivePosition) {
+		this.reletivePosition = reletivePosition;
 	}
 
 
