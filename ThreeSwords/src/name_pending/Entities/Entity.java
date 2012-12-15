@@ -48,7 +48,10 @@ public void keyCheck(int keyCode,boolean pressed)
 
 }
 
+public void mouseCheck(MouseEvent event,String eventType)
+	{
 
+	}
 
 
  */

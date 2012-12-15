@@ -2,10 +2,14 @@ package name_pending.Entities;
 
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.HashSet;
 
 import name_pending.Game;
+import name_pending.Sprite;
+import name_pending.Entities.Items.ItemBow;
 import name_pending.Entities.Items.ItemDrop;
+import name_pending.Entities.Items.Projectile;
 
 public class Player extends Being{
 	
@@ -63,6 +67,14 @@ public class Player extends Being{
 	public void paintMe(Graphics g)
 	{
 		super.paintMe(g);
+		//if equip then draw the item equip
+		ItemBow rangedWeapon = (ItemBow) this.getTheGame().getPlayerData().getRangedWeapon();
+		if(rangedWeapon != null)
+		{
+			Sprite sprite = rangedWeapon.getSprite().clone();
+			sprite.setPosition(getX(), getY());
+			sprite.paint(g);
+		}
 	}
 
 	public void step()
@@ -100,6 +112,21 @@ public class Player extends Being{
 			if( (keyCode == KeyEvent.VK_A) || (keyCode == KeyEvent.VK_D) )
 			{
 				this.setDx(0);
+			}
+		}
+	}
+	
+	public void mouseCheck(MouseEvent event,String eventType)
+	{
+		//check if we need to fire a ranged weapon
+		if(event.getButton() == MouseEvent.BUTTON3)
+		{
+			//TODO do a check if the mouse is over a window
+			if(getTheGame().getPlayerData().getRangedWeapon() != null)
+			{
+				Projectile projectile = new Projectile(getTheGame(), getX(), getY(), true);
+				projectile.setDestination(event.getPoint());
+				getTheGame().getEntityHash().add(projectile);
 			}
 		}
 	}
