@@ -1,13 +1,12 @@
 package name_pending.Entities;
 
-import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.HashSet;
 
 import name_pending.Game;
-import name_pending.Room;
 import name_pending.Sprite;
 import name_pending.Entities.Items.ItemBow;
 import name_pending.Entities.Items.ItemDrop;
@@ -34,6 +33,7 @@ public class Player extends Being{
 	{
 		super.onCreate();
 		setSprite(getTheGame().getResourceLoader().getSprite("Player.png"));
+		//getSprite().setRefPixel(getX() - getSprite().getWidth(), getY() - getSprite().getHeight());
 	}
 
 	public void onDelete()
@@ -180,7 +180,16 @@ public class Player extends Being{
 				int projectileDamage = getTheGame().getRandomGenerator().nextInt(rangedWeapon.getMaxDamage() - rangedWeapon.getMinDamage()) + rangedWeapon.getMinDamage();
 				//fire the arrow at the speed of the ranged weapon
 				Projectile projectile = new Projectile(getTheGame(), getX(), getY(), rangedWeapon.getDistance(), projectileDamage, true);
-				projectile.setDestination(event.getPoint());
+				
+				//Set the destination to be reletive to the players
+				//get the difference
+				int newX = (event.getPoint().x - getTheGame().getPlayer().getX())*1;
+				int newY = (event.getPoint().y - getTheGame().getPlayer().getX())*1;
+				//add the difference
+				newX += getTheGame().getPlayer().getX();
+				newY += getTheGame().getPlayer().getY();
+				Point moveTo = new Point(newX, newY);
+				projectile.setDestination(moveTo);
 				getTheGame().getEntityHash().add(projectile);
 			}
 		}

@@ -27,8 +27,8 @@ public class Projectile extends Entity{
 		//projectile.setDy(dy);
 		
 		//TODO figure out how to make it move at a constant speed. Might need to have a speed limiter every frame instead of just in this method
-		float ySpeed = getDy();
-		float xSpeed = getDx();
+		//float ySpeed = getDy();
+		//float xSpeed = getDx();
 		
 		//ySpeed =  ySpeed * (float) (2.5 / Math.sqrt(xSpeed * xSpeed + ySpeed * ySpeed));
 		//xSpeed = xSpeed * (float) (2.5 / Math.sqrt(xSpeed * xSpeed + ySpeed * ySpeed));
@@ -104,6 +104,14 @@ public class Projectile extends Entity{
 
 	public void setFriendly(boolean friendly) {
 		this.friendly = friendly;
+	}
+
+	public int getDamage() {
+		return damage;
+	}
+
+	public void setDamage(int damage) {
+		this.damage = damage;
 	}
 	
 }

@@ -3,7 +3,6 @@ package name_pending;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Image;
-import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.util.HashSet;

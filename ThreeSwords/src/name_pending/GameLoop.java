@@ -1,14 +1,7 @@
 package name_pending;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.image.BufferStrategy;
 import java.util.ConcurrentModificationException;
 import java.util.HashSet;
-
-import javax.swing.JPanel;
 
 import name_pending.Entities.Entity;
 

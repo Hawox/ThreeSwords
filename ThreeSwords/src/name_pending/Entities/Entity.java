@@ -196,6 +196,8 @@ public abstract class Entity {
 			}
 		}
 
+		newX -= (getSprite().getWidth() /2);
+		newY -= (getSprite().getHeight() /2);
 		getSprite().setPosition(newX, newY);
 
 		this.sprite.paint(g);

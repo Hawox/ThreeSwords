@@ -3,7 +3,6 @@ package name_pending;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ConcurrentModificationException;
 
@@ -49,6 +48,7 @@ public class GameArea extends JPanel {
 
 		//Draw the ui last so it goes ontop of everything
 		theGame.getUi().drawUI(g);
+		g.drawRect(theGame.getFrame().getWidth()/2, theGame.getFrame().getHeight()/2, 1, 1);
 	}
 
 	public Game getTheGame() {
