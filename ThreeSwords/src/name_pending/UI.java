@@ -45,19 +45,74 @@ public class UI {
 	
 	private void drawPlayerStuff(Graphics g, Player player)
 	{
+		PlayerData playerData = theGame.getPlayerData();
+		int frameWidth = theGame.getFrame().getWidth();
+		//int frameHeight = theGame.getFrame().getHeight();
 		//Draw player related HUD
-		//Level
+		
+		//exp bar
+		int expbarX = 5;
+		int expbarY = 5;
+		int expbarWidth = frameWidth - 20;
+		int expWidth = 0;
+		int expPercent = (int) ( ( (float) playerData.getExperiance() / (float) playerData.getExperianceTillLevel() ) * 100);
+		if(playerData.getExperiance() == 0) //avoid dividing by zero
+			expWidth = 0;
+		else
+			expWidth = (int) ( ( (float) playerData.getExperiance() / (float) playerData.getExperianceTillLevel() ) * expbarWidth);
+		//Color expColor = Color.WHITE;
 		g.setColor(Color.BLACK);
-		g.drawString("Player Level: " + Integer.toString(getTheGame().getPlayerData().getLevel()), 700, 50);
+		g.fillRect(expbarX, expbarY, expbarWidth, 12);
+		g.setColor(Color.WHITE);
+		g.fillRect(expbarX, expbarY, expWidth, 12);
+		g.setColor(Color.BLACK);
+		g.drawRect(expbarX, expbarY, expbarWidth, 12);
+		g.setColor(Color.white);
+		g.setXORMode(Color.red);
+		g.drawString(Integer.toString(expPercent) + "%", ( expbarX + ( expbarWidth / 2) ) - 10, expbarY + 11);
+		//g.drawString("Experiance", expbarX + 1, expbarY + 11);
+		g.setPaintMode();
+		
+		//Level
+		//g.drawString("Level: " + Integer.toString(getTheGame().getPlayerData().getLevel()), frameWidth-100, 20);
+		//g.setColor(Color.white);
+		g.setXORMode(Color.red);
+		g.drawString("Level " + Integer.toString(getTheGame().getPlayerData().getLevel()), expbarX + 1, expbarY + 11);
+		g.setPaintMode();
+		
 		//Health bar
+		int healthbarX = 5;
+		int healthbarY = 20;
+		int healthbarWidth = 100;
+		int healthWidth = 0;
+		int healthPercent = (int) ( ( (float) theGame.getPlayer().getHealth() / (float) theGame.getPlayerData().getMaxHealth() ) * 100);
+		if(getTheGame().getPlayer().getHealth() == 0) //avoid dividing by zero
+			healthWidth = 0;
+		else
+			healthWidth = (int) ( ( (float) theGame.getPlayer().getHealth() / (float) theGame.getPlayerData().getMaxHealth() ) * healthbarWidth);
+		g.setColor(Color.RED);
+		g.fillRect(healthbarX, healthbarY, healthbarWidth, 12);
 		g.setColor(Color.GREEN);
-		g.drawString("Health: " + Integer.toString(player.getHealth()), 700, 65);
+		g.fillRect(healthbarX, healthbarY, healthWidth, 12);
+		g.setColor(Color.BLACK);
+		g.drawRect(healthbarX, healthbarY, healthbarWidth, 12);
+		g.setColor(Color.white);
+		g.setXORMode(Color.red);
+		g.drawString(Integer.toString(healthPercent) + "%", ( healthbarX + ( healthbarWidth / 2) ) - 10, healthbarY + 11);
+		//g.drawString("Experiance", expbarX + 1, expbarY + 11);
+		g.setPaintMode();
+		
+		
+		g.setColor(Color.GREEN);
+		//g.drawString("Health: " + Integer.toString(player.getHealth()), frameWidth-100, 35);
+		
 		//Mana
 		g.setColor(Color.BLUE);
-		g.drawString("Mana: " + Integer.toString(player.getMana()), 700, 80);
+		g.drawString("Mana: " + Integer.toString(player.getMana()), frameWidth-100, 50);
+		
 		//Stamina
 		g.setColor(Color.RED);
-		g.drawString("Stamina: " + Integer.toString(player.getStamina()), 700, 95);
+		g.drawString("Stamina: " + Integer.toString(player.getStamina()), frameWidth-100, 65);
 	}
 
 

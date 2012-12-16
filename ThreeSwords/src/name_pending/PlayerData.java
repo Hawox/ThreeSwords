@@ -24,8 +24,9 @@ public class PlayerData {
 //	private int mana = maxMana;
 	private int maxStamina = 1000;
 //	private int stamina = maxStamina;
-	private int experianceTillLevel = 100;
-	private int experiance = 1;
+	private int maxHealth = STARTING_HEALTH;
+	private int experianceTillLevel = 5;
+	private int experiance = 0;
 	private int totalExperiance = experiance;
 	
 	Game thegame;
@@ -43,6 +44,29 @@ public class PlayerData {
 			//this.getEquipment().getItems().add(i,new ItemBow(theGame, "SuperBow", "This is the SuperBow of epicness", "white", 10, 100, 150, null), 50 + (50*i), 50 + (50*i));
 		}
 	}
+	
+	public void addExp(int amount)
+	{
+		this.setExperiance(this.getExperiance() + amount);
+		this.setTotalExperiance(this.getTotalExperiance() + amount);
+		if(this.getExperiance() >= this.getExperianceTillLevel())
+			this.levelUp();
+	}
+	
+	public void levelUp()
+	{
+		//reset exp
+		this.setExperiance(this.getExperiance() - this.getExperianceTillLevel());
+		//TODO make an actuall exp curve
+		//incress exp till level
+		this.setExperianceTillLevel( (int) ( (experianceTillLevel + ( experianceTillLevel * .1)) + ( (10 + (2*this.getLevel()) ) *this.getLevel()) ) );
+		//incress player level
+		this.setLevel(this.getLevel()+1);
+		
+		//TODO incress stats, give points to put in things, etc
+	}
+	
+	
 	/*
 	 * 0 Clockwork weapon
 	 * 1 Melee weapon
@@ -338,6 +362,14 @@ public class PlayerData {
 
 	public void setEquipment(Inventory equipment) {
 		this.equipment = equipment;
+	}
+
+	public int getMaxHealth() {
+		return maxHealth;
+	}
+
+	public void setMaxHealth(int maxHealth) {
+		this.maxHealth = maxHealth;
 	}
 
 

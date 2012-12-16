@@ -20,7 +20,7 @@ public class Player extends Being{
 	@SuppressWarnings("static-access")
 	public Player(Game theGame, int x, int y)
 	{
-		super(theGame, x, y, theGame.getPlayerData().getSTARTING_SPEED(), theGame.getPlayerData().getSTARTING_NAME(), theGame.getPlayerData().getSTARTING_HEALTH(), theGame.getPlayerData().getSTARTING_DEFENCE(), theGame.getPlayerData().getSTARTING_ATTACK(), theGame.getPlayerData().getSTARTING_DEXTERITY(), theGame.getPlayerData().getSTARTING_RESISTANCE());
+		super(theGame, x, y, theGame.getPlayerData().getSTARTING_SPEED(), theGame.getPlayerData().getSTARTING_NAME(), theGame.getPlayerData().getMaxHealth(), theGame.getPlayerData().getSTARTING_DEFENCE(), theGame.getPlayerData().getSTARTING_ATTACK(), theGame.getPlayerData().getSTARTING_DEXTERITY(), theGame.getPlayerData().getSTARTING_RESISTANCE());
 		this.mana = theGame.getPlayerData().getMaxMana();
 		this.stamina = theGame.getPlayerData().getMaxStamina();
 	}
@@ -131,6 +131,7 @@ public class Player extends Being{
 	public void step()
 	{
 		super.step();
+		getTheGame().getPlayerData().addExp(1);
 	}
 
 	public void keyCheck(int keyCode,boolean pressed)

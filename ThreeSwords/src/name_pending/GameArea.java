@@ -1,7 +1,6 @@
 package name_pending;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ConcurrentModificationException;
@@ -20,8 +19,9 @@ public class GameArea extends JPanel {
 	GameArea(Game theGame)
 	{
 		this.theGame = theGame;
-		this.setPreferredSize(new Dimension(8000, 6000));
+		//this.setPreferredSize(new Dimension(8000, 6000));
 		this.currentRoom = new Room(800,600);
+		
 	}
 
 	
@@ -48,7 +48,14 @@ public class GameArea extends JPanel {
 
 		//Draw the ui last so it goes ontop of everything
 		theGame.getUi().drawUI(g);
-		g.drawRect(theGame.getFrame().getWidth()/2, theGame.getFrame().getHeight()/2, 1, 1);
+		
+		//Draw point at screen center
+		if(theGame.isDEBUG())
+			g.drawRect(theGame.getFrame().getWidth()/2 - 1, theGame.getFrame().getHeight()/2 - 1, 3, 3);
+		
+		//TODO resize the game to fit the screen resolution
+		//Graphics2D g2d = (Graphics2D) g;
+		//g2d.scale(800, 600);
 	}
 
 	public Game getTheGame() {

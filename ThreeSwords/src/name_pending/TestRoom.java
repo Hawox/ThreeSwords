@@ -22,7 +22,7 @@ public class TestRoom {
 	public void start()
 	{
 		//TODO change the size of the room
-		theGame.getFrame().setSize(800, 600);
+		//theGame.getFrame().setSize(800, 600);
 		theGame.getGameArea().setCurrentRoom(new Room(2000, 2000));
 		
 		//add the player

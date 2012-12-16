@@ -167,7 +167,7 @@ public abstract class Entity {
 					newX = (getTheGame().getFrame().getWidth() / 2);
 				else
 				{
-					//Converts cordnates based on the side of the player the entity is on
+					//Converts the difference back to the correct direction
 					int sideModifier = -1;
 					//if(this.getX() > player.getX())
 					//	sideModifier = -1;
@@ -187,7 +187,7 @@ public abstract class Entity {
 					newY = (getTheGame().getFrame().getHeight() / 2);
 				else
 				{
-					//Converts cordnates based on the side of the player the entity is on
+					//Converts the difference back to the correct direction
 					int sideModifier = -1;
 					//if(this.getY() > player.getY())
 					//	sideModifier = -1;
