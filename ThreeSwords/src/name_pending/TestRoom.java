@@ -2,6 +2,7 @@ package name_pending;
 
 import java.awt.Point;
 
+import name_pending.Entities.Enviroment;
 import name_pending.Entities.Player;
 import name_pending.Entities.Items.ItemBow;
 import name_pending.Entities.Items.ItemDrop;
@@ -38,6 +39,12 @@ public class TestRoom {
 		for(int i=0; i<10; i++){
 			ItemDrop itemDrop = new ItemDrop(theGame, new ItemBow(theGame, "SuperBow", "This is the SuperBow of epicness", "white", 10, 100, 150, null), 1000 + (50*i), 1000 + (50*i), 0);
 			theGame.getEntityHash().add(itemDrop);
+		}
+		
+		for(int i=0; i<10; i++){
+			//ItemDrop itemDrop = new ItemDrop(theGame, new ItemBow(theGame, "SuperBow", "This is the SuperBow of epicness", "white", 10, 100, 150, null), 900 + (50*i), 1000, 0);
+			Enviroment envi = new Enviroment(theGame, 950, 1000 + (50*i), 0, "Rock");
+			theGame.getEntityHash().add(envi);
 		}
 		/*
 		ItemDrop itemDropa = new ItemDrop(theGame, new ItemBow(theGame, "SuperBow", "This is the SuperBow of epicness", "white", 10, 100, 150, null), 300, 350);

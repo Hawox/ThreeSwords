@@ -2,8 +2,10 @@ package name_pending.Entities;
 
 import java.awt.Graphics;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import name_pending.Game;
+import name_pending.Resistance;
 
 /*
  * Anything that protrays a living being I.E. Monsters, players, npcs
@@ -22,11 +24,14 @@ public class Being extends Entity{
 	private int dexterity = 0;
 		private int critChance = 0; //this number is a percentage 1-100 ((=> 100) = 100% crit
 		private int dodgeChance = 0; //Calcuated the same as crit
-	private HashMap<String, Integer> resistances = new HashMap<String, Integer>(); //Every array point will contain what element it has resistance too
-
+	private HashSet<Resistance> resistances = new HashSet<Resistance>(); //Every array point will contain what element it has resistance too
+	//TODO maybe add a class for types
+	//Also contains debuffs
+	private HashMap<String, Integer> buffs = new HashMap<String, Integer>();
+	
 	private boolean killable = true;
 
-	Being(Game theGame, int x, int y, int speed, String name, int health, int defence, int attack, int dexterity, String[] resist)
+	Being(Game theGame, int x, int y, int speed, String name, int health, int defence, int attack, int dexterity, Resistance[] resist)
 	{
 		//Set cords and name
 		super(theGame, x, y, speed, name);
@@ -41,11 +46,11 @@ public class Being extends Entity{
 		//Set the resistances
 		try
 		{
-			for(String r : resist)
+			for(Resistance r : resist)
 			{
 				//Resistances string form should be "name-#" ie "fire-20" where # is % resistant
-				String[] moreInfo = r.split("-");
-				this.resistances.put(moreInfo[0],Integer.getInteger(moreInfo[1]));
+				//String[] moreInfo = r.split("-");
+				this.resistances.add(r);
 			}
 		}catch(NullPointerException e){} //Don't need to do anything if there were no resistances
 	}
@@ -64,9 +69,9 @@ public class Being extends Entity{
 		super.onDelete();
 	}
 
-	public void checkCollisions()
+	public boolean checkCollisions()
 	{
-		super.checkCollisions();
+		return super.checkCollisions();
 	}
 
 	public void paintMe(Graphics g)
@@ -89,39 +94,46 @@ public class Being extends Entity{
 	 */
 
 	//Checks whether or not the entity has resistances to the element
-	public boolean checkResistance(String type)
+	public int checkResistance(String name)
 	{
 		//See if it exists in the set
-		if(this.resistances.containsKey(type))
-			return true;
-		else
-			return false;
+		for(Resistance r : this.getResistances())
+			if(r.getName() == name)
+				return r.getAmount();
+		return 0;
 	}
 
 	/*
 	 * Remove resistance
 	 * 	-True if they had that resistance before this ran
 	 */
-	public boolean removeResistance(String type)
+	public boolean removeResistance(String name)
 	{
 		//See if it exists in the set
-		if(this.resistances.containsKey(type))
-			return false;
-		else
-		{
-			this.resistances.remove(type);
-			return true;
-		}
+		for(Resistance r : this.getResistances())
+			if(r.getName() == name)
+			{
+				this.getResistances().remove(r);
+				return true;
+			}
+		return false;
 	}
 
 	/*
 	 * add resistance
 	 * 	-False if they had that resistance before this ran
 	 */
-	public boolean addResistance(String type)
+	public boolean addResistance(Resistance resistance)
 	{
 		//See if it exists in the set
-		if(this.resistances.containsKey(type))
+		for(Resistance r : this.getResistances())
+			if(r.getName() == resistance.getName())
+				return false;
+		//Dosn't exist
+		this.getResistances().add(resistance);
+		return true;
+			
+		/*if(this.resistances.containsKey(type))
 		{
 			//Resistances string form should be "name-#" ie "fire-20" where # is % resistant
 			String[] moreInfo = type.split("-");
@@ -132,7 +144,7 @@ public class Being extends Entity{
 		{
 			this.resistances.remove(type);
 			return false;
-		}
+		}*/
 	}
 
 	/***********
@@ -199,12 +211,12 @@ public class Being extends Entity{
 	}
 
 
-	public HashMap<String, Integer> getResistances() {
+	public HashSet<Resistance> getResistances() {
 		return resistances;
 	}
 
 
-	public void setResistances(HashMap<String, Integer> resistances) {
+	public void setResistances(HashSet<Resistance> resistances) {
 		this.resistances = resistances;
 	}
 

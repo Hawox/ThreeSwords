@@ -65,9 +65,9 @@ public class Projectile extends Entity{
 		super.onDelete();
 	}
 
-	public void checkCollisions()
+	public boolean checkCollisions()
 	{
-		super.checkCollisions();
+		return super.checkCollisions();
 	}
 
 	public void paintMe(Graphics g)

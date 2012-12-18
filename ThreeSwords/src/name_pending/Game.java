@@ -29,7 +29,7 @@ public class Game
 {
 	//quick checks to see if the game is is test or debug mode
 	private static boolean TESTING = true;
-	private boolean DEBUG = true;
+	private boolean DEBUG = false;
 	private TestRoom testRoom = new TestRoom(this);
 	private boolean fullscreen = false;
 
@@ -40,12 +40,9 @@ public class Game
 	//private HashSet<GameWindow> gameWindowHash = new HashSet<GameWindow>();
 	
 	//the keylistener
-	private FrameKeyListener frameKeyListener;
+//	private FrameKeyListener frameKeyListener;
 	//the mouse listener
-	private FrameMouseListener frameMouseListener;
-	
-	//Manages all the windows in the game
-	private GameWindowManager gameWindowManager = new GameWindowManager(this);
+//	private FrameMouseListener frameMouseListener;
 
 	//The main game thread loop
 	private GameLoop gameLoop = null;
@@ -55,6 +52,9 @@ public class Game
 	private MainDrawPanel mainDrawPanel = new MainDrawPanel();
 	private UI ui = new UI(this); //base UI for the game
 	private GameArea gameArea = new GameArea(this);
+	
+	//Manages all the windows in the game
+	private GameWindowManager gameWindowManager = new GameWindowManager(this);
 	
 	//Houses all of the games sprites
 	ResourceLoader spriteLoader = new ResourceLoader();
@@ -74,10 +74,10 @@ public class Game
 		setupFrame();
 
 		//setup the  mouse and key listeners
-		frameKeyListener = new FrameKeyListener(this);
-		frame.addKeyListener(frameKeyListener);
-		frameMouseListener = new FrameMouseListener(this);
-		frame.addMouseListener(frameMouseListener);
+//		frameKeyListener = new FrameKeyListener(this);
+//		frame.addKeyListener(frameKeyListener);
+//		frameMouseListener = new FrameMouseListener(this);
+//		frame.addMouseListener(frameMouseListener);
 
 		if(TESTING)
 			testRoom.start();
@@ -246,13 +246,13 @@ public class Game
 		this.entityHash = entityHash;
 	}
 
-	public FrameKeyListener getFrameKeyListener() {
+	/*public FrameKeyListener getFrameKeyListener() {
 		return frameKeyListener;
 	}
 
 	public void setFrameKeyListener(FrameKeyListener frameKeyListener) {
 		this.frameKeyListener = frameKeyListener;
-	}
+	}*/
 
 	public static boolean isTESTING() {
 		return TESTING;
@@ -334,13 +334,13 @@ public class Game
 		this.ui = ui;
 	}
 
-	public FrameMouseListener getFrameMouseListener() {
+	/*public FrameMouseListener getFrameMouseListener() {
 		return frameMouseListener;
 	}
 
 	public void setFrameMouseListener(FrameMouseListener frameMouseListener) {
 		this.frameMouseListener = frameMouseListener;
-	}
+	}*/
 
 	public GameWindowManager getGameWindowManager() {
 		return gameWindowManager;

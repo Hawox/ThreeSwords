@@ -16,14 +16,18 @@ public class PlayerData {
 	private static int STARTING_ATTACK = 1;
 	private static int STARTING_SPEED = 5;
 	private static int STARTING_DEXTERITY = 0;
-	private static String[] STARTING_RESISTANCE = null;
+	private static Resistance[] STARTING_RESISTANCE = null;
+	private static int MAX_LEVEL = 30;
+	private static int STARTING_MAX_FATIGUE = 1000;
 	
 	//player specific stats 23514
 	private int level = 0;
-	private int maxMana = 1000;
+//	private int maxMana = 1000;
 //	private int mana = maxMana;
-	private int maxStamina = 1000;
+//	private int maxStamina = 1000;
 //	private int stamina = maxStamina;
+	private int maxFatigue = STARTING_MAX_FATIGUE;
+	private int fatigue = 0;
 	private int maxHealth = STARTING_HEALTH;
 	private int experianceTillLevel = 5;
 	private int experiance = 0;
@@ -47,14 +51,18 @@ public class PlayerData {
 	
 	public void addExp(int amount)
 	{
-		this.setExperiance(this.getExperiance() + amount);
 		this.setTotalExperiance(this.getTotalExperiance() + amount);
-		if(this.getExperiance() >= this.getExperianceTillLevel())
-			this.levelUp();
+		if(this.getLevel() < PlayerData.getMAX_LEVEL())
+		{
+			this.setExperiance(this.getExperiance() + amount);
+			if(this.getExperiance() >= this.getExperianceTillLevel())
+				this.levelUp();
+		}
 	}
 	
 	public void levelUp()
 	{
+		
 		//reset exp
 		this.setExperiance(this.getExperiance() - this.getExperianceTillLevel());
 		//TODO make an actuall exp curve
@@ -64,6 +72,12 @@ public class PlayerData {
 		this.setLevel(this.getLevel()+1);
 		
 		//TODO incress stats, give points to put in things, etc
+		//Max level stuff
+		if(this.getLevel() == PlayerData.getMAX_LEVEL())
+		{
+			this.setExperianceTillLevel(1);
+			this.setExperiance(1);
+		}
 	}
 	
 	
@@ -292,11 +306,11 @@ public class PlayerData {
 		STARTING_DEXTERITY = sTARTING_DEXTERITY;
 	}
 
-	public static String[] getSTARTING_RESISTANCE() {
+	public static Resistance[] getSTARTING_RESISTANCE() {
 		return STARTING_RESISTANCE;
 	}
 
-	public static void setSTARTING_RESISTANCE(String[] sTARTING_RESISTANCE) {
+	public static void setSTARTING_RESISTANCE(Resistance[] sTARTING_RESISTANCE) {
 		STARTING_RESISTANCE = sTARTING_RESISTANCE;
 	}
 
@@ -308,7 +322,7 @@ public class PlayerData {
 		this.level = level;
 	}
 
-	public int getMaxMana() {
+	/*public int getMaxMana() {
 		return maxMana;
 	}
 
@@ -322,7 +336,7 @@ public class PlayerData {
 
 	public void setMaxStamina(int maxStamina) {
 		this.maxStamina = maxStamina;
-	}
+	}*/
 
 	public int getExperianceTillLevel() {
 		return experianceTillLevel;
@@ -370,6 +384,46 @@ public class PlayerData {
 
 	public void setMaxHealth(int maxHealth) {
 		this.maxHealth = maxHealth;
+	}
+
+	public static int getMAX_LEVEL() {
+		return MAX_LEVEL;
+	}
+
+	public static void setMAX_LEVEL(int mAX_LEVEL) {
+		MAX_LEVEL = mAX_LEVEL;
+	}
+
+	public static int getSTARTING_MAX_FATIGUE() {
+		return STARTING_MAX_FATIGUE;
+	}
+
+	public static void setSTARTING_MAX_FATIGUE(int sTARTING_MAX_FATIGUE) {
+		STARTING_MAX_FATIGUE = sTARTING_MAX_FATIGUE;
+	}
+
+	public int getMaxFatigue() {
+		return maxFatigue;
+	}
+
+	public void setMaxFatigue(int maxFatigue) {
+		this.maxFatigue = maxFatigue;
+	}
+
+	public int getFatigue() {
+		return fatigue;
+	}
+
+	public void setFatigue(int fatigue) {
+		this.fatigue = fatigue;
+	}
+
+	public Game getThegame() {
+		return thegame;
+	}
+
+	public void setThegame(Game thegame) {
+		this.thegame = thegame;
 	}
 
 

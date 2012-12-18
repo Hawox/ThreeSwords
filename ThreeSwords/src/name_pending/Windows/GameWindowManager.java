@@ -2,7 +2,9 @@ package name_pending.Windows;
 
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.HashSet;
 
 import name_pending.Game;
@@ -24,12 +26,18 @@ public class GameWindowManager {
 	//Will house all the game active windows
 	private HashSet<GameWindow> gameWindowHash = new HashSet<GameWindow>();
 	
+	private GameWindowManagerHIDListener gameWindowManagerHIDListener;
+	
 	public GameWindowManager(Game game)
 	{
 		this.theGame = game;
 		//create our inventory
 		getGameWindowHash().add(new GameWindowInventory(theGame, 600, 300, 190, 290));
 		getGameWindowHash().add(new GameWindowEquipment(theGame, 300, 300, 190, 290));
+		
+		gameWindowManagerHIDListener = new GameWindowManagerHIDListener();
+		getTheGame().getFrame().addKeyListener(gameWindowManagerHIDListener);
+		getTheGame().getFrame().addMouseListener(gameWindowManagerHIDListener);
 	}
 	
 	/**
@@ -130,6 +138,56 @@ public class GameWindowManager {
 				gw.update();
 	}
 	
+	
+	class GameWindowManagerHIDListener implements KeyListener, MouseListener
+	{
+
+		public void keyPressed(KeyEvent e) {
+			sendKeyEvent(e.getKeyCode(), true);
+		}
+
+		public void keyReleased(KeyEvent e) {
+			sendKeyEvent(e.getKeyCode(), false);
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent event)
+		{
+			sendMouseEvent(event, "clicked");
+		}
+
+		@Override
+		public void mousePressed(MouseEvent event)
+		{
+			sendMouseEvent(event, "pressed");
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent event)
+		{
+			sendMouseEvent(event, "released");
+		}
+		
+		
+		
+		private void sendMouseEvent(MouseEvent event, String eventType)
+		{
+			theGame.getGameWindowManager().mouseCheck(event, eventType);
+		}
+		
+		private void sendKeyEvent(int keyCode, boolean pressed)
+		{
+			theGame.getGameWindowManager().keyCheck(keyCode, pressed);
+		}
+		
+		
+		//Not currently used
+		public void mouseEntered(MouseEvent e) {}
+
+		public void mouseExited(MouseEvent e) {}
+
+		public void keyTyped(KeyEvent e) {}
+	}
 	
 	/**
 	 * Getters and setters

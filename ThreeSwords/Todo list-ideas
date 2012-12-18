@@ -3,7 +3,9 @@ Each tree gets a bank related item. Magic: Orb thingy, Clockwork communicator/te
 Mutiple bags for different crafting trees. Incress with spec points.
 Magic enchants gear, clockwork adds mods to gear, warrior makes weapons
 Crafting on the go with tools made in town but they have limited uses
-wood, ore, string, elements, gears and circuts the basic crafting stuff
+wood, ore, string, elements, gears and circits the basic crafting stuff
 Use all basic stuff off the bat
-Don't gain exp or materies in stuff without points put into it
+Don't gain exp or masteries in stuff without points put into it
 Fix concurrent modification exceptions everywhere
+Respecs are found at statues that randomly appear. They are non-copyrighted blue boxes and woosh away when you leave the map. First one stays at town until you use it. Then it goes poof and you have to find it again.
+Randomly appearing merchant with items that no one

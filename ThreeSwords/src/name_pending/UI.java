@@ -2,18 +2,21 @@ package name_pending;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Enumeration;
 import java.util.Vector;
 
 import name_pending.Entities.Player;
 
 /**
- * This will be in charge of drawin everything in the game that is considered the game UI
+ * This will be in charge of drawing everything in the game that is considered the game UI
  * @author Hawox
  *
  */
 public class UI {
 	private Game theGame;
+	private UiHIDListener uiHIDListener;
 	
 	//Decides whether or not game windows are drawn
 	//private boolean doDrawInventory = false;
@@ -21,6 +24,8 @@ public class UI {
 	UI(Game game)
 	{
 		theGame = game;
+		this.uiHIDListener = new UiHIDListener();
+		getTheGame().getFrame().addKeyListener(uiHIDListener);
 	}
 	
 	
@@ -32,15 +37,11 @@ public class UI {
 		if(player != null)
 			drawPlayerStuff(g, player);
 		
-		/* Draw active windows */
-//		if(doDrawInventory)
 			drawGameWindows(g);
-			//drawInventoryWindow(g, player);
-		
 		
 		/**DEBUG STUFF!**/
-	//	if(theGame.isDEBUG())
-	//		drawDebugStuff(g);
+		if(theGame.isDEBUG())
+			drawDebugStuff(g);
 	}
 	
 	private void drawPlayerStuff(Graphics g, Player player)
@@ -101,22 +102,31 @@ public class UI {
 		g.drawString(Integer.toString(healthPercent) + "%", ( healthbarX + ( healthbarWidth / 2) ) - 10, healthbarY + 11);
 		//g.drawString("Experiance", expbarX + 1, expbarY + 11);
 		g.setPaintMode();
-		
-		
-		g.setColor(Color.GREEN);
-		//g.drawString("Health: " + Integer.toString(player.getHealth()), frameWidth-100, 35);
-		
-		//Mana
+
+		//Fatigue bar
+		int fatiguebarX = 5;
+		int fatiguebarY = 35;
+		int fatiguebarWidth = 100;
+		int fatigueWidth = 0;
+		int fatiguePercent = (int) ( ( (float) theGame.getPlayerData().getFatigue() / (float) theGame.getPlayerData().getMaxFatigue() ) * 100);
+		if(getTheGame().getPlayerData().getFatigue() == 0) //avoid dividing by zero
+			fatigueWidth = 0;
+		else
+			fatigueWidth = (int) ( ( (float) theGame.getPlayerData().getFatigue() / (float) theGame.getPlayerData().getMaxFatigue() ) * fatiguebarWidth);
 		g.setColor(Color.BLUE);
-		g.drawString("Mana: " + Integer.toString(player.getMana()), frameWidth-100, 50);
-		
-		//Stamina
-		g.setColor(Color.RED);
-		g.drawString("Stamina: " + Integer.toString(player.getStamina()), frameWidth-100, 65);
+		g.fillRect(fatiguebarX, fatiguebarY, fatiguebarWidth, 12);
+		g.setColor(Color.YELLOW);
+		g.fillRect(fatiguebarX, fatiguebarY, fatigueWidth, 12);
+		g.setColor(Color.BLACK);
+		g.drawRect(fatiguebarX, fatiguebarY, fatiguebarWidth, 12);
+		g.setColor(Color.white);
+		g.setXORMode(Color.red);
+		g.drawString(Integer.toString(fatiguePercent) + "%", ( fatiguebarX + ( fatiguebarWidth / 2) ) - 10, fatiguebarY + 11);
+		//g.drawString("Experiance", expbarX + 1, expbarY + 11);
+		g.setPaintMode();
 	}
 
 
-	@SuppressWarnings("unused")
 	private void drawDebugStuff(Graphics g)
 	{
 		g.setColor(Color.YELLOW);
@@ -138,79 +148,11 @@ public class UI {
 		theGame.getGameWindowManager().paintWindows(g);
 	}
 	
-	/** EDIT: Moved to GameWindowManager 
-	 * Methods for drawing all of the cool windows **
-	private void drawInventoryWindow(Graphics g, Player player)
-	{
-		//Fill
-		g.setColor(Color.LIGHT_GRAY);
-		g.fillRect(600, 300, 190, 290);
-		g.setColor(Color.CYAN);
-		g.fillRect(600, 300, 190, 15);
-		
-		//text
-		g.setColor(Color.black);
-		g.drawString("Inventory", 665, 312);
-		
-		//borders
-		g.setColor(Color.BLACK);
-		g.drawRect(600, 300, 190, 290);
-		g.drawRect(600, 300, 190, 15);
-		
-		//Draw spaces for the items
-		int row = 1;
-		int vert = 1;
-		int startx = 615 - 40;
-		int starty = 330 - 40;
-		int drawx = startx;
-		int drawy = starty;
-		for(int i=0; i<player.getInventory().getMaxSize(); i++)
-		{
-			
-			g.setColor(Color.WHITE);
-			g.fillRect(drawx+(35*vert), drawy+(35*row), 32, 32);
-			g.setColor(Color.BLACK);
-			g.drawRect(drawx+(35*vert), drawy+(35*row), 32, 32);
-			g.setColor(Color.RED);
-			g.drawString(Integer.toString(i), drawx+(35*vert)+16, drawy+(35*row)+16);
-			//TODO draw item sprite inside of it
-			Sprite s = null;
-			try{
-				if(player.getInventory().getItems().get(i) != null)
-					s = player.getInventory().getItems().get(i).getSprite();
-					if(s != null)
-					{
-						s.setPosition(drawx+(35*vert), drawy+(35*row));
-						s.paintOrig(g);
-					}
-			}catch(IndexOutOfBoundsException e){}
-			
-			//check if at end of row
-			vert++;
-			if( (drawx+(35*vert+1) + 32) > theGame.getFrame().getWidth() )
-			{
-				drawx = startx;
-				row ++;
-				vert = 1;
-			}
-		}
-	}*/
-	
 	
 	/** Keycheck method **/
 	public void keyCheck(int keyCode, boolean pressed)
 	{
-		/*Show or hide the inventory based on it's previous state
-		if(keyCode == KeyEvent.VK_I)
-		{
-			if(pressed)
-			{
-				if(this.isDrawInventory())//inventory is open
-					this.setDrawInventory(false); //hide it
-				else //inventory is closed
-					this.setDrawInventory(true); //show it
-			}
-		}*/
+		
 	}
 	
 	/**
@@ -280,6 +222,59 @@ public class UI {
 
 	  return ret;
 	}
+	
+	
+	class UiHIDListener implements KeyListener/*, MouseListener*/
+	{
+
+		public void keyPressed(KeyEvent e) {
+			sendKeyEvent(e.getKeyCode(), true);
+		}
+
+		public void keyReleased(KeyEvent e) {
+			sendKeyEvent(e.getKeyCode(), false);
+		}
+
+		/*@Override
+		public void mouseClicked(MouseEvent event)
+		{
+			sendMouseEvent(event, "clicked");
+		}
+
+		@Override
+		public void mousePressed(MouseEvent event)
+		{
+			sendMouseEvent(event, "pressed");
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent event)
+		{
+			sendMouseEvent(event, "released");
+		}
+		
+		
+		
+		private void sendMouseEvent(MouseEvent event, String eventType)
+		{
+			this.
+		}*/
+		
+		private void sendKeyEvent(int keyCode, boolean pressed)
+		{
+			keyCheck(keyCode, pressed);
+		}
+		
+		
+		/*Not currently used
+		public void mouseEntered(MouseEvent e) {}
+
+		public void mouseExited(MouseEvent e) {}*/
+
+		public void keyTyped(KeyEvent e) {}
+	}
+	
+	
 	
 	
 	/**

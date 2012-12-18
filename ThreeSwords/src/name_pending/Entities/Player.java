@@ -21,8 +21,8 @@ public class Player extends Being{
 	public Player(Game theGame, int x, int y)
 	{
 		super(theGame, x, y, theGame.getPlayerData().getSTARTING_SPEED(), theGame.getPlayerData().getSTARTING_NAME(), theGame.getPlayerData().getMaxHealth(), theGame.getPlayerData().getSTARTING_DEFENCE(), theGame.getPlayerData().getSTARTING_ATTACK(), theGame.getPlayerData().getSTARTING_DEXTERITY(), theGame.getPlayerData().getSTARTING_RESISTANCE());
-		this.mana = theGame.getPlayerData().getMaxMana();
-		this.stamina = theGame.getPlayerData().getMaxStamina();
+//		this.mana = theGame.getPlayerData().getMaxMana();
+//		this.stamina = theGame.getPlayerData().getMaxStamina();
 	}
 
 	/*
@@ -41,9 +41,8 @@ public class Player extends Being{
 		super.onDelete();
 	}
 
-	public void checkCollisions()
+	public boolean checkCollisions()
 	{
-		super.checkCollisions();
 		//collides with item on the ground
 		HashSet<Entity> collision = this.checkForCollision("ItemDrop");
 		if(collision != null)
@@ -64,6 +63,7 @@ public class Player extends Being{
 				}
 			}
 		}
+		return super.checkCollisions();
 	}
 
 	public void paintMe(Graphics g)
@@ -131,7 +131,9 @@ public class Player extends Being{
 	public void step()
 	{
 		super.step();
-		getTheGame().getPlayerData().addExp(1);
+		//TODO debug
+		if(getTheGame().isDEBUG())
+			getTheGame().getPlayerData().addExp(1);
 	}
 
 	public void keyCheck(int keyCode,boolean pressed)

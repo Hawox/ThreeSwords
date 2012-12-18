@@ -3,7 +3,10 @@ package name_pending.Entities;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.HashSet;
 
 import name_pending.Game;
@@ -67,11 +70,22 @@ public abstract class Entity {
 	private int dx = 0;
 	private int dy = 0;
 
+	//Where they were related to sprite drawn to the screen last frame
+	private int lastViewX = 0;
+	private int lastViewY = 0;
+	
 	//If it's an entity in the world it should have a sprite
 	private Sprite sprite = null;
 	
 	//How fast the entity moves, but also used in calculation crit/dodge
 	private int speed = 0; 
+	
+	//true if things can not pass threw them
+	private boolean solid = false;
+	private boolean moveThrewSolids = false;
+	
+	//Gets input from HID devices
+	private EntityHIDListener entityHIDListener;
 
 	/*
 	 * I didn't want to add this before, now I am trying to remember why.
@@ -112,6 +126,11 @@ public abstract class Entity {
 		//setSprite(getSprite().clone()); //Not needed?
 		//Start the sprites animation
 		this.sprite.setAnimation(1);
+		
+		//add listener
+		entityHIDListener = new EntityHIDListener();
+		getTheGame().getFrame().addKeyListener(entityHIDListener);
+		getTheGame().getFrame().addMouseListener(entityHIDListener);
 	}
 
 	//The script that is run for the entity upon it's creation
@@ -133,9 +152,13 @@ public abstract class Entity {
 	}
 
 	//Collision processing
-	public void checkCollisions()
+	/**
+	 * @return false if it should not move to the next space
+	 */
+	public boolean checkCollisions()
 	{
-
+		//Don't move if it colides with a soild
+		return( !(checkForSolidCollision()) );
 	}
 
 	//Used to draw whatever is related to the entity to the main game panel
@@ -143,8 +166,6 @@ public abstract class Entity {
 	{
 		//Set the sprites location before we draw it
 		//It needs to be drawn on the reletive point of the game room, not on the exact point of the JPanel
-		//if(!(this instanceof Player))
-			//this.sprite.setPosition(x+theGame.getGameArea().getReletivePoint().x, y+theGame.getGameArea().getReletivePoint().y);
 		Room theRoom = getTheGame().getGameArea().getCurrentRoom();
 		int newX = getX();//getX() - (theRoom.getWidth() / 2);
 		int newY = getY();//getY() - (theRoom.getHeight() / 2);
@@ -156,8 +177,9 @@ public abstract class Entity {
 		if(this instanceof Player)
 			shouldCenter = 2;
 
-		//Set the reletive position of the player
-		if(player.getX() >  (getTheGame().getFrame().getWidth() / shouldCenter) )
+		
+		//Set the reletive position of the entity
+		if(this.getX() >  (getTheGame().getFrame().getWidth() / shouldCenter) )
 		{
 			//Check if it's on the right boundery
 			if( (getX() + (getTheGame().getFrame().getWidth() / 2) > theRoom.getWidth()))
@@ -174,14 +196,17 @@ public abstract class Entity {
 					newX = (getTheGame().getFrame().getWidth() / 2) + ( (player.getX() - this.getX()) * sideModifier);
 				}
 			}
-		}
+		}// do nothing because the top and left side of the map should be the same x or y as their default
 
-		//Set the reletive position of the player
-		if(player.getY() >  (getTheGame().getFrame().getHeight() / shouldCenter) )
+		//Set the reletive position of the entity
+		if(this.getY() >  (getTheGame().getFrame().getHeight() / shouldCenter) )
 		{
-			//Check if it's on the right boundery
+			//Check if it's on the bottom boundery
 			if( (getY() + (getTheGame().getFrame().getHeight() / 2) > theRoom.getHeight()))
-				newY = getTheGame().getFrame().getHeight() - (theRoom.getHeight() - getY()); 
+			{
+				if(this instanceof Player){}
+					newY = getTheGame().getFrame().getHeight() - (theRoom.getHeight() - getY());
+			}
 			else{ //Center of screen
 				if((this instanceof Player))
 					newY = (getTheGame().getFrame().getHeight() / 2);
@@ -194,14 +219,25 @@ public abstract class Entity {
 					newY = (getTheGame().getFrame().getHeight() / 2) + ( (player.getY() - this.getY()) * sideModifier);
 				}
 			}
-		}
+		} // do nothing because the top and left side of the map should be the same x or y as their default
 
 		newX -= (getSprite().getWidth() /2);
 		newY -= (getSprite().getHeight() /2);
 		getSprite().setPosition(newX, newY);
+		
+		setLastViewX(newX);
+		setLastViewY(newY);
 
+		//TODO proof of concept rework or fix but for now if the player is not in view, don't draw it
+				//TODO Currently things off screen can't check collisions (I think) Fix this
+				
+				if((getTheGame().getFrame().getWidth() / 2) + ( (player.getX() - this.getX())) < getTheGame().getFrame().getWidth())
+				{
+					if((getTheGame().getFrame().getHeight() / 2) + ( (player.getY() - this.getY())) < getTheGame().getFrame().getHeight())
+					{
 		this.sprite.paint(g);
 		this.sprite.continueAnimation();
+					}}
 		//TODO DEBUG REMOVEME
 		if(theGame.isDEBUG())
 		{
@@ -242,6 +278,9 @@ public abstract class Entity {
 	//move the entity based on it's direction
 	public void moveMe()
 	{
+		//Previouse x and y just incase they need to move back one pixal (IE collision)
+		//int previousX = this.getX();
+		//int previousY = this.getY();
 		//x += dx;
 		//y += dy;
 		//We want to check for collisions every 1 pixal movement to be more accurate with collision checking
@@ -251,14 +290,16 @@ public abstract class Entity {
 			for(int i =0; i < dx; i++)
 			{
 				x += 1;
-				this.checkCollisions();
+				if(this.checkCollisions() == false)
+					x-=2;
 			}
-		}else //negitive movement
+		}else //Negative movement
 		{
 			for(int i = 0; i < (dx* -1); i++)
 			{
 				x -= 1;
-				this.checkCollisions();
+				if(this.checkCollisions() == false)
+					x+=2;
 			}
 		}
 		
@@ -268,14 +309,16 @@ public abstract class Entity {
 			for(int i =0; i < dy; i++)
 			{
 				y += 1;
-				this.checkCollisions();
+				if(this.checkCollisions() == false)
+					y-=2;
 			}
 		}else //negitive movement
 		{
 			for(int i = 0; i < (dy* -1); i++)
 			{
 				y -= 1;
-				this.checkCollisions();
+				if(this.checkCollisions() == false)
+					y+=2;
 			}
 		}
 	}
@@ -286,54 +329,6 @@ public abstract class Entity {
 		setX(x);
 		setY(y);
 	}
-
-	/**
-	 * Will need to check on mouse events and key events to know when clicked or when it needs to close, etc
-	 * Check for keyboard input
-	 * @param keyCode key used
-	 * @param pressed state = [true] pressed | [false] released
-	 */
-	public void keyCheck(int keyCode,boolean pressed) //copied from Entity
-	{
-
-	}
-	
-	/**
-	 * Will be triggered by the FrameMouseListener event
-	 * @param event Event that was passed from the MouseListener
-	 * @param eventType Compatable Strings "Clicked", "Pressed", and "Released.
-	 */
-	public void mouseCheck(MouseEvent event,String eventType)
-	{
-
-	}
-
-	/*Remade to check for collision with anything
-	//Used to see if this entity collides with another specific entity; then returns it
-	public HashSet<Entity> checkForCollision(String name)
-	{
-		HashSet<Entity> returns = new HashSet<Entity>();
-		for(Entity e : theGame.getEntityHash())
-		{
-			//We don't want to add itself to the list
-			if(e == this)
-				continue;
-			//Match!
-			if(e.getName() == name)
-			{
-				//See if they have collided
-				if(this.getSprite().collidesWith(e.getSprite(), true))
-				{
-					returns.add(e);
-				}
-			}
-		}
-		//To make it easier for other methods to see if there was a collision or not, we will return null on no collision
-		if(returns.isEmpty())
-			return null;
-		else
-			return returns;
-	}*/
 	
 	public HashSet<Entity> checkForCollision()
 	{
@@ -393,7 +388,100 @@ public abstract class Entity {
 		}catch(NullPointerException e) { } //should mean theres an empty list and nothing should happen
 		return null;
 	}
+	
+	/**
+	 * @return true if it collides with somthing solid
+	 */
+	public boolean checkForSolidCollision()
+	{
+		//can move threw solids, skip
+		if(this.isMoveThrewSolids())
+			return false;
+		HashSet<Entity> collision = this.checkForCollision();
+		if(collision != null)
+			for(Entity e : collision)
+				if(e.isSolid())
+					return true; // entity is solid and this should not move threw solids so do not move
+		//Nothing solid and can not move threw soilds
+		return false;
+	}
 
+	/**
+	 * Will need to check on mouse events and key events to know when clicked or when it needs to close, etc
+	 * Check for keyboard input
+	 * @param keyCode key used
+	 * @param pressed state = [true] pressed | [false] released
+	 */
+	public void keyCheck(int keyCode,boolean pressed) //copied from Entity
+	{
+
+	}
+	
+	/**
+	 * Will be triggered by the FrameMouseListener event
+	 * @param event Event that was passed from the MouseListener
+	 * @param eventType Compatable Strings "Clicked", "Pressed", and "Released.
+	 */
+	public void mouseCheck(MouseEvent event,String eventType)
+	{
+
+	}
+	
+	class EntityHIDListener implements KeyListener, MouseListener
+	{
+
+		public void keyPressed(KeyEvent e) {
+			sendKeyEvent(e.getKeyCode(), true);
+		}
+
+		public void keyReleased(KeyEvent e) {
+			sendKeyEvent(e.getKeyCode(), false);
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent event)
+		{
+			sendMouseEvent(event, "clicked");
+		}
+
+		@Override
+		public void mousePressed(MouseEvent event)
+		{
+			sendMouseEvent(event, "pressed");
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent event)
+		{
+			sendMouseEvent(event, "released");
+		}
+		
+		
+		
+		private void sendMouseEvent(MouseEvent event, String eventType)
+		{
+			for (Entity e: theGame.getEntityHash())
+			{
+				e.mouseCheck(event, eventType);
+			}
+		}
+		
+		private void sendKeyEvent(int keyCode, boolean pressed)
+		{
+			for (Entity e: theGame.getEntityHash())
+			{
+				e.keyCheck(keyCode, pressed);
+			}
+		}
+		
+		
+		//Not currently used
+		public void mouseEntered(MouseEvent e) {}
+
+		public void mouseExited(MouseEvent e) {}
+
+		public void keyTyped(KeyEvent e) {}
+	}
 
 	
 
@@ -479,6 +567,38 @@ public abstract class Entity {
 
 	public void setReletivePosition(Point reletivePosition) {
 		this.reletivePosition = reletivePosition;
+	}
+
+	public int getLastViewX() {
+		return lastViewX;
+	}
+
+	public void setLastViewX(int lastViewX) {
+		this.lastViewX = lastViewX;
+	}
+
+	public int getLastViewY() {
+		return lastViewY;
+	}
+
+	public void setLastViewY(int lastViewY) {
+		this.lastViewY = lastViewY;
+	}
+
+	public boolean isSolid() {
+		return solid;
+	}
+
+	public void setSolid(boolean solid) {
+		this.solid = solid;
+	}
+
+	public boolean isMoveThrewSolids() {
+		return moveThrewSolids;
+	}
+
+	public void setMoveThrewSolids(boolean moveThrewSolids) {
+		this.moveThrewSolids = moveThrewSolids;
 	}
 
 
