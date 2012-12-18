@@ -46,6 +46,9 @@ public class Game
 
 	//The main game thread loop
 	private GameLoop gameLoop = null;
+	
+	//all the hotkeys
+	private Hotkeys hotkeys = new Hotkeys();
 
 	//Graphicsy Stuff
 	private JFrame frame = new JFrame();
@@ -372,6 +375,14 @@ public class Game
 
 	public void setGameArea(GameArea gameArea) {
 		this.gameArea = gameArea;
+	}
+
+	public Hotkeys getHotkeys() {
+		return hotkeys;
+	}
+
+	public void setHotkeys(Hotkeys hotkeys) {
+		this.hotkeys = hotkeys;
 	}
 
 	//Different method for this above

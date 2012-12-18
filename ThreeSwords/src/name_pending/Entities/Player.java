@@ -81,51 +81,6 @@ public class Player extends Being{
 			weaponSprite.setPosition(getX(), getY());
 			weaponSprite.paint(g);
 		}
-		
-		//Move the players sprite with the view of the room
-/*		Room theRoom = getTheGame().getGameArea().getCurrentRoom();
-		int newX = getX();//getX() - (theRoom.getWidth() / 2);
-		int newY = getY();//getY() - (theRoom.getHeight() / 2);
-		//make sure it does not draw outside the frames bounds
-		
-		//Set the reletive position of the player
-		if(getX() >  (getTheGame().getFrame().getWidth() / 2) )
-		{
-			//Check if it's on the right boundery
-			if( (getX() + (getTheGame().getFrame().getWidth() / 2) > theRoom.getWidth()))
-				newX = getTheGame().getFrame().getWidth() - (theRoom.getWidth() - getX()); 
-			else //Center of screen
-				newX = (getTheGame().getFrame().getWidth() / 2);
-		}
-		
-		if(getY() >  (getTheGame().getFrame().getHeight() / 2) )
-		{
-			//Check if it's on the right boundery
-			if( (getY() + (getTheGame().getFrame().getHeight() / 2) > theRoom.getHeight()))
-				newY = getTheGame().getFrame().getHeight() - (theRoom.getHeight() - getY()); 
-			else //Center of screen
-				newY = (getTheGame().getFrame().getHeight() / 2);
-		}
-		
-		getSprite().setPosition(newX, newY);
-		getSprite().paint(g);
-		getSprite().continueAnimation();
-		//TODO DEBUG REMOVEME
-		if(getTheGame().isDEBUG())
-		{
-			g.setColor(Color.RED);
-			g.drawString(getNameInList(), getX(), getY()-10);
-			g.drawRect(getSprite().getX(), getSprite().getY(), getSprite().getWidth(), getSprite().getHeight());
-		}*/
-			
-			
-		//if(newX < 0) newX = getX();
-		//if(newY < 0) newY = getY();
-		//if(newX > getWidth()) newX = getWidth();
-		//if(newY > getHeight()) newY = getHeight();
-		//TODO Magic numbers
-		//cropArea.setBounds(newX, newY, 800, 600);
-		//g2d.translate(newX, newY);
 	}
 
 	public void step()
@@ -142,28 +97,28 @@ public class Player extends Being{
 		//Key pressed down
 		if(pressed == true)
 		{
-			if(keyCode == KeyEvent.VK_W)
+			if(keyCode == getTheGame().getHotkeys().getHOTKEY_moveUp())
 			{
 				this.setDy(this.getSpeed() * -1); // move up
 			}
-			if(keyCode == KeyEvent.VK_S)
+			if(keyCode == getTheGame().getHotkeys().getHOTKEY_moveDown())
 			{
 				this.setDy(this.getSpeed()); //move down
 			}
-			if(keyCode == KeyEvent.VK_A)
+			if(keyCode == getTheGame().getHotkeys().getHOTKEY_moveLeft())
 			{
 				this.setDx(this.getSpeed() * -1); //move left
 			}
-			if(keyCode == KeyEvent.VK_D) //move right
+			if(keyCode == getTheGame().getHotkeys().getHOTKEY_moveRight()) //move right
 			{
 				this.setDx(this.getSpeed());
 			}
 		}else{ // Key released
-			if( (keyCode == KeyEvent.VK_W) || (keyCode == KeyEvent.VK_S) )
+			if( (keyCode == getTheGame().getHotkeys().getHOTKEY_moveUp()) || (keyCode == getTheGame().getHotkeys().getHOTKEY_moveDown()) )
 			{
 				this.setDy(0);
 			}
-			if( (keyCode == KeyEvent.VK_A) || (keyCode == KeyEvent.VK_D) )
+			if( (keyCode == getTheGame().getHotkeys().getHOTKEY_moveLeft()) || (keyCode == getTheGame().getHotkeys().getHOTKEY_moveRight()) )
 			{
 				this.setDx(0);
 			}
