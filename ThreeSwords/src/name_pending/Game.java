@@ -29,7 +29,7 @@ public class Game
 {
 	//quick checks to see if the game is is test or debug mode
 	private static boolean TESTING = true;
-	private boolean DEBUG = false;
+	private boolean DEBUG = true;
 	private TestRoom testRoom = new TestRoom(this);
 	private boolean fullscreen = false;
 
@@ -122,10 +122,8 @@ public class Game
 		}
 
 		//Gets double buffering ready
-		frame.createBufferStrategy(2);
+		//frame.createBufferStrategy(2);
 		
-		//setup the cursor
-				frame.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 				//loadCursors();
 	}
 

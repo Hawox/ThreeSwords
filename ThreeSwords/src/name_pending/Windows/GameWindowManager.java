@@ -1,6 +1,8 @@
 package name_pending.Windows;
 
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -16,6 +18,9 @@ import name_pending.Game;
  *
  */
 public class GameWindowManager {
+	
+	//TODO for debug
+	Point mouseClick = new Point (0,0);
 	
 	//TODO Maybe make a global hotkey manager at somepoint
 	//All the hotkeys that are used in the inventory manager
@@ -36,7 +41,7 @@ public class GameWindowManager {
 		
 		gameWindowManagerHIDListener = new GameWindowManagerHIDListener();
 		getTheGame().getFrame().addKeyListener(gameWindowManagerHIDListener);
-		getTheGame().getFrame().addMouseListener(gameWindowManagerHIDListener);
+		getTheGame().getGameArea().addMouseListener(gameWindowManagerHIDListener);
 	}
 	
 	/**
@@ -73,28 +78,6 @@ public class GameWindowManager {
 				}
 			}
 		}
-		/* Windows will not be visiable and non-visiable instead of deleting and creating them
-		 * Not sure why I thought that was a good idea
-		for (GameWindow gw: getGameWindowHash())
-			gw.keyCheck(keyCode, pressed);
-		boolean hasInventory = false;
-		//Should we make some windows?
-		
-		if(keyCode == HOTKEY_inventory)
-		{
-			for (GameWindow gw : this.gameWindowHash)
-			{
-				if(gw.getName() == "InventoryWindow")
-				{
-					//remove that window
-					gw.onDelete();
-					hasInventory = true;
-					break;
-				}
-			}
-			if(hasInventory == false)
-				getGameWindowHash().add(new GameWindowInventory(theGame, 600, 300, 190, 290));
-		}*/
 	}
 
 	/**
@@ -104,6 +87,10 @@ public class GameWindowManager {
 	 */
 	public void mouseCheck(MouseEvent event,String eventType)
 	{
+		//show where the mouse clicked
+		if(getTheGame().isDEBUG())
+			this.mouseClick = new Point(event.getX(), event.getY());
+			
 		for(GameWindow gw: getGameWindowHash())
 			gw.mouseCheck(event, eventType);
 	}
@@ -113,9 +100,16 @@ public class GameWindowManager {
 	 * @param g Graphics
 	 */
 	public void paintWindows(Graphics g)
-	{
+	{	
 		for(GameWindow gw: getGameWindowHash())
 			gw.paintMe(g);
+		
+		//TODO show mouse click
+				if(getTheGame().isDEBUG())
+				{
+					g.setColor(Color.PINK);
+					g.drawRect(this.mouseClick.x, this.mouseClick.y, 1, 1);
+				}
 	}
 	
 	/*

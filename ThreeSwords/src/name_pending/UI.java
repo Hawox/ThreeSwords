@@ -40,8 +40,8 @@ public class UI {
 			drawGameWindows(g);
 		
 		/**DEBUG STUFF!**/
-		if(theGame.isDEBUG())
-			drawDebugStuff(g);
+		//if(theGame.isDEBUG())
+		//	drawDebugStuff(g);
 	}
 	
 	private void drawPlayerStuff(Graphics g, Player player)

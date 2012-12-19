@@ -130,7 +130,7 @@ public abstract class Entity {
 		//add listener
 		entityHIDListener = new EntityHIDListener();
 		getTheGame().getFrame().addKeyListener(entityHIDListener);
-		getTheGame().getFrame().addMouseListener(entityHIDListener);
+		getTheGame().getGameArea().addMouseListener(entityHIDListener);
 	}
 
 	//The script that is run for the entity upon it's creation
