@@ -89,6 +89,15 @@ public class Being extends Entity{
 	public void step()
 	{
 		super.step();
+		
+		//if they have no more health and are not the player then kill them
+		if(this.health <= 0)
+		{
+			if(!(this instanceof Player))
+			{
+				this.onDelete();
+			}
+		}
 	}
 
 	public void keyCheck(int keyCode,boolean pressed)
@@ -143,18 +152,33 @@ public class Being extends Entity{
 	
 	
 
-	public void fireProjectile(Point target, ItemWeapon weapon, int lifeSpan, String spriteName)
+	public void fireProjectile(Point target, ItemWeapon weapon, int lifeSpan, String spriteName, boolean friendly)
 	{
 		//get a random dmg number from the weapon
 		int projectileDamage = getTheGame().getRandomGenerator().nextInt(weapon.getMaxDamage() - weapon.getMinDamage()) + weapon.getMinDamage();
 		//fire the arrow at the speed of the ranged weapon
-		Projectile projectile = new Projectile(getTheGame(), getX(), getY(), weapon.getDistance(), projectileDamage, lifeSpan, true, spriteName);
+		Projectile projectile = new Projectile(getTheGame(), getX(), getY(), weapon.getDistance(), projectileDamage, lifeSpan, friendly, spriteName);
 
 		Point moveTo = target;
 		projectile.setDestination(moveTo, weapon.getDistance());
 		getTheGame().getEntityHash().add(projectile);
 
 	}
+	
+	
+	//TODO
+		/**
+		 * Converts the damage received to the damage taken based upon the entities stats
+		 * @param damage
+		 * @param type
+		 * @return
+		 */
+		public int takeDamage(int damage, Resistance type)
+		{
+			damage -= this.getDefence();
+			this.setHealth(this.getHealth() - damage);
+			return damage;
+		}
 
 
 

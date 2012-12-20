@@ -10,6 +10,7 @@ import java.awt.event.MouseListener;
 import java.util.HashSet;
 
 import name_pending.Game;
+import name_pending.Resistance;
 import name_pending.Sprite;
 
 /****
@@ -85,6 +86,12 @@ public abstract class Entity {
 	
 	//Gets input from HID devices
 	private EntityHIDListener entityHIDListener;
+	
+	//Direction the entity is facing
+	private String direction = "right";
+	
+	//If they are on the players side or not
+	private boolean friendly;
 
 	/*
 	 * I didn't want to add this before, now I am trying to remember why.
@@ -156,6 +163,34 @@ public abstract class Entity {
 	 */
 	public boolean checkCollisions()
 	{
+		//see if you are hit by a projectile
+		HashSet<Entity> collision = this.checkForCollision();
+		if(collision != null)
+		{
+			for(Entity e : collision)
+			{
+				if(e instanceof Projectile)
+				{
+					Projectile p = (Projectile) e;
+					//Take damage and delete projectile
+
+					//friendly entities don't take damage from friendly projectiles
+					if(this.friendly != e.friendly)
+					{
+						//if being take damage, otherwise do nothing but block the projectile for now
+						if(this instanceof Being)
+						{
+							Being being = (Being) this;
+							being.takeDamage(p.getDamage(), null);
+						}
+						
+						//delete projectile
+						e.onDelete();
+					}
+				}
+			}
+		}
+		
 		//don't move if you collide with a solid
 		if(this.moveThrewSolids == false)
 		{
@@ -387,6 +422,8 @@ public abstract class Entity {
 			if((getDy() * -1) < (this.getSpeed() * -1))
 				setDy(getSpeed() * -1);*/
 	}
+	
+	
 
 	/**
 	 * Will need to check on mouse events and key events to know when clicked or when it needs to close, etc
@@ -581,6 +618,30 @@ public abstract class Entity {
 
 	public void setMoveThrewSolids(boolean moveThrewSolids) {
 		this.moveThrewSolids = moveThrewSolids;
+	}
+
+	public String getDirection() {
+		return direction;
+	}
+
+	public void setDirection(String direction) {
+		this.direction = direction;
+	}
+
+	public EntityHIDListener getEntityHIDListener() {
+		return entityHIDListener;
+	}
+
+	public void setEntityHIDListener(EntityHIDListener entityHIDListener) {
+		this.entityHIDListener = entityHIDListener;
+	}
+
+	public boolean isFriendly() {
+		return friendly;
+	}
+
+	public void setFriendly(boolean friendly) {
+		this.friendly = friendly;
 	}
 
 

@@ -28,6 +28,7 @@ public class Player extends Being{
 	public Player(Game theGame, int x, int y)
 	{
 		super(theGame, x, y, theGame.getPlayerData().getSTARTING_SPEED(), theGame.getPlayerData().getSTARTING_NAME(), theGame.getPlayerData().getMaxHealth(), theGame.getPlayerData().getSTARTING_DEFENCE(), theGame.getPlayerData().getSTARTING_ATTACK(), theGame.getPlayerData().getSTARTING_DEXTERITY(), theGame.getPlayerData().getSTARTING_RESISTANCE());
+		this.setFriendly(true);
 	}
 
 	/*
@@ -128,7 +129,7 @@ public class Player extends Being{
 						//newX = ((int) ((mousePoint.x - newX) / 10));
 						//newY = ((int) ((mousePoint.y - newY) / 10)); //10 is how many frames it will take to get to that location
 						
-						this.fireProjectile(new Point(newX, newY), meleeWeapon, 5, "Slash.png");
+						this.fireProjectile(new Point(newX, newY), meleeWeapon, 5, "Slash.png", true);
 						setAttackDelay(8); //one second
 					}
 					if(isShootingRanged())
@@ -137,7 +138,7 @@ public class Player extends Being{
 						//TODO set this to a number
 						int newX = getTheGame().getGameArea().getOriginPoint().x + mousePoint.x;
 						int newY = getTheGame().getGameArea().getOriginPoint().y + mousePoint.y;
-						this.fireProjectile(new Point(newX, newY), rangedWeapon, 66, "Arrow.png");
+						this.fireProjectile(new Point(newX, newY), rangedWeapon, 66, "Arrow.png", true);
 						setAttackDelay(15); //one second
 					}
 				}

@@ -7,7 +7,7 @@ import name_pending.Game;
 
 public class Projectile extends Entity{
 	//If the bullet will hurt the player or enemies
-	private boolean friendly = false;
+	//private boolean friendly = false;
 	private int damage = 0;
 	
 	private int lifeSpan = 1;
@@ -25,10 +25,11 @@ public class Projectile extends Entity{
 	 */
 	public Projectile(Game theGame, int x, int y, int speed, int damage, int lifeSpan, boolean friendly, String spriteName) {
 		super(theGame, x, y, speed, "Projectile");
-		this.friendly = friendly;
+		//this.friendly = friendly;
 		this.damage = damage;
 		setSprite(theGame.getResourceLoader().getSprite(spriteName));
 		this.lifeSpan = lifeSpan;
+		this.setFriendly(friendly);
 		//getSprite().setRefPixel(getSprite().getWidth() / 2, getSprite().getWidth() / 2);
 	}
 
@@ -75,13 +76,13 @@ public class Projectile extends Entity{
 	
 	
 	
-	public boolean isFriendly() {
+	/*public boolean isFriendly() {
 		return friendly;
 	}
 
 	public void setFriendly(boolean friendly) {
 		this.friendly = friendly;
-	}
+	}*/
 
 	public int getDamage() {
 		return damage;
