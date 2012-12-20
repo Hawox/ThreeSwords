@@ -10,7 +10,6 @@ import java.awt.event.MouseListener;
 import java.util.HashSet;
 
 import name_pending.Game;
-import name_pending.Room;
 import name_pending.Sprite;
 
 /****
@@ -157,8 +156,21 @@ public abstract class Entity {
 	 */
 	public boolean checkCollisions()
 	{
-		//Don't move if it colides with a soild
-		return( !(checkForSolidCollision()) );
+		//don't move if you collide with a solid
+		if(this.moveThrewSolids == false)
+		{
+			try{
+				for(Entity e : this.checkForCollision())
+				{
+					if(e.isSolid())
+					{
+						//undo move
+						return false;
+					}
+				}
+			}catch(NullPointerException e){}
+		}
+		return true;
 	}
 
 	//Used to draw whatever is related to the entity to the main game panel
@@ -198,10 +210,6 @@ public abstract class Entity {
 		//see if the entity is moving and move it
 		if( (dx != 0) || (dy != 0) )
 			this.moveMe();
-		//move our sprite to the correct location
-		//Don't think we need this here. Moved to the paint step.
-		// - Having this here might be the reason we can only have one entity per sprite
-		this.sprite.setPosition(x, y);
 		
 		//If the entity is out of the bounds of the Room then delete it UNLESS IT IS THE PLAYER
 		if(!(this instanceof Player))
@@ -222,12 +230,7 @@ public abstract class Entity {
 	//move the entity based on it's direction
 	public void moveMe()
 	{
-		//Previouse x and y just incase they need to move back one pixal (IE collision)
-		//int previousX = this.getX();
-		//int previousY = this.getY();
-		//x += dx;
-		//y += dy;
-		//We want to check for collisions every 1 pixal movement to be more accurate with collision checking
+		//We want to check for collisions every 1 pixel movement to be more accurate with collision checking
 		//positive movement
 		if(dx > 0)
 		{
@@ -256,7 +259,7 @@ public abstract class Entity {
 				if(this.checkCollisions() == false)
 					y-=2;
 			}
-		}else //negitive movement
+		}else //Negative movement
 		{
 			for(int i = 0; i < (dy* -1); i++)
 			{

@@ -1,6 +1,5 @@
 package name_pending.Entities;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -48,13 +47,16 @@ public class Player extends Being{
 
 	public boolean checkCollisions()
 	{
+		boolean returnMe = super.checkCollisions(); //uphere incase it has other code that needs to run before this stuff
+		
 		//collides with item on the ground
 		HashSet<Entity> collision = this.checkForCollision("ItemDrop");
 		if(collision != null)
 		{
 			for(Entity e : collision)
 			{
-				//ItemDrop collision
+				//Pickup items on the ground and remove the item drop
+				
 				if(e.getName() == "ItemDrop")
 				{
 					ItemDrop id = (ItemDrop) e;
@@ -68,7 +70,7 @@ public class Player extends Being{
 				}
 			}
 		}
-		return super.checkCollisions();
+		return returnMe;
 	}
 
 	public void paintMe(Graphics g)
@@ -86,11 +88,7 @@ public class Player extends Being{
 			weaponSprite.setPosition(getSprite().getX() + 5, getSprite().getY() + 5);
 			weaponSprite.paint(g);
 		}
-		
-		
-		//TODO DEBUG
-		g.setColor(Color.BLACK);
-		g.drawString("Mouse x: " + Integer.toString(this.mousePoint.x) + " y: " + Integer.toString(this.mousePoint.y), 100, 100);
+
 	}
 
 	public void step()
