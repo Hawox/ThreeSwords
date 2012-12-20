@@ -29,7 +29,7 @@ public class TestRoom {
 		//add the player
 		//change the cursor
 		theGame.changeCursor("CursorCrossheir.png", new Point(15,15));
-		theGame.getEntityHash().add(new Player(theGame, 1000, 1000));
+		theGame.getEntityHash().add(new Player(theGame, 100, 100));
 		//theGame.getEntityHash().add(new Player(theGame, 400, 100));
 		//create a bow
 		//AH HAH! Note to self, you can't use a single Item for multiple ItemDrops. That was stupid of me.
@@ -37,15 +37,16 @@ public class TestRoom {
 		//put it in the players inventory
 
 		for(int i=0; i<10; i++){
-			ItemDrop itemDrop = new ItemDrop(theGame, new ItemBow(theGame, "SuperBow", "This is the SuperBow of epicness", "white", 10, 100, 150, null), 1000 + (50*i), 1000 + (50*i), 0);
+			ItemDrop itemDrop = new ItemDrop(theGame, new ItemBow(theGame, "SuperBow", "This is the SuperBow of epicness", "white", 10, 100, 150, null), 1100 + (50*i), 1000 + (50*i), 0);
 			theGame.getEntityHash().add(itemDrop);
 		}
 		
-		for(int i=0; i<10; i++){
+		theGame.getEntityHash().add(new Enviroment(theGame, 1000, 1000, 0, "Center"));
+	//	for(int i=0; i<10; i++){
 			//ItemDrop itemDrop = new ItemDrop(theGame, new ItemBow(theGame, "SuperBow", "This is the SuperBow of epicness", "white", 10, 100, 150, null), 900 + (50*i), 1000, 0);
-			Enviroment envi = new Enviroment(theGame, 950, 1000 + (50*i), 0, "Rock");
-			theGame.getEntityHash().add(envi);
-		}
+	//		Enviroment envi = new Enviroment(theGame, 950, 1000 + (50*i), 0, "Rock");
+	//		theGame.getEntityHash().add(envi);
+	//	}
 		/*
 		ItemDrop itemDropa = new ItemDrop(theGame, new ItemBow(theGame, "SuperBow", "This is the SuperBow of epicness", "white", 10, 100, 150, null), 300, 350);
 		theGame.getEntityHash().add(itemDropa);

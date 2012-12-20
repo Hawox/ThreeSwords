@@ -101,8 +101,8 @@ public class Game
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(BorderLayout.CENTER, gameArea);
 		//frame.setSize(1280,768);
-		//frame.setSize(800,600);
-		frame.setSize(1024, 768);
+		frame.setSize(800,600);
+		//frame.setSize(1024, 768);
 		frame.setVisible(true);
 		frame.setResizable(false);
 		

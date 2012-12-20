@@ -1,11 +1,14 @@
 package name_pending.Entities;
 
 import java.awt.Graphics;
+import java.awt.Point;
 import java.util.HashMap;
 import java.util.HashSet;
 
 import name_pending.Game;
 import name_pending.Resistance;
+import name_pending.Entities.Items.ItemBow;
+import name_pending.Entities.Items.Projectile;
 
 /*
  * Anything that protrays a living being I.E. Monsters, players, npcs
@@ -28,6 +31,10 @@ public class Being extends Entity{
 	//TODO maybe add a class for types
 	//Also contains debuffs
 	private HashMap<String, Integer> buffs = new HashMap<String, Integer>();
+	
+	//True if the player has the ability to attack. This limits how often they can attack
+	private boolean canShoot = true;
+	private int attackDelay = 5; //how many frames untill they can attack again
 	
 	private boolean killable = true;
 
@@ -132,20 +139,34 @@ public class Being extends Entity{
 		//Dosn't exist
 		this.getResistances().add(resistance);
 		return true;
-			
-		/*if(this.resistances.containsKey(type))
-		{
-			//Resistances string form should be "name-#" ie "fire-20" where # is % resistant
-			String[] moreInfo = type.split("-");
-			this.resistances.put(moreInfo[0],Integer.getInteger(moreInfo[1]));
-			return true;
-		}
-		else
-		{
-			this.resistances.remove(type);
-			return false;
-		}*/
 	}
+	
+	
+
+	public void fireProjectile(Point target, ItemBow rangedWeapon, int lifeSpan)
+	{
+		//target = new  Point(1000,1000);
+		//get a random dmg number from the weapon
+		int projectileDamage = getTheGame().getRandomGenerator().nextInt(rangedWeapon.getMaxDamage() - rangedWeapon.getMinDamage()) + rangedWeapon.getMinDamage();
+		//fire the arrow at the speed of the ranged weapon
+		Projectile projectile = new Projectile(getTheGame(), getX(), getY(), rangedWeapon.getDistance(), projectileDamage, lifeSpan, true);
+
+		//Set the destination to be reletive to the players
+		//get the difference
+
+		//int newX = (int) ( (getTheGame().getFrame().getWidth() / 2) + ( (getTheGame().getPlayer().getX() - target.getX() )/* * -1 */) );
+		//int newY = (int) ( (getTheGame().getFrame().getHeight() / 2) + ( (getTheGame().getPlayer().getY() - target.getY() )/* * -1 */) );
+		//add the difference
+		//newX += getTheGame().getPlayer().getX();
+		//newY += getTheGame().getPlayer().getY();
+		//Point moveTo = new Point(newX, newY);
+		Point moveTo = target;
+		projectile.setDestination(moveTo);
+		getTheGame().getEntityHash().add(projectile);
+
+	}
+
+
 
 	/***********
 	 * Getters and setters
@@ -228,5 +249,29 @@ public class Being extends Entity{
 
 	public void setKillable(boolean killable) {
 		this.killable = killable;
+	}
+
+	public HashMap<String, Integer> getBuffs() {
+		return buffs;
+	}
+
+	public void setBuffs(HashMap<String, Integer> buffs) {
+		this.buffs = buffs;
+	}
+
+	public boolean isCanShoot() {
+		return canShoot;
+	}
+
+	public void setCanShoot(boolean canShoot) {
+		this.canShoot = canShoot;
+	}
+
+	public int getAttackDelay() {
+		return attackDelay;
+	}
+
+	public void setAttackDelay(int attackDelay) {
+		this.attackDelay = attackDelay;
 	}
 }

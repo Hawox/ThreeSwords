@@ -164,63 +164,12 @@ public abstract class Entity {
 	//Used to draw whatever is related to the entity to the main game panel
 	public void paintMe(Graphics g)
 	{
-		//Set the sprites location before we draw it
-		//It needs to be drawn on the reletive point of the game room, not on the exact point of the JPanel
-		Room theRoom = getTheGame().getGameArea().getCurrentRoom();
-		int newX = getX();//getX() - (theRoom.getWidth() / 2);
-		int newY = getY();//getY() - (theRoom.getHeight() / 2);
-		//make sure it does not draw outside the frames bounds
-		Player player = theGame.getPlayer();
+		//move it's x to the orintation of the room view
+		Point origin = getTheGame().getGameArea().getOriginPoint();
+
+		int newX = this.getX() - origin.x;
+		int newY = this.getY() - origin.y;
 		
-		int shouldCenter = 2;
-		//Player should be at the center of screen but everything else should just be drawn at its reletive positions
-		if(this instanceof Player)
-			shouldCenter = 2;
-
-		
-		//Set the reletive position of the entity
-		if(this.getX() >  (getTheGame().getFrame().getWidth() / shouldCenter) )
-		{
-			//Check if it's on the right boundery
-			if( (getX() + (getTheGame().getFrame().getWidth() / 2) > theRoom.getWidth()))
-				newX = getTheGame().getFrame().getWidth() - (theRoom.getWidth() - getX()); 
-			else{ //Center of screen
-				if((this instanceof Player))
-					newX = (getTheGame().getFrame().getWidth() / 2);
-				else
-				{
-					//Converts the difference back to the correct direction
-					int sideModifier = -1;
-					//if(this.getX() > player.getX())
-					//	sideModifier = -1;
-					newX = (getTheGame().getFrame().getWidth() / 2) + ( (player.getX() - this.getX()) * sideModifier);
-				}
-			}
-		}// do nothing because the top and left side of the map should be the same x or y as their default
-
-		//Set the reletive position of the entity
-		if(this.getY() >  (getTheGame().getFrame().getHeight() / shouldCenter) )
-		{
-			//Check if it's on the bottom boundery
-			if( (getY() + (getTheGame().getFrame().getHeight() / 2) > theRoom.getHeight()))
-			{
-				if(this instanceof Player){}
-					newY = getTheGame().getFrame().getHeight() - (theRoom.getHeight() - getY());
-			}
-			else{ //Center of screen
-				if((this instanceof Player))
-					newY = (getTheGame().getFrame().getHeight() / 2);
-				else
-				{
-					//Converts the difference back to the correct direction
-					int sideModifier = -1;
-					//if(this.getY() > player.getY())
-					//	sideModifier = -1;
-					newY = (getTheGame().getFrame().getHeight() / 2) + ( (player.getY() - this.getY()) * sideModifier);
-				}
-			}
-		} // do nothing because the top and left side of the map should be the same x or y as their default
-
 		newX -= (getSprite().getWidth() /2);
 		newY -= (getSprite().getHeight() /2);
 		getSprite().setPosition(newX, newY);
@@ -229,15 +178,10 @@ public abstract class Entity {
 		setLastViewY(newY);
 
 		//TODO proof of concept rework or fix but for now if the player is not in view, don't draw it
-				//TODO Currently things off screen can't check collisions (I think) Fix this
-				
-				if((getTheGame().getFrame().getWidth() / 2) + ( (player.getX() - this.getX())) < getTheGame().getFrame().getWidth())
-				{
-					if((getTheGame().getFrame().getHeight() / 2) + ( (player.getY() - this.getY())) < getTheGame().getFrame().getHeight())
-					{
+			//TODO Currently things off screen can't check collisions (I think) Fix this
+
 		this.sprite.paint(g);
 		this.sprite.continueAnimation();
-					}}
 		//TODO DEBUG REMOVEME
 		if(theGame.isDEBUG())
 		{

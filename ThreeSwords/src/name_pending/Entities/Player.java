@@ -1,28 +1,32 @@
 package name_pending.Entities;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.util.HashSet;
 
 import name_pending.Game;
 import name_pending.Sprite;
 import name_pending.Entities.Items.ItemBow;
 import name_pending.Entities.Items.ItemDrop;
-import name_pending.Entities.Items.Projectile;
 
 public class Player extends Being{
 	
-	int mana;
-	int stamina;
+	private boolean shootingRanged;
+	
+	private int mana;
+	private int stamina;
+	
+	private Point mousePoint;
+	
+	PlayerMouseMotionListener playerMouseMotionListener;
 
 	@SuppressWarnings("static-access")
 	public Player(Game theGame, int x, int y)
 	{
 		super(theGame, x, y, theGame.getPlayerData().getSTARTING_SPEED(), theGame.getPlayerData().getSTARTING_NAME(), theGame.getPlayerData().getMaxHealth(), theGame.getPlayerData().getSTARTING_DEFENCE(), theGame.getPlayerData().getSTARTING_ATTACK(), theGame.getPlayerData().getSTARTING_DEXTERITY(), theGame.getPlayerData().getSTARTING_RESISTANCE());
-//		this.mana = theGame.getPlayerData().getMaxMana();
-//		this.stamina = theGame.getPlayerData().getMaxStamina();
 	}
 
 	/*
@@ -33,7 +37,8 @@ public class Player extends Being{
 	{
 		super.onCreate();
 		setSprite(getTheGame().getResourceLoader().getSprite("Player.png"));
-		//getSprite().setRefPixel(getX() - getSprite().getWidth(), getY() - getSprite().getHeight());
+		playerMouseMotionListener = new PlayerMouseMotionListener();
+		getTheGame().getGameArea().addMouseMotionListener(playerMouseMotionListener);
 	}
 
 	public void onDelete()
@@ -78,14 +83,40 @@ public class Player extends Being{
 		}
 		if(weaponSprite != null)
 		{
-			weaponSprite.setPosition(getX(), getY());
+			weaponSprite.setPosition(getSprite().getX() + 5, getSprite().getY() + 5);
 			weaponSprite.paint(g);
 		}
+		
+		
+		//TODO DEBUG
+		g.setColor(Color.BLACK);
+		g.drawString("Mouse x: " + Integer.toString(this.mousePoint.x) + " y: " + Integer.toString(this.mousePoint.y), 100, 100);
 	}
 
 	public void step()
 	{
 		super.step();
+		
+		if(isShootingRanged())
+		{
+			if(isCanShoot())
+			{
+				if(this.getAttackDelay() == 0)
+				{
+					ItemBow rangedWeapon = (ItemBow) getTheGame().getPlayerData().getRangedWeapon();			
+					//TODO set this to a number
+					int newX = getTheGame().getGameArea().getOriginPoint().x + mousePoint.x;
+					int newY = getTheGame().getGameArea().getOriginPoint().y + mousePoint.y;
+					this.fireProjectile(new Point(newX, newY), rangedWeapon, 66);
+					setAttackDelay(33); //one second
+				}
+			}
+		}
+		
+		//Decress attack timer
+		if(getAttackDelay() > 0)
+			setAttackDelay(getAttackDelay() - 1);
+		
 		//TODO debug
 		if(getTheGame().isDEBUG())
 			getTheGame().getPlayerData().addExp(1);
@@ -130,28 +161,36 @@ public class Player extends Being{
 		//check if we need to fire a ranged weapon
 		if(event.getButton() == MouseEvent.BUTTON3)
 		{
-			//TODO do a check if the mouse is over a window
-			ItemBow rangedWeapon = (ItemBow) getTheGame().getPlayerData().getRangedWeapon();
-			if(rangedWeapon != null)
+			if(eventType == "pressed")
 			{
-				//get a random dmg number from the weapon
-				int projectileDamage = getTheGame().getRandomGenerator().nextInt(rangedWeapon.getMaxDamage() - rangedWeapon.getMinDamage()) + rangedWeapon.getMinDamage();
-				//fire the arrow at the speed of the ranged weapon
-				Projectile projectile = new Projectile(getTheGame(), getX(), getY(), rangedWeapon.getDistance(), projectileDamage, true);
-				
-				//Set the destination to be reletive to the players
-				//get the difference
-				int newX = (event.getPoint().x - getTheGame().getPlayer().getX())*1;
-				int newY = (event.getPoint().y - getTheGame().getPlayer().getX())*1;
-				//add the difference
-				newX += getTheGame().getPlayer().getX();
-				newY += getTheGame().getPlayer().getY();
-				Point moveTo = new Point(newX, newY);
-				projectile.setDestination(moveTo);
-				getTheGame().getEntityHash().add(projectile);
-			}
+				ItemBow rangedWeapon = (ItemBow) getTheGame().getPlayerData().getRangedWeapon();
+				if(rangedWeapon != null)
+				{
+					setShootingRanged(true);
+				}
+			}else
+			if(eventType == "released")
+				setShootingRanged(false);
 		}
 	}
+	
+	//used to get the position of the mouse
+	class PlayerMouseMotionListener implements MouseMotionListener
+	{
+
+		@Override
+		public void mouseDragged(MouseEvent event) {
+			setMousePoint(event.getPoint());
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent event) {
+			setMousePoint(event.getPoint());
+		}
+		
+	}
+	
+	
 
 	public int getMana() {
 		return mana;
@@ -167,6 +206,22 @@ public class Player extends Being{
 
 	public void setStamina(int stamina) {
 		this.stamina = stamina;
+	}
+
+	public boolean isShootingRanged() {
+		return shootingRanged;
+	}
+
+	public void setShootingRanged(boolean shootingRanged) {
+		this.shootingRanged = shootingRanged;
+	}
+
+	public Point getMousePoint() {
+		return mousePoint;
+	}
+
+	public void setMousePoint(Point mousePoint) {
+		this.mousePoint = mousePoint;
 	}
 
 }

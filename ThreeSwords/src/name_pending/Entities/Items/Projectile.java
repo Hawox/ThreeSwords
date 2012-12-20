@@ -12,11 +12,14 @@ public class Projectile extends Entity{
 	private boolean friendly = false;
 	private int damage = 0;
 	
-	public Projectile(Game theGame, int x, int y, int speed, int damage, boolean friendly) {
+	private int lifeSpan = 1;
+	
+	public Projectile(Game theGame, int x, int y, int speed, int damage, int lifeSpan, boolean friendly) {
 		super(theGame, x, y, speed, "Projectile");
 		this.friendly = friendly;
 		this.damage = damage;
 		setSprite(theGame.getResourceLoader().getSprite("Arrow.png"));
+		this.lifeSpan = lifeSpan;
 		//getSprite().setRefPixel(getSprite().getWidth() / 2, getSprite().getWidth() / 2);
 	}
 	
@@ -32,8 +35,8 @@ public class Projectile extends Entity{
 		
 		//ySpeed =  ySpeed * (float) (2.5 / Math.sqrt(xSpeed * xSpeed + ySpeed * ySpeed));
 		//xSpeed = xSpeed * (float) (2.5 / Math.sqrt(xSpeed * xSpeed + ySpeed * ySpeed));
-		setDx((int) ((point.x - getX()) / 8));
-		setDy((int) ((point.y - getY()) / 8));
+		setDx((int) ((point.x - getX()) / 66));
+		setDy((int) ((point.y - getY()) / 66)); //100 is how many frames it will take to get to that location
 		
 		//Make sure it is not over max speed
 		/*Is positive
@@ -73,14 +76,14 @@ public class Projectile extends Entity{
 	public void paintMe(Graphics g)
 	{
 		super.paintMe(g);
-		//TODO make this a sprite that sets an angle based on the direction it is moving
-		getSprite().setPosition(getX(), getY());
-		getSprite().paint(g);
 	}
 
 	public void step()
 	{
 		super.step();
+		setLifeSpan(getLifeSpan() - 1);
+		if(getLifeSpan() <= 0)
+			this.onDelete();
 	}
 
 	public void keyCheck(int keyCode,boolean pressed)
@@ -112,6 +115,14 @@ public class Projectile extends Entity{
 
 	public void setDamage(int damage) {
 		this.damage = damage;
+	}
+
+	public int getLifeSpan() {
+		return lifeSpan;
+	}
+
+	public void setLifeSpan(int lifeSpan) {
+		this.lifeSpan = lifeSpan;
 	}
 	
 }
