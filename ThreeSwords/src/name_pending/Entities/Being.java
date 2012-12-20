@@ -7,8 +7,7 @@ import java.util.HashSet;
 
 import name_pending.Game;
 import name_pending.Resistance;
-import name_pending.Entities.Items.ItemBow;
-import name_pending.Entities.Items.Projectile;
+import name_pending.Entities.Items.ItemWeapon;
 
 /*
  * Anything that protrays a living being I.E. Monsters, players, npcs
@@ -35,6 +34,7 @@ public class Being extends Entity{
 	//True if the player has the ability to attack. This limits how often they can attack
 	private boolean canShoot = true;
 	private int attackDelay = 5; //how many frames untill they can attack again
+	private int attackDelayLast = attackDelay; //inorder to draw an attack delay bar
 	
 	private boolean killable = true;
 
@@ -143,25 +143,15 @@ public class Being extends Entity{
 	
 	
 
-	public void fireProjectile(Point target, ItemBow rangedWeapon, int lifeSpan)
+	public void fireProjectile(Point target, ItemWeapon weapon, int lifeSpan, String spriteName)
 	{
-		//target = new  Point(1000,1000);
 		//get a random dmg number from the weapon
-		int projectileDamage = getTheGame().getRandomGenerator().nextInt(rangedWeapon.getMaxDamage() - rangedWeapon.getMinDamage()) + rangedWeapon.getMinDamage();
+		int projectileDamage = getTheGame().getRandomGenerator().nextInt(weapon.getMaxDamage() - weapon.getMinDamage()) + weapon.getMinDamage();
 		//fire the arrow at the speed of the ranged weapon
-		Projectile projectile = new Projectile(getTheGame(), getX(), getY(), rangedWeapon.getDistance(), projectileDamage, lifeSpan, true);
+		Projectile projectile = new Projectile(getTheGame(), getX(), getY(), weapon.getDistance(), projectileDamage, lifeSpan, true, spriteName);
 
-		//Set the destination to be reletive to the players
-		//get the difference
-
-		//int newX = (int) ( (getTheGame().getFrame().getWidth() / 2) + ( (getTheGame().getPlayer().getX() - target.getX() )/* * -1 */) );
-		//int newY = (int) ( (getTheGame().getFrame().getHeight() / 2) + ( (getTheGame().getPlayer().getY() - target.getY() )/* * -1 */) );
-		//add the difference
-		//newX += getTheGame().getPlayer().getX();
-		//newY += getTheGame().getPlayer().getY();
-		//Point moveTo = new Point(newX, newY);
 		Point moveTo = target;
-		projectile.setDestination(moveTo);
+		projectile.setDestination(moveTo, weapon.getDistance());
 		getTheGame().getEntityHash().add(projectile);
 
 	}
@@ -272,6 +262,15 @@ public class Being extends Entity{
 	}
 
 	public void setAttackDelay(int attackDelay) {
+		this.attackDelayLast = this.attackDelay;
 		this.attackDelay = attackDelay;
+	}
+
+	public int getAttackDelayLast() {
+		return attackDelayLast;
+	}
+
+	public void setAttackDelayLast(int attackDelayLast) {
+		this.attackDelayLast = attackDelayLast;
 	}
 }

@@ -10,10 +10,12 @@ import name_pending.Game;
 import name_pending.Sprite;
 import name_pending.Entities.Items.ItemBow;
 import name_pending.Entities.Items.ItemDrop;
+import name_pending.Entities.Items.ItemMelee;
 
 public class Player extends Being{
 	
 	private boolean shootingRanged;
+	private boolean shootingMelee;
 	
 	private int mana;
 	private int stamina;
@@ -75,13 +77,28 @@ public class Player extends Being{
 
 	public void paintMe(Graphics g)
 	{
-		super.paintMe(g);
+		//Draw this before the player so it is drawn behind it
 		//if equip then draw the item equip
 		Sprite weaponSprite = null;
 		ItemBow rangedWeapon = (ItemBow) this.getTheGame().getPlayerData().getRangedWeapon();
 		if(rangedWeapon != null)
 		{
 			weaponSprite = rangedWeapon.getSprite().clone();
+		}
+		if(weaponSprite != null)
+		{
+			weaponSprite.setPosition(getSprite().getX() - 8, getSprite().getY() -8);
+			weaponSprite.paint(g);
+		}
+
+		super.paintMe(g);
+		
+		
+		ItemMelee meleeWeapon = (ItemMelee) this.getTheGame().getPlayerData().getMeleeWeapon();
+		weaponSprite = null;
+		if(meleeWeapon != null)
+		{
+			weaponSprite = meleeWeapon.getSprite().clone();
 		}
 		if(weaponSprite != null)
 		{
@@ -95,18 +112,34 @@ public class Player extends Being{
 	{
 		super.step();
 		
-		if(isShootingRanged())
+		if(isShootingRanged() || isShootingMelee())
 		{
 			if(isCanShoot())
 			{
 				if(this.getAttackDelay() == 0)
 				{
-					ItemBow rangedWeapon = (ItemBow) getTheGame().getPlayerData().getRangedWeapon();			
-					//TODO set this to a number
-					int newX = getTheGame().getGameArea().getOriginPoint().x + mousePoint.x;
-					int newY = getTheGame().getGameArea().getOriginPoint().y + mousePoint.y;
-					this.fireProjectile(new Point(newX, newY), rangedWeapon, 66);
-					setAttackDelay(33); //one second
+					if(isShootingMelee())
+					{
+						ItemMelee meleeWeapon = (ItemMelee) getTheGame().getPlayerData().getMeleeWeapon();			
+						//TODO set this to a number
+						int newX = getTheGame().getGameArea().getOriginPoint().x + mousePoint.x;
+						int newY = getTheGame().getGameArea().getOriginPoint().y + mousePoint.y;
+						
+						//newX = ((int) ((mousePoint.x - newX) / 10));
+						//newY = ((int) ((mousePoint.y - newY) / 10)); //10 is how many frames it will take to get to that location
+						
+						this.fireProjectile(new Point(newX, newY), meleeWeapon, 5, "Slash.png");
+						setAttackDelay(8); //one second
+					}
+					if(isShootingRanged())
+					{
+						ItemBow rangedWeapon = (ItemBow) getTheGame().getPlayerData().getRangedWeapon();			
+						//TODO set this to a number
+						int newX = getTheGame().getGameArea().getOriginPoint().x + mousePoint.x;
+						int newY = getTheGame().getGameArea().getOriginPoint().y + mousePoint.y;
+						this.fireProjectile(new Point(newX, newY), rangedWeapon, 66, "Arrow.png");
+						setAttackDelay(15); //one second
+					}
 				}
 			}
 		}
@@ -170,6 +203,21 @@ public class Player extends Being{
 			if(eventType == "released")
 				setShootingRanged(false);
 		}
+		
+		//check if we need to fire a ranged weapon
+		if(event.getButton() == MouseEvent.BUTTON1)
+		{
+			if(eventType == "pressed")
+			{
+				ItemMelee meleeWeapon = (ItemMelee) getTheGame().getPlayerData().getMeleeWeapon();
+				if(meleeWeapon != null)
+				{
+					setShootingMelee(true);
+				}
+			}else
+				if(eventType == "released")
+					setShootingMelee(false);
+		}
 	}
 	
 	//used to get the position of the mouse
@@ -220,6 +268,23 @@ public class Player extends Being{
 
 	public void setMousePoint(Point mousePoint) {
 		this.mousePoint = mousePoint;
+	}
+
+	public boolean isShootingMelee() {
+		return shootingMelee;
+	}
+
+	public void setShootingMelee(boolean setShootingMelee) {
+		this.shootingMelee = setShootingMelee;
+	}
+
+	public PlayerMouseMotionListener getPlayerMouseMotionListener() {
+		return playerMouseMotionListener;
+	}
+
+	public void setPlayerMouseMotionListener(
+			PlayerMouseMotionListener playerMouseMotionListener) {
+		this.playerMouseMotionListener = playerMouseMotionListener;
 	}
 
 }

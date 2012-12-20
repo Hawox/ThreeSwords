@@ -124,6 +124,33 @@ public class UI {
 		g.drawString(Integer.toString(fatiguePercent) + "%", ( fatiguebarX + ( fatiguebarWidth / 2) ) - 10, fatiguebarY + 11);
 		//g.drawString("Experiance", expbarX + 1, expbarY + 11);
 		g.setPaintMode();
+		
+		
+		
+		
+		
+		//Attack time bar
+		int attackTimebarX = 100;/*getTheGame().getPlayer().getX() - getTheGame().getGameArea().getOriginPoint().x*/;
+		int attackTimebarY = 100; /*( getTheGame().getPlayer().getY() -  - getTheGame().getGameArea().getOriginPoint().y) + 40;*/
+		int attackTimebarWidth = 32;
+		int attackTimeWidth = 0;
+		//int attackTimePercent = (int) ( ( (float) theGame.getPlayer().getAttackDelay() / (float) theGame.getPlayer().getAttackDelayLast() ) * 100);
+		if(theGame.getPlayer().getAttackDelay() == 0) //avoid dividing by zero
+			attackTimeWidth = 0;
+		else
+			attackTimeWidth = (int) ( ( (float) theGame.getPlayer().getAttackDelay() / (float) theGame.getPlayer().getAttackDelayLast() ) * attackTimebarWidth);
+		//g.setColor(Color.Blue);
+		//g.fillRect(attackTimebarX, attackTimebarY, attackTimebarWidth, 12);
+		g.setColor(Color.YELLOW);
+		g.fillRect(attackTimebarX, attackTimebarY, attackTimeWidth, 2);
+		g.setColor(Color.BLACK);
+		g.drawRect(attackTimebarX, attackTimebarY, attackTimebarWidth, 2);
+		g.setColor(Color.white);
+		g.setXORMode(Color.red);
+		//g.drawString(Integer.toString(attackTimePercent) + "%", ( attackTimebarX + ( attackTimebarWidth / 2) ) - 10, attackTimebarY + 11);
+		//g.drawString("Experiance", expbarX + 1, expbarY + 11);
+		g.setPaintMode();
+
 	}
 
 

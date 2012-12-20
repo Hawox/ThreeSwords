@@ -28,13 +28,15 @@ public class ItemWeapon extends Item{
 	 * @param minDamage
 	 * @param maxDamage
 	 * @param distance
+	 * @param spriteName
 	 */
-	public ItemWeapon(Game game, String name, String decription, String rarity, String type, int minDamage, int maxDamage, int distance, String[] bonuses) {
+	public ItemWeapon(Game game, String name, String decription, String rarity, String type, int minDamage, int maxDamage, int distance, String[] bonuses, String spriteName) {
 		super(game, name, decription, rarity, type);
 		this.minDamage = minDamage;
 		this.maxDamage = maxDamage;
 		this.distance = distance;
 		this.bonuses = bonuses;
+		this.setSprite(getTheGame().getResourceLoader().getSprite(spriteName));
 	}
 
 

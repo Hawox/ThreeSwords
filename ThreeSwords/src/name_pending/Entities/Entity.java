@@ -339,7 +339,7 @@ public abstract class Entity {
 	/**
 	 * @return true if it collides with somthing solid
 	 */
-	public boolean checkForSolidCollision()
+	/*public boolean checkForSolidCollision()
 	{
 		//can move threw solids, skip
 		if(this.isMoveThrewSolids())
@@ -351,6 +351,41 @@ public abstract class Entity {
 					return true; // entity is solid and this should not move threw solids so do not move
 		//Nothing solid and can not move threw soilds
 		return false;
+	}*/
+	
+	public void setDestination(Point point, int speed)
+	{
+		//Set the movement of the projectile to the point provided
+		//projectile.setDx(dx);
+		//projectile.setDy(dy);
+		
+		//TODO figure out how to make it move at a constant speed. Might need to have a speed limiter every frame instead of just in this method
+		//float ySpeed = getDy();
+		//float xSpeed = getDx();
+		
+		//ySpeed =  ySpeed * (float) (2.5 / Math.sqrt(xSpeed * xSpeed + ySpeed * ySpeed));
+		//xSpeed = xSpeed * (float) (2.5 / Math.sqrt(xSpeed * xSpeed + ySpeed * ySpeed));
+		setDx((int) ((point.x - getX()) / speed));
+		setDy((int) ((point.y - getY()) / speed)); //100 is how many frames it will take to get to that location
+		
+		//Make sure it is not over max speed
+		/*Is positive
+		if(getDx() > 0)
+		{
+			if(this.getDx() > this.getSpeed())
+				setDx(getSpeed());
+		}else //negitive
+			if((getDx() * -1) < (this.getSpeed() * -1))
+				setDx(getSpeed() * -1);
+				
+		//Is positive
+		if(getDy() > 0)
+		{
+			if(this.getDy() > this.getSpeed())
+				setDy(getSpeed());
+		}else //negitive
+			if((getDy() * -1) < (this.getSpeed() * -1))
+				setDy(getSpeed() * -1);*/
 	}
 
 	/**

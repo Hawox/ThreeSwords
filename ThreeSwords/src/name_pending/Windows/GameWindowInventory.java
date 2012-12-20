@@ -210,6 +210,16 @@ public class GameWindowInventory extends GameWindow {
 			if(command == "Equip")
 			{
 				//TODO add in all the other types
+				if(this.item.getType() == "meleeweapon")
+				{
+					PlayerData pd = this.getParentWindow().theGame.getPlayerData();
+					Item equipedItem = pd.getMeleeWeapon();
+					pd.setMeleeWeapon(item);
+					pd.getInventory().getItems().remove(item);
+					if(equipedItem != null)
+						pd.getInventory().addItem(equipedItem);
+					this.getParentWindow().getTheGame().getGameWindowManager().updateWindows();
+				}
 				if(this.item.getType() == "rangedweapon")
 				{
 					PlayerData pd = this.getParentWindow().theGame.getPlayerData();

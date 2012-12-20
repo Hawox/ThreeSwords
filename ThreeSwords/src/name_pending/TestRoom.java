@@ -6,6 +6,7 @@ import name_pending.Entities.Enviroment;
 import name_pending.Entities.Player;
 import name_pending.Entities.Items.ItemBow;
 import name_pending.Entities.Items.ItemDrop;
+import name_pending.Entities.Items.ItemMelee;
 
 /**
  * Used to check stuff out in the games test room
@@ -37,8 +38,10 @@ public class TestRoom {
 		//put it in the players inventory
 
 		for(int i=0; i<10; i++){
-			ItemDrop itemDrop = new ItemDrop(theGame, new ItemBow(theGame, "SuperBow", "This is the SuperBow of epicness", "white", 10, 100, 150, null), 1100 + (50*i), 1000 + (50*i), 0);
+			ItemDrop itemDrop = new ItemDrop(theGame, new ItemBow(theGame, "SuperBow", "This is the SuperBow of epicness", "white", 10, 100, 33, null), 1100 + (50*i), 1000 + (50*i), 0);
+			ItemDrop itemDropSword = new ItemDrop(theGame, new ItemMelee(theGame, "SuperSword", "This is the SuperSword of epicness", "white", 10, 100, 10, null), 900 + (50*i), 1000 + (50*i), 0);
 			theGame.getEntityHash().add(itemDrop);
+			theGame.getEntityHash().add(itemDropSword);
 		}
 		
 		theGame.getEntityHash().add(new Enviroment(theGame, 1002, 1000, 0, "Center"));

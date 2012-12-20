@@ -17,10 +17,9 @@ public class ItemBow extends ItemWeapon{
 	 * @param bonuses
 	 */
 	public ItemBow(Game game, String name, String decription, String rarity, int minDamage, int maxDamage, int distance, String[] bonuses) {
-		super(game, name, decription, rarity, "rangedweapon", minDamage, maxDamage, distance, bonuses);
+		super(game, name, decription, rarity, "rangedweapon", minDamage, maxDamage, distance, bonuses, "ItemBow.png");
 		setWeaponType("bow");
 		setRanged(true);
-		this.setSprite(this.getTheGame().getResourceLoader().getSprite("ItemBow.png"));
 	}
 
 }
