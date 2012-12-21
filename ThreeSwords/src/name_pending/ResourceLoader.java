@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
  * This class will load on sprites on game start and will send out the sprites that are asked for
@@ -76,6 +79,14 @@ public class ResourceLoader {
 		try{
 			return new Sprite(ImageIO.read(new File (this.getClass().getResource("Sprites/" + name).getPath())));
 		}catch(IOException e){}
+		return null;
+	}
+	
+	public AudioInputStream getSound(String soundName)
+	{
+		try{
+			return AudioSystem.getAudioInputStream(Main.class.getResourceAsStream("Music" + soundName));
+		}catch(IOException | UnsupportedAudioFileException e){}
 		return null;
 	}
 

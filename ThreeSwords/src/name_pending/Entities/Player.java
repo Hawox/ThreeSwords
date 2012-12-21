@@ -59,17 +59,21 @@ public class Player extends Being{
 			for(Entity e : collision)
 			{
 				//Pickup items on the ground and remove the item drop
-				
+
 				if(e.getName() == "ItemDrop")
 				{
 					ItemDrop id = (ItemDrop) e;
-					//Delete drop and add it's item to inventory < reverse that
-					this.getTheGame().getPlayerData().getInventory().addItem(id.getItem());
-					id.onDelete();
-					
-					//Update our inventory with the new item
-					this.getTheGame().getGameWindowManager().updateWindows("InventoryWindow");
-					break;
+					//see if we have room in our inventory
+					if(!(getTheGame().getPlayerData().getInventory().isFull()))
+					{
+						//Delete drop and add it's item to inventory < reverse that
+						this.getTheGame().getPlayerData().getInventory().addItem(id.getItem());
+						id.onDelete();
+
+						//Update our inventory with the new item
+						this.getTheGame().getGameWindowManager().updateWindows("InventoryWindow");
+						break;
+					}
 				}
 			}
 		}

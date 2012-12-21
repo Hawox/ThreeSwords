@@ -8,6 +8,7 @@ import java.awt.Toolkit;
 import java.util.HashSet;
 import java.util.Random;
 
+import javax.print.attribute.standard.Media;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -91,6 +92,8 @@ public class Game
 		//Start the loop
 		gameLoop = new GameLoop(this);
 		gameLoop.run();
+		
+		this.playSound("fieldTheme.mp3");
 
 	}
 
@@ -232,6 +235,23 @@ public class Game
 			}
 
 		}*/
+	}
+	
+	
+	//TODO
+	public void playSound(String soundName)
+	{
+		//Media hit = new Media(soundName);
+		//MediaPlayer mediaPlayer = new MediaPlayer(hit);
+		//mediaPlayer.play();
+		/*try {
+	          Clip clip = AudioSystem.getClip();
+	          AudioInputStream inputStream = this.getResourceLoader().getSound(soundName);
+	          clip.open(inputStream);
+	          clip.start(); 
+	        } catch (Exception e) {
+	          e.printStackTrace();
+	        }*/
 	}
 	
 

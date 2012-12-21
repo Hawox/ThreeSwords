@@ -47,6 +47,14 @@ public class Inventory {
 	}
 	
 	
+	public boolean isFull()
+	{
+		if(this.getItems().size() > (this.maxSize - 1))
+			return true;
+		return false;
+	}
+	
+	
 	
 	/**
 	 * Getters and setters
