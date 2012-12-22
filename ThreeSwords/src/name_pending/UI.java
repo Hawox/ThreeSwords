@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Vector;
 
 import name_pending.Entities.Player;
@@ -18,6 +19,8 @@ public class UI {
 	private Game theGame;
 	private UiHIDListener uiHIDListener;
 	
+	private HashSet<UiButton> uiButtons = new HashSet<UiButton>();
+	
 	//Decides whether or not game windows are drawn
 	//private boolean doDrawInventory = false;
 	
@@ -26,9 +29,11 @@ public class UI {
 		theGame = game;
 		this.uiHIDListener = new UiHIDListener();
 		getTheGame().getFrame().addKeyListener(uiHIDListener);
+		this.uiButtons.add(new UiButton(game, game.getGameArea().getWidth() - 10, 20, "inventory"));
+		this.uiButtons.add(new UiButton(game, game.getGameArea().getWidth() - 10, 50, "equipment"));
 	}
-	
-	
+
+
 	//Do all the fun drawy stuff when this is called
 	public void drawUI(Graphics g)
 	{	
@@ -36,8 +41,12 @@ public class UI {
 		Player player = theGame.getPlayer();
 		if(player != null)
 			drawPlayerStuff(g, player);
-		
-			drawGameWindows(g);
+
+		drawGameWindows(g);
+
+		//draw ui buttons
+		for(UiButton uib : this.uiButtons)
+			uib.paintMe(g);
 		
 		/**DEBUG STUFF!**/
 		//if(theGame.isDEBUG())
@@ -251,7 +260,7 @@ public class UI {
 	}
 	
 	
-	class UiHIDListener implements KeyListener/*, MouseListener*/
+	class UiHIDListener implements KeyListener
 	{
 
 		public void keyPressed(KeyEvent e) {
@@ -318,6 +327,26 @@ public class UI {
 
 	public void setTheGame(Game theGame) {
 		this.theGame = theGame;
+	}
+
+
+	public UiHIDListener getUiHIDListener() {
+		return uiHIDListener;
+	}
+
+
+	public void setUiHIDListener(UiHIDListener uiHIDListener) {
+		this.uiHIDListener = uiHIDListener;
+	}
+
+
+	public HashSet<UiButton> getUiButtons() {
+		return uiButtons;
+	}
+
+
+	public void setUiButtons(HashSet<UiButton> uiButtons) {
+		this.uiButtons = uiButtons;
 	}
 
 

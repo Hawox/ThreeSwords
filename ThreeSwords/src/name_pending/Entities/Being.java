@@ -157,7 +157,7 @@ public class Being extends Entity{
 		//get a random dmg number from the weapon
 		int projectileDamage = getTheGame().getRandomGenerator().nextInt(weapon.getMaxDamage() - weapon.getMinDamage()) + weapon.getMinDamage();
 		//fire the arrow at the speed of the ranged weapon
-		Projectile projectile = new Projectile(getTheGame(), getX(), getY(), weapon.getDistance(), projectileDamage, lifeSpan, friendly, spriteName);
+		Projectile projectile = new Projectile(getTheGame(), this, getX(), getY(), weapon.getDistance(), projectileDamage, lifeSpan, friendly, spriteName);
 
 		Point moveTo = target;
 		projectile.setDestination(moveTo, weapon.getDistance());

@@ -12,6 +12,8 @@ public class Projectile extends Entity{
 	
 	private int lifeSpan = 1;
 	
+	private Entity source;
+	
 	/**
 	 * 
 	 * @param theGame
@@ -23,13 +25,14 @@ public class Projectile extends Entity{
 	 * @param friendly
 	 * @param sprite
 	 */
-	public Projectile(Game theGame, int x, int y, int speed, int damage, int lifeSpan, boolean friendly, String spriteName) {
+	public Projectile(Game theGame, Entity source, int x, int y, int speed, int damage, int lifeSpan, boolean friendly, String spriteName) {
 		super(theGame, x, y, speed, "Projectile");
 		//this.friendly = friendly;
 		this.damage = damage;
 		setSprite(theGame.getResourceLoader().getSprite(spriteName));
 		this.lifeSpan = lifeSpan;
 		this.setFriendly(friendly);
+		this.source = source;
 		//getSprite().setRefPixel(getSprite().getWidth() / 2, getSprite().getWidth() / 2);
 	}
 
@@ -98,6 +101,14 @@ public class Projectile extends Entity{
 
 	public void setLifeSpan(int lifeSpan) {
 		this.lifeSpan = lifeSpan;
+	}
+
+	public Entity getSource() {
+		return source;
+	}
+
+	public void setSource(Entity source) {
+		this.source = source;
 	}
 	
 }

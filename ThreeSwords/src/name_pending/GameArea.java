@@ -82,8 +82,10 @@ public class GameArea extends JPanel {
 
 		
 		//Draw the ui last so it goes ontop of everything
-		theGame.getUi().drawUI(g);
-		
+		try{
+			theGame.getUi().drawUI(g);
+		}catch(NullPointerException e){}
+			
 		//Draw point at screen center
 		if(theGame.isDEBUG())
 			g.drawRect(theGame.getFrame().getWidth()/2 - 1, theGame.getFrame().getHeight()/2 - 1, 3, 3);

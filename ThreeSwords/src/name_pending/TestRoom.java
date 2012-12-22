@@ -47,7 +47,7 @@ public class TestRoom {
 		
 		theGame.getEntityHash().add(new Enviroment(theGame, 1002, 1000, 0, "Center"));
 		
-		theGame.getEntityHash().add(new Enemy(theGame, 1100, 650, 50, "Zombie", 100, 5, 50, 2, null));
+		theGame.getEntityHash().add(new Enemy(theGame, 1100, 650, 6, "Zombie", 100, 5, 50, 2, null));
 	//	for(int i=0; i<10; i++){
 			//ItemDrop itemDrop = new ItemDrop(theGame, new ItemBow(theGame, "SuperBow", "This is the SuperBow of epicness", "white", 10, 100, 150, null), 900 + (50*i), 1000, 0);
 	//		Enviroment envi = new Enviroment(theGame, 950, 1000 + (50*i), 0, "Rock");

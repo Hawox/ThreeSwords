@@ -8,7 +8,6 @@ import java.awt.Toolkit;
 import java.util.HashSet;
 import java.util.Random;
 
-import javax.print.attribute.standard.Media;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -33,6 +32,9 @@ public class Game
 	private boolean DEBUG = true;
 	private TestRoom testRoom = new TestRoom(this);
 	private boolean fullscreen = false;
+	
+	//Houses all of the games sprites
+	ResourceLoader spriteLoader = new ResourceLoader();
 
 	//This will contain every entity currently in the game to run all of their internal functions
 	private HashSet<Entity> entityHash = new HashSet<Entity>();
@@ -54,14 +56,11 @@ public class Game
 	//Graphicsy Stuff
 	private JFrame frame = new JFrame();
 	private MainDrawPanel mainDrawPanel = new MainDrawPanel();
-	private UI ui = new UI(this); //base UI for the game
-	private GameArea gameArea = new GameArea(this);
+	private GameArea gameArea;
+	private UI ui; //base UI for the game
 	
 	//Manages all the windows in the game
-	private GameWindowManager gameWindowManager = new GameWindowManager(this);
-	
-	//Houses all of the games sprites
-	ResourceLoader spriteLoader = new ResourceLoader();
+	private GameWindowManager gameWindowManager;
 	
 	//This will hold all the important data for players
 	PlayerData playerData = new PlayerData(this);
@@ -75,7 +74,10 @@ public class Game
 	//Launch when the game starts
 	public void go()
 	{
+		gameArea = new GameArea(this);
 		setupFrame();
+		gameWindowManager = new GameWindowManager(this);
+		ui = new UI(this);
 
 		//setup the  mouse and key listeners
 //		frameKeyListener = new FrameKeyListener(this);

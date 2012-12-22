@@ -182,6 +182,14 @@ public abstract class Entity {
 						{
 							Being being = (Being) this;
 							being.takeDamage(p.getDamage(), null);
+							
+							//if you take damage from an opposite team and are an npc, aggro onto what shot at you
+							if(this instanceof Enemy)
+							{
+								Enemy enemy = (Enemy) being;
+								enemy.setAggroed(true);
+								enemy.setAggroedTo(p.getSource());
+							}
 						}
 						
 						//delete projectile
@@ -400,27 +408,102 @@ public abstract class Entity {
 		
 		//ySpeed =  ySpeed * (float) (2.5 / Math.sqrt(xSpeed * xSpeed + ySpeed * ySpeed));
 		//xSpeed = xSpeed * (float) (2.5 / Math.sqrt(xSpeed * xSpeed + ySpeed * ySpeed));
+		
+		
+		int targetX = point.x - this.getX();
+		int targetY = point.y - this.getY();
+		
+		//pythagorean theorem
+		double distance = Math.sqrt(targetX * targetX + targetY * targetY);
+		
+		//movement
+		setDx( (int) ((targetX / distance) * speed));
+		setDy( (int) ((targetY / distance) * speed));
+		
+		
+		
+		
+		
+		/** Works to a degress
+		int targetX = point.x;
+		int targetY = point.y;
+		
+		double totalX = targetX - getX();
+		double totalY = targetY - getY();
+		
+		double totalDistance = Math.sqrt( (totalX * totalX) + (totalX * totalY)  );
+		
+		double modifier = totalDistance / speed;
+		
+		double distanceX = totalX / modifier;
+		double distanceY = totalY / modifier;
+		
+		int intDistanceX = (int) distanceX;
+		int intDistanceY = (int) distanceY;
+		
+		//if the ints drop them both to zero, turn them to 1 to keep moving
+		if( ( (intDistanceX == 0) && (intDistanceY == 0) ) && ( (distanceX != 0) || (distanceY != 0) ) )
+		{
+		//	intDistanceX = 1;
+		//	intDistanceY = 1;
+		}
+		
+		setDx( intDistanceX );
+		setDy( intDistanceY );*/
+		
+		/*
+		int targetX = point.x;
+		int targetY = point.y;
+		
+		int framesX = 0; //Number of frames it will take to get from x and y to target
+		int framesY = 0;
+		
+		//simple (time it takes) = distance / speed
+		int totalXDistance = targetX - getX();
+		int totalYDistance = targetY - getY();
+		
+		framesX = Math.abs(totalXDistance / speed);
+		framesY = Math.abs(totalYDistance / speed);
+		
+		//advoid / by 0
+		//if(framesX == 0)framesX = 1;
+		//if(framesY == 0)framesY = 1;
+		try{
+		setDx((int) (totalXDistance / framesX));
+		}catch(java.lang.ArithmeticException e){}
+		try{
+		setDy((int) (totalYDistance / framesY)); //speed is how many frames it will take to get to that location
+		}catch(java.lang.ArithmeticException e){}*/
+		
+		
+		
+		
+		
+		
+		
+		/* WORKING
 		setDx((int) ((point.x - getX()) / speed));
-		setDy((int) ((point.y - getY()) / speed)); //100 is how many frames it will take to get to that location
+		setDy((int) ((point.y - getY()) / speed)); //speed is how many frames it will take to get to that location
+		*/
 		
 		//Make sure it is not over max speed
 		/*Is positive
 		if(getDx() > 0)
 		{
-			if(this.getDx() > this.getSpeed())
-				setDx(getSpeed());
+			if(this.getDx() > speed)
+				setDx(speed);
 		}else //negitive
-			if((getDx() * -1) < (this.getSpeed() * -1))
-				setDx(getSpeed() * -1);
+			if((getDx() * -1) < (speed * -1))
+				setDx(speed * -1);
 				
 		//Is positive
 		if(getDy() > 0)
 		{
-			if(this.getDy() > this.getSpeed())
-				setDy(getSpeed());
+			if(this.getDy() > speed)
+				setDy(speed);
 		}else //negitive
-			if((getDy() * -1) < (this.getSpeed() * -1))
-				setDy(getSpeed() * -1);*/
+			if((getDy() * -1) < (speed * -1))
+				setDy(speed * -1);*/
 	}
 	
 	
@@ -448,6 +531,7 @@ public abstract class Entity {
 	
 	class EntityHIDListener implements KeyListener, MouseListener
 	{
+		//TODO fix me to only send events to self instead of all entities
 
 		public void keyPressed(KeyEvent e) {
 			sendKeyEvent(e.getKeyCode(), true);

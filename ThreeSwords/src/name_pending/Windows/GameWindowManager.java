@@ -56,26 +56,12 @@ public class GameWindowManager {
 		{
 			if(keyCode == getTheGame().getHotkeys().getHOTKEY_inventory())
 			{
-				for(GameWindow gw : gameWindowHash)
-				{
-					if(gw.getName() == "InventoryWindow")
-					{
-						gw.toggleVisibility();
-						break;
-					}
-				}
+				this.openInventory();
 			}
 			
 			if(keyCode == getTheGame().getHotkeys().getHOTKEY_equipment())
 			{
-				for(GameWindow gw : gameWindowHash)
-				{
-					if(gw.getName() == "EquipmentWindow")
-					{
-						gw.toggleVisibility();
-						break;
-					}
-				}
+				this.openEquipment();
 			}
 		}
 	}
@@ -129,6 +115,32 @@ public class GameWindowManager {
 		for(GameWindow gw : getGameWindowHash())
 			if(gw.getName() == name)
 				gw.update();
+	}
+	
+	
+	//Methods for opening windows
+	public void openInventory()
+	{
+		for(GameWindow gw : gameWindowHash)
+		{
+			if(gw.getName() == "InventoryWindow")
+			{
+				gw.toggleVisibility();
+				break;
+			}
+		}
+	}
+	
+	public void openEquipment()
+	{
+		for(GameWindow gw : gameWindowHash)
+		{
+			if(gw.getName() == "EquipmentWindow")
+			{
+				gw.toggleVisibility();
+				break;
+			}
+		}
 	}
 	
 	
