@@ -5,10 +5,12 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import name_pending.Game;
 import name_pending.Resistance;
 import name_pending.Sprite;
+import name_pending.Entities.Items.ItemDrop;
 
 
 public class Enemy extends Being{
@@ -191,6 +193,46 @@ public class Enemy extends Being{
 				lineOfSight = new Rectangle (this.getX() - (height / 2), this.getY(), height, width);
 				break;
 		}
+	}
+	
+	public boolean checkCollisions()
+	{
+		//up here in case code needs to run first
+		boolean returnMe = super.checkCollisions();
+
+		//IF you hit player or non-friendly projectile, then reflect back
+		HashSet<Entity> collision = this.checkForCollision();
+		if(collision != null)
+		{
+			for(Entity e : collision)
+			{
+				//player
+				if(e.getName() == "Player")
+				{
+					Player p = (Player) e;
+					//damage player and then refelct
+					//TODO Make a hashset of different attacks enemies can do; taking into account damage and resistance type
+					p.takeDamage(getAttack(), null);
+					this.reflectPerfect(1, 0);
+					returnMe = false;
+				}
+				//projectile
+				if(e.getName() == "Projectile")
+				{
+					Projectile p = (Projectile) e;
+					
+					this.takeDamage(p.getDamage(), null);
+					this.reflectPerfect(2, 0);
+					p.onDelete();
+					returnMe = false;
+				}
+			}
+		}
+
+		
+		
+		
+		return returnMe;
 	}
 	
 	

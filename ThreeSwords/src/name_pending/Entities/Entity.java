@@ -10,7 +10,6 @@ import java.awt.event.MouseListener;
 import java.util.HashSet;
 
 import name_pending.Game;
-import name_pending.Resistance;
 import name_pending.Sprite;
 
 /****
@@ -69,6 +68,8 @@ public abstract class Entity {
 	//The distance they will move in the next step
 	private int dx = 0;
 	private int dy = 0;
+	
+	private int reflectingTime = 0;
 
 	//Where they were related to sprite drawn to the screen last frame
 	private int lastViewX = 0;
@@ -134,7 +135,7 @@ public abstract class Entity {
 		this.sprite.setAnimation(1);
 		
 		//add listener
-		entityHIDListener = new EntityHIDListener();
+		entityHIDListener = new EntityHIDListener(this);
 		getTheGame().getFrame().addKeyListener(entityHIDListener);
 		getTheGame().getGameArea().addMouseListener(entityHIDListener);
 	}
@@ -268,56 +269,9 @@ public abstract class Entity {
 				this.onDelete();
 			}
 		}
-	}
-
-	//move the entity based on it's direction
-	public void moveMe()
-	{
-		//We want to check for collisions every 1 pixel movement to be more accurate with collision checking
-		//positive movement
-		if(dx > 0)
-		{
-			for(int i =0; i < dx; i++)
-			{
-				x += 1;
-				if(this.checkCollisions() == false)
-					x-=2;
-			}
-		}else //Negative movement
-		{
-			for(int i = 0; i < (dx* -1); i++)
-			{
-				x -= 1;
-				if(this.checkCollisions() == false)
-					x+=2;
-			}
-		}
 		
-		//positive movement
-		if(dy > 0)
-		{
-			for(int i =0; i < dy; i++)
-			{
-				y += 1;
-				if(this.checkCollisions() == false)
-					y-=2;
-			}
-		}else //Negative movement
-		{
-			for(int i = 0; i < (dy* -1); i++)
-			{
-				y -= 1;
-				if(this.checkCollisions() == false)
-					y+=2;
-			}
-		}
-	}
-
-	//Override to allow the entity to be moved to an exact x y
-	public void moveMe(int x, int y)
-	{
-		setX(x);
-		setY(y);
+		//reduce reflect time
+		setReflectingTime(getReflectingTime() - 1);
 	}
 	
 	public HashSet<Entity> checkForCollision()
@@ -378,134 +332,97 @@ public abstract class Entity {
 		}catch(NullPointerException e) { } //should mean theres an empty list and nothing should happen
 		return null;
 	}
-	
-	/**
-	 * @return true if it collides with somthing solid
-	 */
-	/*public boolean checkForSolidCollision()
+
+	//move the entity based on it's direction
+	public void moveMe()
 	{
-		//can move threw solids, skip
-		if(this.isMoveThrewSolids())
-			return false;
-		HashSet<Entity> collision = this.checkForCollision();
-		if(collision != null)
-			for(Entity e : collision)
-				if(e.isSolid())
-					return true; // entity is solid and this should not move threw solids so do not move
-		//Nothing solid and can not move threw soilds
-		return false;
-	}*/
+		//We want to check for collisions every 1 pixel movement to be more accurate with collision checking
+		//positive movement
+		if(dx > 0)
+		{
+			for(int i =0; i < dx; i++)
+			{
+				x += 1;
+				if(this.checkCollisions() == false)
+					x-=2;
+			}
+		}else //Negative movement
+		{
+			for(int i = 0; i < (dx* -1); i++)
+			{
+				x -= 1;
+				if(this.checkCollisions() == false)
+					x+=2;
+			}
+		}
+		
+		//positive movement
+		if(dy > 0)
+		{
+			for(int i =0; i < dy; i++)
+			{
+				y += 1;
+				if(this.checkCollisions() == false)
+					y-=2;
+			}
+		}else //Negative movement
+		{
+			for(int i = 0; i < (dy* -1); i++)
+			{
+				y -= 1;
+				if(this.checkCollisions() == false)
+					y+=2;
+			}
+		}
+	}
+
+	//Override to allow the entity to be moved to an exact x y
+	public void moveMe(int x, int y)
+	{
+		setX(x);
+		setY(y);
+	}
 	
 	public void setDestination(Point point, int speed)
 	{
-		//Set the movement of the projectile to the point provided
-		//projectile.setDx(dx);
-		//projectile.setDy(dy);
-		
-		//TODO figure out how to make it move at a constant speed. Might need to have a speed limiter every frame instead of just in this method
-		//float ySpeed = getDy();
-		//float xSpeed = getDx();
-		
-		//ySpeed =  ySpeed * (float) (2.5 / Math.sqrt(xSpeed * xSpeed + ySpeed * ySpeed));
-		//xSpeed = xSpeed * (float) (2.5 / Math.sqrt(xSpeed * xSpeed + ySpeed * ySpeed));
-		
-		
-		int targetX = point.x - this.getX();
-		int targetY = point.y - this.getY();
-		
-		//pythagorean theorem
-		double distance = Math.sqrt(targetX * targetX + targetY * targetY);
-		
-		//movement
-		setDx( (int) ((targetX / distance) * speed));
-		setDy( (int) ((targetY / distance) * speed));
-		
-		
-		
-		
-		
-		/** Works to a degress
-		int targetX = point.x;
-		int targetY = point.y;
-		
-		double totalX = targetX - getX();
-		double totalY = targetY - getY();
-		
-		double totalDistance = Math.sqrt( (totalX * totalX) + (totalX * totalY)  );
-		
-		double modifier = totalDistance / speed;
-		
-		double distanceX = totalX / modifier;
-		double distanceY = totalY / modifier;
-		
-		int intDistanceX = (int) distanceX;
-		int intDistanceY = (int) distanceY;
-		
-		//if the ints drop them both to zero, turn them to 1 to keep moving
-		if( ( (intDistanceX == 0) && (intDistanceY == 0) ) && ( (distanceX != 0) || (distanceY != 0) ) )
+		//Only set your destination if you are not reflecting
+		if(getReflectingTime() < 1)
 		{
-		//	intDistanceX = 1;
-		//	intDistanceY = 1;
+			//I almost had it, oh well. Code changes thanks to: http://stackoverflow.com/questions/7448729/moving-an-object-from-point-to-point-in-a-linear-path
+
+			int targetX = point.x - this.getX();
+			int targetY = point.y - this.getY();
+
+			//pythagorean theorem
+			double distance = Math.sqrt(targetX * targetX + targetY * targetY);
+
+			//movement
+			setDx( (int) ((targetX / distance) * speed));
+			setDy( (int) ((targetY / distance) * speed));
 		}
-		
-		setDx( intDistanceX );
-		setDy( intDistanceY );*/
-		
-		/*
-		int targetX = point.x;
-		int targetY = point.y;
-		
-		int framesX = 0; //Number of frames it will take to get from x and y to target
-		int framesY = 0;
-		
-		//simple (time it takes) = distance / speed
-		int totalXDistance = targetX - getX();
-		int totalYDistance = targetY - getY();
-		
-		framesX = Math.abs(totalXDistance / speed);
-		framesY = Math.abs(totalYDistance / speed);
-		
-		//advoid / by 0
-		//if(framesX == 0)framesX = 1;
-		//if(framesY == 0)framesY = 1;
-		try{
-		setDx((int) (totalXDistance / framesX));
-		}catch(java.lang.ArithmeticException e){}
-		try{
-		setDy((int) (totalYDistance / framesY)); //speed is how many frames it will take to get to that location
-		}catch(java.lang.ArithmeticException e){}*/
-		
-		
-		
-		
-		
-		
-		
-		/* WORKING
-		setDx((int) ((point.x - getX()) / speed));
-		setDy((int) ((point.y - getY()) / speed)); //speed is how many frames it will take to get to that location
-		*/
-		
-		//Make sure it is not over max speed
-		/*Is positive
-		if(getDx() > 0)
-		{
-			if(this.getDx() > speed)
-				setDx(speed);
-		}else //negitive
-			if((getDx() * -1) < (speed * -1))
-				setDx(speed * -1);
-				
-		//Is positive
-		if(getDy() > 0)
-		{
-			if(this.getDy() > speed)
-				setDy(speed);
-		}else //negitive
-			if((getDy() * -1) < (speed * -1))
-				setDy(speed * -1);*/
 	}
 	
+	//TODO add reflect abbility that works like knockback by inverting the entites dx and dy for a set time
+	public void reflectPerfect(int numberOfFrames, int overTime)
+	{
+		//If there is no time, then move it that far instantly
+		if(overTime == 0)
+		{
+			//setDx((getDx() * numberOfFrames) * -1);
+			//setDy((getDx() * numberOfFrames) * -1);
+			moveMe( getX() + ((getDx() * numberOfFrames) * -1), getY() + ((getDy() * numberOfFrames) * -1) );
+		}
+		//else move it that far over that many frames
+		else {
+			setReflectingTime(overTime);
+			setDx(getDx() * -1);
+			setDy(getDy() * -1);
+		}
+		
+		//update their position now
+		//moveMe();
+		
+	}
 	
 
 	/**
@@ -531,7 +448,12 @@ public abstract class Entity {
 	
 	class EntityHIDListener implements KeyListener, MouseListener
 	{
-		//TODO fix me to only send events to self instead of all entities
+		Entity parent;
+		
+		EntityHIDListener(Entity entity)
+		{
+			this.parent = entity;
+		}
 
 		public void keyPressed(KeyEvent e) {
 			sendKeyEvent(e.getKeyCode(), true);
@@ -560,7 +482,7 @@ public abstract class Entity {
 		}
 		
 		
-		
+		/*
 		private void sendMouseEvent(MouseEvent event, String eventType)
 		{
 			for (Entity e: theGame.getEntityHash())
@@ -575,6 +497,16 @@ public abstract class Entity {
 			{
 				e.keyCheck(keyCode, pressed);
 			}
+		}*/
+		
+		private void sendMouseEvent(MouseEvent event, String eventType)
+		{
+			parent.mouseCheck(event, eventType);
+		}
+		
+		private void sendKeyEvent(int keyCode, boolean pressed)
+		{
+				parent.keyCheck(keyCode, pressed);
 		}
 		
 		
@@ -726,6 +658,14 @@ public abstract class Entity {
 
 	public void setFriendly(boolean friendly) {
 		this.friendly = friendly;
+	}
+
+	public int getReflectingTime() {
+		return reflectingTime;
+	}
+
+	public void setReflectingTime(int reflectingTime) {
+		this.reflectingTime = reflectingTime;
 	}
 
 
