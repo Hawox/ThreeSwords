@@ -1,4 +1,4 @@
-package name_pending;
+package name_pending.DataBanks;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -11,6 +11,9 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import name_pending.Main;
+import name_pending.Sprite;
+
 /**
  * This class will load on sprites on game start and will send out the sprites that are asked for
  *  to other objects
@@ -20,7 +23,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  * 			Changed this classes name to ResourceLoader from SpriteLoader
  */
 
-public class ResourceLoader {
+public class ResourceDataBank {
 	private HashMap<String, BufferedImage> images = new HashMap<String, BufferedImage>();
 	
 	public void loadImages()

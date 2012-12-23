@@ -29,7 +29,7 @@ public class Projectile extends Entity{
 		super(theGame, x, y, speed, "Projectile");
 		//this.friendly = friendly;
 		this.damage = damage;
-		setSprite(theGame.getResourceLoader().getSprite(spriteName));
+		setSprite(theGame.getResourceDataBank().getSprite(spriteName));
 		this.lifeSpan = lifeSpan;
 		this.setFriendly(friendly);
 		this.source = source;

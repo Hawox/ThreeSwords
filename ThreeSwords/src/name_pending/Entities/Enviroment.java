@@ -10,7 +10,7 @@ public class Enviroment extends Entity{
 	
 	public void onCreate()
 	{
-		this.setSprite(getTheGame().getResourceLoader().getSprite("ErrorEnviroment.png"));
+		this.setSprite(getTheGame().getResourceDataBank().getSprite("ErrorEnviroment.png"));
 		this.setSolid(true);
 	}
 

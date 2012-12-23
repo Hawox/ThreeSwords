@@ -16,7 +16,7 @@ public class Tile{
 
 	public Tile(Game theGame, String spriteName) {
 		this.theGame = theGame;
-		this.sprite = theGame.getResourceLoader().getSprite(spriteName);
+		this.sprite = theGame.getResourceDataBank().getSprite(spriteName);
 	}
 
 	public void paintMeAt(int xi, int yi, Graphics g) {

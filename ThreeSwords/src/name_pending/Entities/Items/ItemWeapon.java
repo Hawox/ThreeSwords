@@ -36,7 +36,7 @@ public class ItemWeapon extends Item{
 		this.maxDamage = maxDamage;
 		this.distance = distance;
 		this.bonuses = bonuses;
-		this.setSprite(getTheGame().getResourceLoader().getSprite(spriteName));
+		this.setSprite(getTheGame().getResourceDataBank().getSprite(spriteName));
 	}
 
 

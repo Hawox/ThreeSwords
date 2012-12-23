@@ -27,9 +27,9 @@ public class UiButton {
 			this.type = type;
 			this.theGame = game;
 			if(type == "inventory");
-				this.sprite = game.getResourceLoader().getSprite("InventoryButton.png").clone();
+				this.sprite = game.getResourceDataBank().getSprite("InventoryButton.png").clone();
 			if(type == "equipment")
-				this.sprite = game.getResourceLoader().getSprite("EquipmentButton.png").clone();
+				this.sprite = game.getResourceDataBank().getSprite("EquipmentButton.png").clone();
 			this.sprite.setPosition(x, y);
 			//theMouseListener
 			game.getFrame().addMouseListener(theMouseListener);
@@ -42,7 +42,7 @@ public class UiButton {
 		
 		public void mouseCheck(MouseEvent event,String eventType)
 		{
-			this.sprite = this.theGame.getResourceLoader().getSprite("Arrow.png");
+			this.sprite = this.theGame.getResourceDataBank().getSprite("Arrow.png");
 			if(event.getButton() == MouseEvent.BUTTON1)
 			{
 				//See if it was within out borders

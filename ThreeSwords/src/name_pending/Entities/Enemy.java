@@ -10,7 +10,6 @@ import java.util.HashSet;
 import name_pending.Game;
 import name_pending.Resistance;
 import name_pending.Sprite;
-import name_pending.Entities.Items.ItemDrop;
 
 
 public class Enemy extends Being{
@@ -22,6 +21,8 @@ public class Enemy extends Being{
 	private int lineOfSightWidth = 300;
 	private int lineOfSightHeight = 150;
 	private ArrayList<String> aggroTo = new ArrayList<String>();
+	
+	private String spriteName = "Error.png";
 	
 	//movement variables
 	private boolean wander = true;
@@ -40,9 +41,11 @@ public class Enemy extends Being{
 	 * @param dexterity
 	 * @param resist
 	 */
-	public Enemy(Game theGame, int x, int y, int speed, String name, int health,
+	public Enemy(Game theGame, int x, int y, int speed, String name, String spriteName, int health,
 			int defence, int attack, int dexterity, Resistance[] resist) {
 		super(theGame, x, y, speed, name, health, defence, attack, dexterity, resist);
+		this.spriteName = spriteName;
+		this.setSprite(getTheGame().getResourceDataBank().getSprite(spriteName));
 		setAggroed(false);
 		setAggroedTo(null);
 		
@@ -55,7 +58,6 @@ public class Enemy extends Being{
 	public void onCreate()
 	{
 		super.onCreate();
-		this.setSprite(getTheGame().getResourceLoader().getSprite("Zombie.png"));
 	}
 	
 	public void paintMe(Graphics g)
@@ -68,7 +70,7 @@ public class Enemy extends Being{
 		//draw aggro
 		if(this.isAggroed())
 		{
-			Sprite aggro = getTheGame().getResourceLoader().getSprite("Aggroed.png");
+			Sprite aggro = getTheGame().getResourceDataBank().getSprite("Aggroed.png");
 			aggro.setPosition(this.getX() - getTheGame().getGameArea().getOriginPoint().x - 16, this.getY() - getTheGame().getGameArea().getOriginPoint().y - 64);
 			aggro.paint(g);
 		}
@@ -300,6 +302,14 @@ public class Enemy extends Being{
 
 	public void setAggroTo(ArrayList<String> aggroTo) {
 		this.aggroTo = aggroTo;
+	}
+
+	public String getSpriteName() {
+		return spriteName;
+	}
+
+	public void setSpriteName(String spriteName) {
+		this.spriteName = spriteName;
 	}
 
 

@@ -38,7 +38,7 @@ public class Player extends Being{
 	public void onCreate()
 	{
 		super.onCreate();
-		setSprite(getTheGame().getResourceLoader().getSprite("Player.png"));
+		setSprite(getTheGame().getResourceDataBank().getSprite("Player.png"));
 		playerMouseMotionListener = new PlayerMouseMotionListener();
 		getTheGame().getGameArea().addMouseMotionListener(playerMouseMotionListener);
 	}

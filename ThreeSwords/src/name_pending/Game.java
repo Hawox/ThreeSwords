@@ -11,6 +11,9 @@ import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import name_pending.DataBanks.EnemyDataBank;
+import name_pending.DataBanks.PlayerData;
+import name_pending.DataBanks.ResourceDataBank;
 import name_pending.Entities.Entity;
 import name_pending.Entities.Player;
 import name_pending.Windows.GameWindowManager;
@@ -34,7 +37,7 @@ public class Game
 	private boolean fullscreen = false;
 	
 	//Houses all of the games sprites
-	ResourceLoader spriteLoader = new ResourceLoader();
+	ResourceDataBank spriteLoader = new ResourceDataBank();
 
 	//This will contain every entity currently in the game to run all of their internal functions
 	private HashSet<Entity> entityHash = new HashSet<Entity>();
@@ -68,12 +71,17 @@ public class Game
 	//Al of our random number needs
 	Random randomGenerator = new Random();
 
+	//All of our fun databanks
+	EnemyDataBank enemyDataBank;
 
 	private Sprite currentCursor = null;
 
 	//Launch when the game starts
 	public void go()
 	{
+		//load our databanks
+		enemyDataBank = new EnemyDataBank(this);
+		
 		gameArea = new GameArea(this);
 		setupFrame();
 		gameWindowManager = new GameWindowManager(this);
@@ -165,7 +173,7 @@ public class Game
 		//if(this.getResourceLoader().getImages().containsKey(name))
 		//{
 			//Change the variable
-			newCursor = this.getResourceLoader().getSprite(name);
+			newCursor = this.getResourceDataBank().getSprite(name);
 			newCursor.setRefPixel(clickPoint.x, clickPoint.y);
 			//Now actually change the cursor that's drawn
 			Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -345,11 +353,11 @@ public class Game
 		this.ui = ui;
 	}
 
-	public ResourceLoader getResourceLoader() {
+	public ResourceDataBank getResourceDataBank() {
 		return spriteLoader;
 	}
 
-	public void setResourceLoader(ResourceLoader spriteLoader) {
+	public void setResourceDataBank(ResourceDataBank spriteLoader) {
 		this.spriteLoader = spriteLoader;
 	}
 
@@ -403,6 +411,14 @@ public class Game
 
 	public void setHotkeys(Hotkeys hotkeys) {
 		this.hotkeys = hotkeys;
+	}
+
+	public EnemyDataBank getEnemyDataBank() {
+		return enemyDataBank;
+	}
+
+	public void setEnemyDataBank(EnemyDataBank enemyDataBank) {
+		this.enemyDataBank = enemyDataBank;
 	}
 
 	//Different method for this above

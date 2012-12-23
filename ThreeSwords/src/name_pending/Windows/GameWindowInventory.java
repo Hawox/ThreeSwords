@@ -9,8 +9,8 @@ import java.util.ConcurrentModificationException;
 
 import name_pending.Game;
 import name_pending.Inventory;
-import name_pending.PlayerData;
 import name_pending.Sprite;
+import name_pending.DataBanks.PlayerData;
 import name_pending.Entities.Player;
 import name_pending.Entities.Items.Item;
 

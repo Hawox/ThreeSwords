@@ -8,6 +8,7 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Vector;
 
+import name_pending.DataBanks.PlayerData;
 import name_pending.Entities.Player;
 
 /**
@@ -49,8 +50,8 @@ public class UI {
 			uib.paintMe(g);
 		
 		/**DEBUG STUFF!**/
-		//if(theGame.isDEBUG())
-		//	drawDebugStuff(g);
+		if(theGame.isDEBUG())
+			drawDebugStuff(g);
 	}
 	
 	private void drawPlayerStuff(Graphics g, Player player)
@@ -165,6 +166,7 @@ public class UI {
 
 	private void drawDebugStuff(Graphics g)
 	{
+		/*
 		g.setColor(Color.YELLOW);
 		g.drawString("Sprite Array Size: " + theGame.getResourceLoader().getImages().size(), 200, 200);
 		String[] wrap = UI.wrapText(theGame.getResourceLoader().getImages().toString(), 100);
@@ -176,6 +178,7 @@ public class UI {
 		g.drawString(s.toString(), 200, 150);
 		s.setPosition(100, 100);
 		s.paint(g);
+		*/
 		
 	}
 	

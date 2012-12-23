@@ -1,5 +1,8 @@
-package name_pending;
+package name_pending.DataBanks;
 
+import name_pending.Game;
+import name_pending.Inventory;
+import name_pending.Resistance;
 import name_pending.Entities.Items.Item;
 
 

@@ -29,7 +29,7 @@ public class Item {
 		this.type = type;
 		
 		//Set the sprite to an error sprite
-		game.getResourceLoader().getSprite("ItemError.png");
+		game.getResourceDataBank().getSprite("ItemError.png");
 	}
 
 	public Game getTheGame() {

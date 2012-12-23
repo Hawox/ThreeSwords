@@ -59,7 +59,7 @@ public void mouseCheck(MouseEvent event,String eventType)
 
 
  */
-public abstract class Entity {
+public abstract class Entity implements Cloneable{
 
 	//Basic variables all entity should have
 	private int x = 0;
@@ -146,7 +146,7 @@ public abstract class Entity {
 		//Setup the sprite
 		//setSprite(theGame.getSpriteLoader().getSprite("Error.png"));
 		//if(theGame.getResourceLoader().getImages().containsKey("Error.png"))
-		setSprite(theGame.getResourceLoader().getSprite("Error.png"));
+		setSprite(theGame.getResourceDataBank().getSprite("Error.png"));
 	}
 
 	//Objects can't really be deleted, so this is ran when the object is removed form the entity list
@@ -519,6 +519,15 @@ public abstract class Entity {
 	}
 
 	
+	public Entity clone()
+	{
+		try {
+            return (Entity) super.clone();
+        }catch (CloneNotSupportedException e) {
+            System.out.println("Clone failed.");
+            return null;
+        }
+	}
 
 	/**
 	 * Getters and setters
