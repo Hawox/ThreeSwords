@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import name_pending.Entities.Entity;
+import name_pending.DataBanks.ResourceDataBank;
 
 //TODO Make different classes for the different types
 public class UiButton {
@@ -24,12 +24,12 @@ public class UiButton {
 		{
 			this.x = x;
 			this.y = y;
-			this.type = type;
+			this.setType(type);
 			this.theGame = game;
 			if(type == "inventory");
-				this.sprite = game.getResourceDataBank().getSprite("InventoryButton.png").clone();
+				this.sprite = ResourceDataBank.getSprite("InventoryButton.png").clone();
 			if(type == "equipment")
-				this.sprite = game.getResourceDataBank().getSprite("EquipmentButton.png").clone();
+				this.sprite = ResourceDataBank.getSprite("EquipmentButton.png").clone();
 			this.sprite.setPosition(x, y);
 			//theMouseListener
 			game.getFrame().addMouseListener(theMouseListener);
@@ -42,7 +42,7 @@ public class UiButton {
 		
 		public void mouseCheck(MouseEvent event,String eventType)
 		{
-			this.sprite = this.theGame.getResourceDataBank().getSprite("Arrow.png");
+			this.sprite = ResourceDataBank.getSprite("Arrow.png");
 			if(event.getButton() == MouseEvent.BUTTON1)
 			{
 				//See if it was within out borders
@@ -128,5 +128,13 @@ public class UiButton {
 
 		public void setY(int y) {
 			this.y = y;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public void setType(String type) {
+			this.type = type;
 		}
 }

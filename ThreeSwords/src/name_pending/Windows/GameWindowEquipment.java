@@ -44,7 +44,7 @@ public class GameWindowEquipment extends GameWindow{
 			if(inventory.getItems().size() > i)
 				item = inventory.getItems().get(i);
 			else
-				item = new Item(theGame, "Empty Slot", "Nothing here.", "notype", "none");
+				item = new Item();
 			this.equipmentSlots.add(new GameWindowEquipmentSlot(this, drawx+(35*vert), drawy+(35*row), 32, 32, item, i+1));
 			//check if at end of row
 			vert++;

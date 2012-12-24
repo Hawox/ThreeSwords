@@ -9,9 +9,9 @@ import java.util.HashSet;
 import java.util.Random;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import name_pending.DataBanks.EnemyDataBank;
+import name_pending.DataBanks.ItemDataBank;
 import name_pending.DataBanks.PlayerData;
 import name_pending.DataBanks.ResourceDataBank;
 import name_pending.Entities.Entity;
@@ -37,7 +37,7 @@ public class Game
 	private boolean fullscreen = false;
 	
 	//Houses all of the games sprites
-	ResourceDataBank spriteLoader = new ResourceDataBank();
+//	ResourceDataBank spriteLoader = new ResourceDataBank();
 
 	//This will contain every entity currently in the game to run all of their internal functions
 	private HashSet<Entity> entityHash = new HashSet<Entity>();
@@ -58,7 +58,6 @@ public class Game
 
 	//Graphicsy Stuff
 	private JFrame frame = new JFrame();
-	private MainDrawPanel mainDrawPanel = new MainDrawPanel();
 	private GameArea gameArea;
 	private UI ui; //base UI for the game
 	
@@ -72,7 +71,8 @@ public class Game
 	Random randomGenerator = new Random();
 
 	//All of our fun databanks
-	EnemyDataBank enemyDataBank;
+	private EnemyDataBank enemyDataBank;
+	private ItemDataBank itemDataBank;
 
 	private Sprite currentCursor = null;
 
@@ -81,6 +81,7 @@ public class Game
 	{
 		//load our databanks
 		enemyDataBank = new EnemyDataBank(this);
+		itemDataBank = new ItemDataBank(this);
 		
 		gameArea = new GameArea(this);
 		setupFrame();
@@ -97,7 +98,7 @@ public class Game
 			testRoom.start();
 
 		//load the sprites
-		spriteLoader.loadImages();
+//		spriteLoader.loadImages();
 		
 		//Start the loop
 		gameLoop = new GameLoop(this);
@@ -173,7 +174,7 @@ public class Game
 		//if(this.getResourceLoader().getImages().containsKey(name))
 		//{
 			//Change the variable
-			newCursor = this.getResourceDataBank().getSprite(name);
+			newCursor = ResourceDataBank.getSprite(name);
 			newCursor.setRefPixel(clickPoint.x, clickPoint.y);
 			//Now actually change the cursor that's drawn
 			Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -226,27 +227,6 @@ public class Game
 		}
 		return player;
 	}
-
-	//TODO
-	@SuppressWarnings("serial")
-	//Top left panel where the main game is drawn. Most UI may not be in this screen.
-	class MainDrawPanel extends JPanel
-	{
-		/*
-		public void painComponet(Graphics g)
-		{
-			//Base background, should usually be covered by images. If we see this something is wrong
-			g.setColor(Color.pink);
-
-			//Draw every entity to the panel
-			for (Entity e: entityHash)
-			{
-				e.paintMe(g);
-			}
-
-		}*/
-	}
-	
 	
 	//TODO
 	public void playSound(String soundName)
@@ -325,14 +305,6 @@ public class Game
 		this.frame = frame;
 	}
 
-	public MainDrawPanel getMainDrawPanel() {
-		return mainDrawPanel;
-	}
-
-	public void setMainDrawPanel(MainDrawPanel mainDrawPanel) {
-		this.mainDrawPanel = mainDrawPanel;
-	}
-
 	public boolean isFullscreen() {
 		return fullscreen;
 	}
@@ -353,13 +325,13 @@ public class Game
 		this.ui = ui;
 	}
 
-	public ResourceDataBank getResourceDataBank() {
+/*	public ResourceDataBank getResourceDataBank() {
 		return spriteLoader;
 	}
 
 	public void setResourceDataBank(ResourceDataBank spriteLoader) {
 		this.spriteLoader = spriteLoader;
-	}
+	}*/
 
 	public void setUi(UI ui) {
 		this.ui = ui;
@@ -419,6 +391,10 @@ public class Game
 
 	public void setEnemyDataBank(EnemyDataBank enemyDataBank) {
 		this.enemyDataBank = enemyDataBank;
+	}
+
+	public ItemDataBank getItemDataBank() {
+		return itemDataBank;
 	}
 
 	//Different method for this above

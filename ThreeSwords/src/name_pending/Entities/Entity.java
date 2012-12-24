@@ -11,6 +11,7 @@ import java.util.HashSet;
 
 import name_pending.Game;
 import name_pending.Sprite;
+import name_pending.DataBanks.ResourceDataBank;
 
 /****
  * 
@@ -146,7 +147,7 @@ public abstract class Entity implements Cloneable{
 		//Setup the sprite
 		//setSprite(theGame.getSpriteLoader().getSprite("Error.png"));
 		//if(theGame.getResourceLoader().getImages().containsKey("Error.png"))
-		setSprite(theGame.getResourceDataBank().getSprite("Error.png"));
+		setSprite(ResourceDataBank.getSprite("Error.png"));
 	}
 
 	//Objects can't really be deleted, so this is ran when the object is removed form the entity list

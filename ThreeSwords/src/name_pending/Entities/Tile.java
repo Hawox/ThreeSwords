@@ -5,6 +5,7 @@ import java.awt.Point;
 
 import name_pending.Game;
 import name_pending.Sprite;
+import name_pending.DataBanks.ResourceDataBank;
 
 public class Tile{
 	
@@ -16,7 +17,7 @@ public class Tile{
 
 	public Tile(Game theGame, String spriteName) {
 		this.theGame = theGame;
-		this.sprite = theGame.getResourceDataBank().getSprite(spriteName);
+		this.sprite = ResourceDataBank.getSprite(spriteName);
 	}
 
 	public void paintMeAt(int xi, int yi, Graphics g) {

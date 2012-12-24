@@ -77,10 +77,10 @@ public class ResourceDataBank {
 	}*/
 	
 	//TODO Testing something! Delete this and get above to work
-	public Sprite getSprite(String name)
+	public static Sprite getSprite(String name)
 	{
 		try{
-			return new Sprite(ImageIO.read(new File (this.getClass().getResource("Sprites/" + name).getPath())));
+			return new Sprite(ImageIO.read(new File (ResourceDataBank.class.getResource("Sprites/" + name).getPath()))).clone();
 		}catch(IOException e){}
 		return null;
 	}

@@ -8,9 +8,10 @@ import java.util.HashSet;
 
 import name_pending.Game;
 import name_pending.Sprite;
-import name_pending.Entities.Items.ItemBow;
+import name_pending.DataBanks.ResourceDataBank;
 import name_pending.Entities.Items.ItemDrop;
 import name_pending.Entities.Items.ItemMelee;
+import name_pending.Entities.Items.ItemRanged;
 
 public class Player extends Being{
 	
@@ -38,7 +39,7 @@ public class Player extends Being{
 	public void onCreate()
 	{
 		super.onCreate();
-		setSprite(getTheGame().getResourceDataBank().getSprite("Player.png"));
+		setSprite(ResourceDataBank.getSprite("Player.png"));
 		playerMouseMotionListener = new PlayerMouseMotionListener();
 		getTheGame().getGameArea().addMouseMotionListener(playerMouseMotionListener);
 	}
@@ -85,7 +86,7 @@ public class Player extends Being{
 		//Draw this before the player so it is drawn behind it
 		//if equip then draw the item equip
 		Sprite weaponSprite = null;
-		ItemBow rangedWeapon = (ItemBow) this.getTheGame().getPlayerData().getRangedWeapon();
+		ItemRanged rangedWeapon = (ItemRanged) this.getTheGame().getPlayerData().getRangedWeapon();
 		if(rangedWeapon != null)
 		{
 			weaponSprite = rangedWeapon.getSprite().clone();
@@ -138,7 +139,7 @@ public class Player extends Being{
 					}
 					if(isShootingRanged())
 					{
-						ItemBow rangedWeapon = (ItemBow) getTheGame().getPlayerData().getRangedWeapon();			
+						ItemRanged rangedWeapon = (ItemRanged) getTheGame().getPlayerData().getRangedWeapon();			
 						//TODO set this to a number
 						int newX = getTheGame().getGameArea().getOriginPoint().x + mousePoint.x;
 						int newY = getTheGame().getGameArea().getOriginPoint().y + mousePoint.y;
@@ -199,7 +200,7 @@ public class Player extends Being{
 		{
 			if(eventType == "pressed")
 			{
-				ItemBow rangedWeapon = (ItemBow) getTheGame().getPlayerData().getRangedWeapon();
+				ItemRanged rangedWeapon = (ItemRanged) getTheGame().getPlayerData().getRangedWeapon();
 				if(rangedWeapon != null)
 				{
 					setShootingRanged(true);

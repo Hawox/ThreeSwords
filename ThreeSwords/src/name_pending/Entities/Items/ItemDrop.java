@@ -19,8 +19,9 @@ public class ItemDrop extends Entity{
 		super(theGame, x, y, speed, "ItemDrop");
 		this.item = item;
 		//Set the entity sprite to the item sprite
-		setSprite(item.getSprite()); // I don't call this in the onCreate because item will still be null
-		getSprite().setAnimation(1); //get it's animation setup since it was not called in onCreate
+		setSprite(item.getSprite().clone()); // I don't call this in the onCreate because item will still be null
+		//setSprite(ResourceDataBank.getSprite("Player.png"));
+		//getSprite().setAnimation(1); //get it's animation setup since it was not called in onCreate
 	}
 	
 	public void onCreate()

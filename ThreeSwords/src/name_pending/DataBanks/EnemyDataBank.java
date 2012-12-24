@@ -82,7 +82,7 @@ public class EnemyDataBank {
 	//TODO make this load from a file of enemies instead of just writing them in the code
 	private boolean loadEnemies()
 	{
-		enemies.add(new EnemyTemplate(theGame, 0, 0, 7, "Zombie", "Zombie.png", 100, 5, 50, 2, null));
+		enemies.add(new EnemyTemplate(theGame, 0, 0, 7, "Zombie", "Zombie.png", 10, 5, 5, 2, null));
 		return true;
 	}
 }

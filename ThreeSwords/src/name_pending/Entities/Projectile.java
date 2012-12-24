@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 
 import name_pending.Game;
+import name_pending.DataBanks.ResourceDataBank;
 
 public class Projectile extends Entity{
 	//If the bullet will hurt the player or enemies
@@ -29,7 +30,7 @@ public class Projectile extends Entity{
 		super(theGame, x, y, speed, "Projectile");
 		//this.friendly = friendly;
 		this.damage = damage;
-		setSprite(theGame.getResourceDataBank().getSprite(spriteName));
+		setSprite(ResourceDataBank.getSprite(spriteName));
 		this.lifeSpan = lifeSpan;
 		this.setFriendly(friendly);
 		this.source = source;

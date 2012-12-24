@@ -10,6 +10,7 @@ import java.util.HashSet;
 import name_pending.Game;
 import name_pending.Resistance;
 import name_pending.Sprite;
+import name_pending.DataBanks.ResourceDataBank;
 
 
 public class Enemy extends Being{
@@ -45,7 +46,7 @@ public class Enemy extends Being{
 			int defence, int attack, int dexterity, Resistance[] resist) {
 		super(theGame, x, y, speed, name, health, defence, attack, dexterity, resist);
 		this.spriteName = spriteName;
-		this.setSprite(getTheGame().getResourceDataBank().getSprite(spriteName));
+		this.setSprite(ResourceDataBank.getSprite(spriteName));
 		setAggroed(false);
 		setAggroedTo(null);
 		
@@ -70,7 +71,7 @@ public class Enemy extends Being{
 		//draw aggro
 		if(this.isAggroed())
 		{
-			Sprite aggro = getTheGame().getResourceDataBank().getSprite("Aggroed.png");
+			Sprite aggro = ResourceDataBank.getSprite("Aggroed.png");
 			aggro.setPosition(this.getX() - getTheGame().getGameArea().getOriginPoint().x - 16, this.getY() - getTheGame().getGameArea().getOriginPoint().y - 64);
 			aggro.paint(g);
 		}
@@ -225,6 +226,11 @@ public class Enemy extends Being{
 					
 					this.takeDamage(p.getDamage(), null);
 					this.reflectPerfect(2, 0);
+					if(this.aggroed == false)
+					{
+						this.aggroed = true;
+						this.aggroedTo = p.getSource();
+					}
 					p.onDelete();
 					returnMe = false;
 				}
