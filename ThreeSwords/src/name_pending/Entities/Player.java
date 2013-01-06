@@ -42,10 +42,12 @@ public class Player extends Being{
 		setSprite(ResourceDataBank.getSprite("Player.png"));
 		playerMouseMotionListener = new PlayerMouseMotionListener();
 		getTheGame().getGameArea().addMouseMotionListener(playerMouseMotionListener);
+		getTheGame().getConsole().addText("Player Created.");
 	}
 
 	public void onDelete()
 	{
+		getTheGame().getConsole().addText("Player deleted.");
 		super.onDelete();
 	}
 
@@ -165,22 +167,80 @@ public class Player extends Being{
 		//Key pressed down
 		if(pressed == true)
 		{
+			String horizMovement = "none";
+			String vertMovement = "none";
 			if(keyCode == getTheGame().getHotkeys().getHOTKEY_moveUp())
 			{
-				this.setDy(this.getSpeed() * -1); // move up
+				//this.setDy(this.getSpeed() * -1); // move up
+				vertMovement = "up";
 			}
 			if(keyCode == getTheGame().getHotkeys().getHOTKEY_moveDown())
 			{
-				this.setDy(this.getSpeed()); //move down
+				//this.setDy(this.getSpeed()); //move down
+				vertMovement = "down";
 			}
 			if(keyCode == getTheGame().getHotkeys().getHOTKEY_moveLeft())
 			{
-				this.setDx(this.getSpeed() * -1); //move left
+				//this.setDx(this.getSpeed() * -1); //move left
+				horizMovement = "left";
 			}
 			if(keyCode == getTheGame().getHotkeys().getHOTKEY_moveRight()) //move right
 			{
-				this.setDx(this.getSpeed());
+				//this.setDx(this.getSpeed());
+				horizMovement = "right";
 			}
+			//Set the destination to the right direction
+			switch(vertMovement)
+			{
+			case "up":
+				switch(horizMovement)
+				{
+				case "left":
+					this.setDestination(new Point(getX() - getSpeed(), getY() - getSpeed()), getSpeed());
+					break;
+				case "right":
+					this.setDestination(new Point(getX() + getSpeed(), getY() - getSpeed()), getSpeed());
+					break;
+				default:
+					//just moveing up
+					this.setDestination(new Point(getX(), getY() - getSpeed()), getSpeed());
+					break;
+				}
+				break;
+				
+			case "down":
+				switch(horizMovement)
+				{
+				case "left":
+					this.setDestination(new Point(getX() - getSpeed(), getY() + getSpeed()), getSpeed());
+					break;
+				case "right":
+					this.setDestination(new Point(getX() + getSpeed(), getY() + getSpeed()), getSpeed());
+					break;
+				default:
+					//just moveing down
+					this.setDestination(new Point(getX(), getY() + getSpeed()), getSpeed());
+					break;
+				}
+				break;
+			
+			default:
+				//no vertical movement
+				switch(horizMovement)
+				{
+				case "left":
+					this.setDestination(new Point(getX() - getSpeed(), getY()), getSpeed());
+					break;
+				case "right":
+					this.setDestination(new Point(getX() + getSpeed(), getY()), getSpeed());
+					break;
+				default:
+					//no movement
+					break;
+				}
+			}
+			
+			
 		}else{ // Key released
 			if( (keyCode == getTheGame().getHotkeys().getHOTKEY_moveUp()) || (keyCode == getTheGame().getHotkeys().getHOTKEY_moveDown()) )
 			{

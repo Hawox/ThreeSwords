@@ -42,6 +42,7 @@ public class GameWindowManager {
 		gameWindowManagerHIDListener = new GameWindowManagerHIDListener();
 		getTheGame().getFrame().addKeyListener(gameWindowManagerHIDListener);
 		getTheGame().getGameArea().addMouseListener(gameWindowManagerHIDListener);
+		theGame.getConsole().addText("Game Window Manager Loaded.");
 	}
 	
 	/**

@@ -17,7 +17,7 @@ public class PlayerData {
 	private static int STARTING_HEALTH = 1000;
 	private static int STARTING_DEFENCE = 0;
 	private static int STARTING_ATTACK = 1;
-	private static int STARTING_SPEED = 5;
+	private static int STARTING_SPEED = 50;
 	private static int STARTING_DEXTERITY = 0;
 	private static Resistance[] STARTING_RESISTANCE = null;
 	private static int MAX_LEVEL = 30;

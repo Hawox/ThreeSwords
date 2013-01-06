@@ -83,6 +83,7 @@ public class EnemyDataBank {
 	private boolean loadEnemies()
 	{
 		enemies.add(new EnemyTemplate(theGame, 0, 0, 7, "Zombie", "Zombie.png", 10, 5, 5, 2, null));
+		theGame.getConsole().addText("Enemy Data Bank loaded.");
 		return true;
 	}
 }

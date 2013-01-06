@@ -19,6 +19,7 @@ public class GameLoop implements Runnable{
 
 	@Override
 	public void run() {
+		theGame.getConsole().addText("Gameloop Started.");
 		do{
 		HashSet<Entity> entities = theGame.getEntityHash();
 		
@@ -43,6 +44,7 @@ public class GameLoop implements Runnable{
 	}while(true);
 		//realized this causes problems, not sure what I was thinking, let's do a while loop
 		//this.run(); // we never want the game loop to stop running
+
 	}
 
 	/**

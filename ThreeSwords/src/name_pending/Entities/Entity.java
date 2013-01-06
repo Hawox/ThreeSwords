@@ -7,11 +7,14 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import name_pending.Game;
 import name_pending.Sprite;
 import name_pending.DataBanks.ResourceDataBank;
+import name_pending.Pathing.Pathable;
 
 /****
  * 
@@ -60,7 +63,7 @@ public void mouseCheck(MouseEvent event,String eventType)
 
 
  */
-public abstract class Entity implements Cloneable{
+public abstract class Entity extends Pathable implements Cloneable{
 
 	//Basic variables all entity should have
 	private int x = 0;
@@ -106,6 +109,9 @@ public abstract class Entity implements Cloneable{
 	private String nameInList = "deleteMe"; //this name will have a number added to the end so entities in the list don't all have the same name
 	
 	Point reletivePosition = new Point(x,y);
+	
+	//The cost of going threw this object in the AStar pathing script | Negitive = unpassable
+	double pathingCost = 0.0;
 
 	/**
 	 * 
@@ -116,6 +122,7 @@ public abstract class Entity implements Cloneable{
 	 */
 	protected Entity(Game theGame, int x, int y, int Speed, String name)
 	{
+		super(theGame.getPathingThread());
 		this.theGame = theGame;
 		this.setX(x);
 		this.setY(y);
@@ -246,6 +253,19 @@ public abstract class Entity implements Cloneable{
 			g.drawString(getNameInList(), getSprite().getX(), getSprite().getY()-10);
 			g.drawString("X: " + Integer.toString(getX()) + "  Y: " + Integer.toString(getY()), getSprite().getX() - 20, getSprite().getY()-20);
 			g.drawRect(getSprite().getX(), getSprite().getY(), getSprite().getWidth(), getSprite().getHeight());
+			
+			//Draw it's path points
+			if(pathPoints.size() > 0)
+			{
+				Point lastPoint = pathPoints.get(0);
+				for(Point p : pathPoints)
+				{
+					g.setColor(Color.pink);
+					g.drawOval(p.x - origin.x, p.y - origin.y, 10, 10);
+					g.drawLine(p.x - origin.x, p.y - origin.y, lastPoint.x - origin.x, lastPoint.y - origin.y);
+					lastPoint = p;
+				}
+			}
 		}
 	}
 
@@ -273,6 +293,12 @@ public abstract class Entity implements Cloneable{
 		
 		//reduce reflect time
 		setReflectingTime(getReflectingTime() - 1);
+		
+		//See if we should change our move threw cost
+		if(this.isSolid())
+		{
+			this.pathingCost = -1.0;
+		}
 	}
 	
 	public HashSet<Entity> checkForCollision()
@@ -386,6 +412,15 @@ public abstract class Entity implements Cloneable{
 	
 	public void setDestination(Point point, int speed)
 	{
+		//TODO get the path
+		this.needPath(new Point(this.x, this.y), point);
+	}
+	
+	/**
+	 * Taken out of setDestination after pathing was added
+	 */
+	public void moveToPoint(Point point, int speed)
+	{
 		//Only set your destination if you are not reflecting
 		if(getReflectingTime() < 1)
 		{
@@ -401,6 +436,12 @@ public abstract class Entity implements Cloneable{
 			setDx( (int) ((targetX / distance) * speed));
 			setDy( (int) ((targetY / distance) * speed));
 		}
+	}
+
+	//Make sure that the entity is following the path along to each node
+	private void adjustDestinationToPath()
+	{
+		
 	}
 	
 	//TODO add reflect abbility that works like knockback by inverting the entites dx and dy for a set time
@@ -676,6 +717,14 @@ public abstract class Entity implements Cloneable{
 
 	public void setReflectingTime(int reflectingTime) {
 		this.reflectingTime = reflectingTime;
+	}
+
+	public double getPathingCost() {
+		return pathingCost;
+	}
+
+	public void setPathingCost(double pathingCost) {
+		this.pathingCost = pathingCost;
 	}
 
 

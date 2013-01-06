@@ -56,6 +56,7 @@ public class TestRoom {
 		
 		ItemDrop itemDropb = new ItemDrop(theGame, new ItemBow(theGame, "SuperBow", "This is the SuperBow of epicness", "white", 10, 100, 150, null), 300, 400);
 		theGame.getEntityHash().add(itemDropb);*/
+		theGame.getConsole().addText("Testroom loaded.");
 	}
 
 }

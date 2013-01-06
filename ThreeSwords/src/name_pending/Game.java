@@ -1,6 +1,5 @@
 package name_pending;
 
-import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.Point;
@@ -16,6 +15,7 @@ import name_pending.DataBanks.PlayerData;
 import name_pending.DataBanks.ResourceDataBank;
 import name_pending.Entities.Entity;
 import name_pending.Entities.Player;
+import name_pending.Pathing.AStarPathing;
 import name_pending.Windows.GameWindowManager;
 
 
@@ -59,6 +59,7 @@ public class Game
 	//Graphicsy Stuff
 	private JFrame frame = new JFrame();
 	private GameArea gameArea;
+	private ConsoleWindow console = new ConsoleWindow();
 	private UI ui; //base UI for the game
 	
 	//Manages all the windows in the game
@@ -75,16 +76,30 @@ public class Game
 	private ItemDataBank itemDataBank;
 
 	private Sprite currentCursor = null;
+	
+	//Pathing thread
+	AStarPathing pathingThread;
 
 	//Launch when the game starts
 	public void go()
 	{
+		//Get the console loaded before anyhting happens so we can see checks on everything
+		setupConsole();
+
+		//Startup the pathing thread
+		pathingThread = new AStarPathing(this);
+		Thread thePathingThread = new Thread(pathingThread);
+		thePathingThread.start();
+		
 		//load our databanks
 		enemyDataBank = new EnemyDataBank(this);
 		itemDataBank = new ItemDataBank(this);
 		
-		gameArea = new GameArea(this);
+		//setup panels
+		gameArea = new GameArea(this);		
+		
 		setupFrame();
+		
 		gameWindowManager = new GameWindowManager(this);
 		ui = new UI(this);
 
@@ -102,23 +117,24 @@ public class Game
 		
 		//Start the loop
 		gameLoop = new GameLoop(this);
+		console.addText("Game done getting setup.");
 		gameLoop.run();
 		
-		this.playSound("fieldTheme.mp3");
-
+		//this.playSound("fieldTheme.mp3");
 	}
 
 	//Sets all of our default variables to get the frame ready for action
 	private void setupFrame()
-	{
+	{	
 		//Create our frame
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().add(BorderLayout.CENTER, gameArea);
+		frame.getContentPane().add(gameArea);
+		
 		//frame.setSize(1280,768);
 		//frame.setSize(800,600);
 		frame.setSize(1024, 768);
-		frame.setVisible(true);
 		frame.setResizable(false);
+		frame.setVisible(true);
 		
 		//gameArea.setSize(800, 600);
 		
@@ -139,6 +155,22 @@ public class Game
 		//frame.createBufferStrategy(2);
 		
 				//loadCursors();
+		console.addText("Frame Loaded.");
+	}
+	
+	//creates the console in a seperate window
+	private void setupConsole()
+	{
+		//Create our frame
+		console.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setSize(1280,768);
+		//frame.setSize(800,600);
+		console.setSize(400, 200);
+		console.setLocation(new Point(1100,500));
+		console.setTitle("Console");
+		console.setVisible(true);
+		console.setResizable(false);
+		console.addText("Console loaded.");
 	}
 
 	//Load all of the games cursors into Memory
@@ -249,6 +281,11 @@ public class Game
 	 * Getters and setters
 	 */
 
+	/* MODIFIED
+	 * This is causing too many concurrent modifications exceptions.
+	 * Lets return a clone of it instead
+	 */
+	@SuppressWarnings("unchecked")
 	public HashSet<Entity> getEntityHash() {
 		return entityHash;
 	}
@@ -395,6 +432,22 @@ public class Game
 
 	public ItemDataBank getItemDataBank() {
 		return itemDataBank;
+	}
+
+	public AStarPathing getPathingThread() {
+		return pathingThread;
+	}
+
+	public void setPathingThread(AStarPathing pathingThread) {
+		this.pathingThread = pathingThread;
+	}
+
+	public ConsoleWindow getConsole() {
+		return console;
+	}
+
+	public void setConsole(ConsoleWindow console) {
+		this.console = console;
 	}
 
 	//Different method for this above

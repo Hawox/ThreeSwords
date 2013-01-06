@@ -32,6 +32,7 @@ public class UI {
 		getTheGame().getFrame().addKeyListener(uiHIDListener);
 		this.uiButtons.add(new UiButton(game, game.getGameArea().getWidth() - 10, 20, "inventory"));
 		this.uiButtons.add(new UiButton(game, game.getGameArea().getWidth() - 10, 50, "equipment"));
+		theGame.getConsole().addText("UI loaded.");
 	}
 
 

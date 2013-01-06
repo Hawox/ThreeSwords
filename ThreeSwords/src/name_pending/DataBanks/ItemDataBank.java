@@ -158,6 +158,7 @@ public class ItemDataBank {
 			else if(i.getType() == "material")
 				this.material.add(i);
 		}
+		theGame.getConsole().addText("Item Data Bank loaded.");
 		return true;
 	}
 }
