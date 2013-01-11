@@ -9,6 +9,7 @@ public class Pathable {
 	 */
 	protected ArrayList<Point> pathPoints = new ArrayList<Point>();
 	private AStarPathing aStarPathing;
+	private boolean waitingOnPath = false;
 	
 	protected Pathable(AStarPathing asp)
 	{
@@ -18,9 +19,13 @@ public class Pathable {
 	public void needPath(Point at, Point target)
 	{
 		aStarPathing.addMe(this, at, target);
+		waitingOnPath = true;
 	}
 	
-	
+	public void unqueue()
+	{
+		aStarPathing.removeMe(this);
+	}
 	
 	//Called from the A* thread to give this a path
 	public void setPath(ArrayList<Point> newPathPoints)
@@ -42,5 +47,13 @@ public class Pathable {
 
 	public void setaStarPathing(AStarPathing aStarPathing) {
 		this.aStarPathing = aStarPathing;
+	}
+
+	public boolean isWaitingOnPath() {
+		return waitingOnPath;
+	}
+
+	public void setWaitingOnPath(boolean waitingOnPath) {
+		this.waitingOnPath = waitingOnPath;
 	}
 }

@@ -112,6 +112,10 @@ public abstract class Entity extends Pathable implements Cloneable{
 	
 	//The cost of going threw this object in the AStar pathing script | Negitive = unpassable
 	double pathingCost = 0.0;
+	
+	//Need this with all the different moving methods
+	//Used mainly to keep the speed at which we are to follow the pathing one
+	private int currentMovingSpeed = 0;
 
 	/**
 	 * 
@@ -363,6 +367,12 @@ public abstract class Entity extends Pathable implements Cloneable{
 	//move the entity based on it's direction
 	public void moveMe()
 	{
+		//If we have a path we want to adjust our speed to follow it, otherwise keep on our merry way
+		if(this.pathPoints.size() > 0)
+		{
+			this.adjustDestinationToPath();
+		}
+		
 		//We want to check for collisions every 1 pixel movement to be more accurate with collision checking
 		//positive movement
 		if(dx > 0)
@@ -410,10 +420,22 @@ public abstract class Entity extends Pathable implements Cloneable{
 		setY(y);
 	}
 	
+	/**
+	 * Don't set a path if we are currently in line for a path
+	 * Instead just start walking towards the location without a path
+	 * @param point
+	 * @param speed
+	 */
 	public void setDestination(Point point, int speed)
 	{
-		//TODO get the path
-		this.needPath(new Point(this.x, this.y), point);
+		this.currentMovingSpeed = speed;
+		if(this.isWaitingOnPath() == false)
+		{
+			this.needPath(new Point(this.x, this.y), point);
+		}else
+		{
+			moveToPoint(point, speed);
+		}
 	}
 	
 	/**
@@ -441,7 +463,8 @@ public abstract class Entity extends Pathable implements Cloneable{
 	//Make sure that the entity is following the path along to each node
 	private void adjustDestinationToPath()
 	{
-		
+		Point target = this.getPathPoints().get(0);
+		moveToPoint(target, this.currentMovingSpeed);
 	}
 	
 	//TODO add reflect abbility that works like knockback by inverting the entites dx and dy for a set time

@@ -46,7 +46,8 @@ public class AStarPathing implements Runnable{
 				aStarSearch.start = pd.start;
 
 				pd.pathable.setPath(new ArrayList<Point>(aStarSearch.compute(pd.start)));
-				theGame.getConsole().addText("AStarPathing pathset");
+				pd.pathable.setWaitingOnPath(false);
+				theGame.getConsole().addText("AStarPathing pathset.");
 				waitingList.remove(pd);
 				theGame.getConsole().addText("AStarPathing<< Item removed. Current wait:" + waitingList.size());
 				if(pd.pathable instanceof Entity)
@@ -74,6 +75,11 @@ public class AStarPathing implements Runnable{
 	{
 		this.waitingList.add(new PathingData(target, at, pathable));
 		//theGame.getConsole().addText("AStarPathing<< New Item in waiting list. Current wait:" + waitingList.size());
+	}
+	
+	public void removeMe(Pathable p)
+	{
+		this.waitingList.remove(p);
 	}
 	
 	//All the data that will be needed for each path
